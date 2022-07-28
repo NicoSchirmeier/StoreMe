@@ -12,28 +12,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class ItemTemplateJsonDriver implements JsonDriver {
+public class ItemTemplateJsonDriver extends JsonDriver {
     private static final String PATH = "data/item_templates.json";
     private static final Type listType = new TypeToken<ArrayList<Item>>(){}.getType();
 
-
-    @Override
-    public void save(Object item_templates) {
-        if(item_templates instanceof ArrayList) {
-            JsonDriver.saveToJson(item_templates, PATH);
-        }
+    public ItemTemplateJsonDriver() {
+        super(PATH);
     }
 
     @Override
-    public ArrayList<Item> read() {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public void save(ArrayList<Record> records) {
+        save(records, PATH);
+    }
 
-            String json = Files.readString(Path.of(PATH));
-            return gson.fromJson(json, listType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public ArrayList<Record> read() {
+        return read(PATH);
     }
 }

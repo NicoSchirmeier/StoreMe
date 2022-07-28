@@ -11,28 +11,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class TagJsonDriver implements JsonDriver {
+public class TagJsonDriver extends JsonDriver {
 
     private static final String PATH = "data/tags.json";
     private static final Type listType = new TypeToken<ArrayList<Tag>>(){}.getType();
 
-    @Override
-    public void save(Object tags) {
-        if(tags instanceof ArrayList) {
-            JsonDriver.saveToJson(tags, PATH);
-        }
+    public TagJsonDriver() {
+        super(PATH);
     }
 
     @Override
-    public ArrayList<Tag> read() {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public void save(ArrayList<Record> tags) {
+        save(tags, PATH);
+    }
 
-            String json = Files.readString(Path.of(PATH));
-            return gson.fromJson(json, listType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public ArrayList<Record> read() {
+        return read(PATH);
     }
 }

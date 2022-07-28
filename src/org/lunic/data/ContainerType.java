@@ -14,5 +14,6 @@ public enum ContainerType {
     SAFE,
     CABINET,
     CLOSET,
-    CUPBOARD
+    CUPBOARD,
+    DUMMY
 }

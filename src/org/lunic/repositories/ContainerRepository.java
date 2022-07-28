@@ -3,46 +3,36 @@ package org.lunic.repositories;
 import org.lunic.data.Container;
 import org.lunic.data.ContainerType;
 import org.lunic.data.Item;
+import org.lunic.persistance.ContainerJsonDriver;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
-public class ContainerRepository {
+public class ContainerRepository extends Repository {
 
-    private HashSet<Container> containerList;
-
-
-    public void Create(String containerName, String containerLocation, HashSet<Item> containerItems, ContainerType containerType) {
-        Container container = new Container(containerName, containerLocation, containerItems, containerType);
-        containerList.add(container);
-
-        //Save
+    public ContainerRepository() {
+        super(new ContainerJsonDriver());
     }
 
-    public Container Read(Container container) {
-        return find(container);
+    public void Create(Container container) {
+        super.Create(container);
     }
 
-    public void Update(Container container, String containerName, String containerLocation, HashSet<Item> containerItems, ContainerType containerType) {
-        Container containerBeforeUpdate = new Container(containerName, containerLocation, containerItems, containerType);
-        Container containerToUpdate = find(container);
+    public ArrayList<Container> Read() {
+        ArrayList<Container> container = new ArrayList<>();
+        for(Record record : recordList) {
+            if(record instanceof Container) {
+                container.add((Container) record);
+            }
+        }
+        return container;
+    }
 
-        if(containerToUpdate == null) return;
-
-        containerList.remove(containerToUpdate);
-        containerList.add(container);
-
-        //Save
+    public void Update(Container oldContainer, Container newContainer) {
+        super.Update(oldContainer, newContainer);
     }
 
     public void Delete(Container container) {
-        containerList.remove(find(container));
-        //Save
-    }
-
-    private Container find(Container containerToFind) {
-        for(Container container : containerList) {
-            if(container.name().equals(containerToFind)) return container;
-        }
-        return null;
+        super.Delete(container);
     }
 }

@@ -13,27 +13,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class ContainerJsonDriver implements JsonDriver {
+public class ContainerJsonDriver extends JsonDriver {
     private static final String PATH = "data/container.json";
-    private static final Type listType = new TypeToken<ArrayList<Container>>(){}.getType();
 
-    @Override
-    public void save(Object container) {
-        if(container instanceof ArrayList) {
-            JsonDriver.saveToJson(container, PATH);
-        }
+    public ContainerJsonDriver() {
+        super(PATH);
     }
 
     @Override
-    public ArrayList<Container> read() {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public void save(ArrayList<Record> records) {
+        save(records, PATH);
+    }
 
-            String json = Files.readString(Path.of(PATH));
-            return gson.fromJson(json, listType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public ArrayList<Record> read() {
+        return read(PATH);
     }
 }

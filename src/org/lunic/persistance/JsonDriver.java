@@ -2,16 +2,25 @@ package org.lunic.persistance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
-public interface JsonDriver {
+public abstract class JsonDriver {
 
-    static void saveToJson(Object item, String path) {
+    private static final Type listType = new TypeToken<ArrayList<Record>>(){}.getType();
+
+    JsonDriver(String path) {
+        create(path);
+    }
+
+    private void saveToJson(Object item, String path) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File jsonFile = new File(path);
         try {
@@ -23,17 +32,35 @@ public interface JsonDriver {
         }
     }
 
-    static void createDirectory(String path) {
+    private void create(String path) {
         try {
-            Path directory = Path.of(path);
-            if(!Files.exists(directory)) Files.createDirectory(directory);
+            File file = new File(path);
+            boolean parentDirectoriesCreated = file.getParentFile().mkdirs();
+            if(!file.exists() && parentDirectoriesCreated) {
+                FileWriter writer = new FileWriter(file);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void save(Object item);
+    protected void save(ArrayList<Record> records, String path) {
+        saveToJson(records, path);
+    }
 
-    Object read();
+    protected ArrayList<Record> read(String path) {
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = Files.readString(Path.of(path));
+            return gson.fromJson(json, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    abstract public void save(ArrayList<Record> records);
+    abstract public ArrayList<Record> read();
+
 
 }

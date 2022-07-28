@@ -12,27 +12,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class RecipeJsonDriver implements JsonDriver {
+public class RecipeJsonDriver extends JsonDriver {
     private static final String PATH = "data/recipes.json";
     private static final Type listType = new TypeToken<ArrayList<Recipe>>(){}.getType();
 
-    @Override
-    public void save(Object recipes) {
-        if(recipes instanceof ArrayList) {
-            JsonDriver.saveToJson(recipes, PATH);
-        }
+    public RecipeJsonDriver() {
+        super(PATH);
     }
 
     @Override
-    public ArrayList<Recipe> read() {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public void save(ArrayList<Record> records) {
+        save(records, PATH);
+    }
 
-            String json = Files.readString(Path.of(PATH));
-            return gson.fromJson(json, listType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public ArrayList<Record> read() {
+        return read(PATH);
     }
 }
