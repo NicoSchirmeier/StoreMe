@@ -26,11 +26,11 @@ public abstract class Repository {
         jsonDriver.save(recordList);
     }
 
-    protected void Update(Record oldRecord, Record newRecord) {
-        if(oldRecord == null || newRecord == null) return;
+    protected void Update(Record recordToUpdate, Record updatedRecord) {
+        if(recordToUpdate == null || updatedRecord == null) return;
 
-        recordList.remove(Find(oldRecord));
-        recordList.add(newRecord);
+        recordList.remove(Find(recordToUpdate));
+        recordList.add(updatedRecord);
 
         jsonDriver.save(recordList);
     }
