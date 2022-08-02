@@ -16,7 +16,9 @@ public abstract class Repository {
 
     private void Load() {
         recordList.clear();
-        recordList.addAll(jsonDriver.read());
+        if(jsonDriver.read() != null) {
+            recordList.addAll(jsonDriver.read());
+        }
     }
 
     protected void Create(Record record) {
