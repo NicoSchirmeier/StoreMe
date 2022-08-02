@@ -44,24 +44,8 @@ public class UserInputHandler implements InputHandler {
         options.add(new Option("View Recipes", recipeInputHandler));
         options.add(new Option("View Tags", tagInputHandler));
 
-        Option option = displayOptions(options);
+        Option option = ConsoleUtils.displayOptions(options);
         option.getInputHandler().print();
-    }
-
-    public static Option displayOptions(ArrayList<Option> options) {
-        if(options == null || options.size() < 1) return null;
-
-        int selection = -1;
-        Scanner scanner = new Scanner(System.in);
-
-        while (selection < 0 || selection > options.size()) {
-            for(Option option : options) {
-                System.out.println("[" + options.indexOf(option) + "] " + option.getText());
-            }
-            selection = scanner.nextInt();
-        }
-
-        return options.get(selection);
     }
 
 

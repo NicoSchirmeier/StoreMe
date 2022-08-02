@@ -27,6 +27,6 @@ public class TagJsonDriver extends JsonDriver {
 
     @Override
     public ArrayList<Record> read() {
-        return read(PATH);
+        return read(PATH, listType);
     }
 }

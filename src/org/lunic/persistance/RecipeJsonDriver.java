@@ -27,6 +27,6 @@ public class RecipeJsonDriver extends JsonDriver {
 
     @Override
     public ArrayList<Record> read() {
-        return read(PATH);
+        return read(PATH, listType);
     }
 }

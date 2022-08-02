@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class ContainerJsonDriver extends JsonDriver {
     private static final String PATH = "data/container.json";
+    private static final Type listType = new TypeToken<ArrayList<Container>>(){}.getType();
 
     public ContainerJsonDriver() {
         super(PATH);
@@ -27,6 +28,6 @@ public class ContainerJsonDriver extends JsonDriver {
 
     @Override
     public ArrayList<Record> read() {
-        return read(PATH);
+        return read(PATH, listType);
     }
 }

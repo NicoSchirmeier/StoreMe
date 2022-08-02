@@ -14,8 +14,6 @@ import java.util.ArrayList;
 
 public abstract class JsonDriver {
 
-    private static final Type listType = new TypeToken<ArrayList<Record>>(){}.getType();
-
     JsonDriver(String path) {
         create(path);
     }
@@ -37,7 +35,7 @@ public abstract class JsonDriver {
             File file = new File(path);
             boolean parentDirectoriesCreated = file.getParentFile().mkdirs();
             if(!file.exists() && parentDirectoriesCreated) {
-                FileWriter writer = new FileWriter(file);
+                var _created = file.createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,7 +46,7 @@ public abstract class JsonDriver {
         saveToJson(records, path);
     }
 
-    protected ArrayList<Record> read(String path) {
+    protected ArrayList<Record> read(String path, Type listType) {
         try {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = Files.readString(Path.of(path));

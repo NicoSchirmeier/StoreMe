@@ -1,10 +1,13 @@
 package org.lunic.ui;
 
 import org.lunic.data.Container;
+import org.lunic.data.ContainerType;
 import org.lunic.data.Item;
 import org.lunic.repositories.ContainerRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
 
 public class ContainerInputHandler implements InputHandler {
     private final ContainerRepository repository;
@@ -27,7 +30,7 @@ public class ContainerInputHandler implements InputHandler {
             options.add(new Option(container.toString(), container));
         }
 
-        Option option = UserInputHandler.displayOptions(options);
+        Option option = ConsoleUtils.displayOptions(options);
 
         if(option.getRootObject() instanceof Container) {
             printContainerItems((Container) option.getRootObject());
@@ -50,7 +53,7 @@ public class ContainerInputHandler implements InputHandler {
             options.add(new Option(item.toString(), item));
         }
 
-        Option option = UserInputHandler.displayOptions(options);
+        Option option = ConsoleUtils.displayOptions(options);
 
         if(option.getRootObject() instanceof Item) {
             printItemOptions(container, (Item) option.getRootObject());
@@ -66,7 +69,31 @@ public class ContainerInputHandler implements InputHandler {
     }
 
     private void printContainerCreationDialog() {
-        System.err.println("NOT IMPLEMENTED");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter name: ");
+        String name = ConsoleUtils.readString();
+        System.out.println("Enter location: ");
+        String location = ConsoleUtils.readString();
+        System.out.println("Select container type:");
+
+        ContainerType type = ContainerType.DEFAULT;
+        ArrayList<Option> options = new ArrayList<>();
+        for (ContainerType containerType : ContainerType.values()) {
+            options.add(new Option(containerType.name(), containerType));
+        }
+        Option option = ConsoleUtils.displayOptions(options);
+        if(option.getRootObject() instanceof ContainerType containerType) {
+            type = containerType;
+        }
+
+        Container container = new Container(name, location, new HashSet<>(), type);
+
+        System.out.println(container);
+        if(ConsoleUtils.printConfirmationDialog("Create Container")) {
+            repository.Create(container);
+        } else {
+            printContainerCreationDialog();
+        }
     }
 
     private void printContainerChangeDialog() {
