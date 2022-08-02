@@ -1,12 +1,9 @@
 package org.lunic.repositories;
 
 import org.lunic.data.Container;
-import org.lunic.data.ContainerType;
-import org.lunic.data.Item;
 import org.lunic.persistance.ContainerJsonDriver;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class ContainerRepository extends Repository {
 
@@ -19,17 +16,18 @@ public class ContainerRepository extends Repository {
     }
 
     public ArrayList<Container> Read() {
-        ArrayList<Container> container = new ArrayList<>();
-        for(Record record : recordList) {
-            if(record instanceof Container) {
-                container.add((Container) record);
+        ArrayList<Container> containers = new ArrayList<>();
+        for (Record record : recordList) {
+            if (record instanceof Container) {
+                containers.add((Container) record);
             }
         }
-        return container;
+        return containers;
     }
 
-    public void Update(Container oldContainer, Container newContainer) {
-        super.Update(oldContainer, newContainer);
+    public void Update(Container containerToBeUpdated,
+                       Container updatedContainer) {
+        super.Update(containerToBeUpdated, updatedContainer);
     }
 
     public void Delete(Container container) {

@@ -17,8 +17,8 @@ public class TagRepository extends Repository {
 
     public ArrayList<Tag> Read() {
         ArrayList<Tag> tags = new ArrayList<>();
-        for(Record record : recordList) {
-            if(record instanceof Tag) {
+        for (Record record : recordList) {
+            if (record instanceof Tag) {
                 tags.add((Tag) record);
             }
         }
@@ -26,8 +26,8 @@ public class TagRepository extends Repository {
         return tags;
     }
 
-    public void Update(Tag oldTag, Tag newTag) {
-        super.Update(oldTag, newTag);
+    public void Update(Tag tagToBeUpdated, Tag updatedTag) {
+        super.Update(tagToBeUpdated, updatedTag);
     }
 
     public void Delete(Tag tag) {

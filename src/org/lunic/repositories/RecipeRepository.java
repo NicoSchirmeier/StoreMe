@@ -17,8 +17,8 @@ public class RecipeRepository extends Repository {
 
     public ArrayList<Recipe> Read() {
         ArrayList<Recipe> recipes = new ArrayList<>();
-        for(Record record : recordList) {
-            if(record instanceof Recipe) {
+        for (Record record : recordList) {
+            if (record instanceof Recipe) {
                 recipes.add((Recipe) record);
             }
         }
@@ -26,8 +26,8 @@ public class RecipeRepository extends Repository {
         return recipes;
     }
 
-    public void Update(Recipe oldRecipe, Recipe newRecipe) {
-        super.Update(oldRecipe, newRecipe);
+    public void Update(Recipe recipeToBeUpdated, Recipe updatedRecipe) {
+        super.Update(recipeToBeUpdated, updatedRecipe);
     }
 
     public void Delete(Recipe recipe) {

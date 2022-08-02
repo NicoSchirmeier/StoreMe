@@ -1,7 +1,5 @@
 package org.lunic.repositories;
 
-import org.lunic.data.Container;
-import org.lunic.persistance.ItemTemplateJsonDriver;
 import org.lunic.persistance.JsonDriver;
 
 import java.util.ArrayList;
@@ -26,32 +24,33 @@ public abstract class Repository {
         jsonDriver.save(recordList);
     }
 
-    protected void Update(Record recordToUpdate, Record updatedRecord) {
-        if(recordToUpdate == null || updatedRecord == null) return;
+    protected void Update(Record recordToBeUpdated, Record updatedRecord) {
+        if (recordToBeUpdated == null || updatedRecord == null) return;
 
-        recordList.remove(Find(recordToUpdate));
+        recordList.remove(Find(recordToBeUpdated));
         recordList.add(updatedRecord);
 
         jsonDriver.save(recordList);
     }
 
     protected void Delete(Record record) {
-        if(Find(record) == null) return;
+        if (Find(record) == null) return;
 
         recordList.remove(Find(record));
         jsonDriver.save(recordList);
     }
 
     private Record Find(Record recordToFind) {
-        if(recordToFind == null) {
+        if (recordToFind == null) {
             System.err.println(new NullPointerException().getMessage());
             return null;
         } else {
-            for(Record record : recordList) {
-                if(record.equals(recordToFind)) return record;
+            for (Record record : recordList) {
+                if (record.equals(recordToFind)) return record;
             }
         }
-        System.err.println("ERROR: " + recordToFind.getClass() + " could not be found!");
+        System.err.println(
+                "ERROR: " + recordToFind.getClass() + " could not be found!");
         return null;
     }
 
