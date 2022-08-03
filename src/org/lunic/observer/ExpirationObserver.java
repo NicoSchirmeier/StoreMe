@@ -7,19 +7,36 @@ import org.lunic.repositories.ContainerRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 
 public class ExpirationObserver {
 
-    public static ArrayList<Item> getSoonExpiringItems(
-            ContainerRepository currentRepository
-    ) {
-        LocalDate currentDate = LocalDate.now();
-        for (Container container : currentRepository.Read()) {
+    public ContainerRepository currentContainers;
+    LocalDate currentDate;
+
+    public ExpirationObserver(ContainerRepository currentContainers) {
+        this.currentContainers = currentContainers;
+        this.currentDate = LocalDate.now();
+    }
+
+    public static long getDaysBetween(LocalDate expirationDate,
+                                       LocalDate currentDate) {
+        return DAYS.between(currentDate, expirationDate);
+    }
+
+    public ArrayList<Item> getSoonExpiringItems() {
+
+        ArrayList<Item> expiredItems = new ArrayList<>();
+        for (Container container : currentContainers.Read()) {
             for (Item item : container.items()) {
-                //TODO check expiration date
+                long daysBetween = getDaysBetween(item.expirationDate(), currentDate);
+                if (daysBetween <= 0) {
+                    expiredItems.add(item);
+                }
             }
         }
-        return null;
+        return expiredItems;
     }
 
 }
