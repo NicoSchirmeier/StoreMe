@@ -13,9 +13,10 @@ public class UserInputHandler implements InputHandler {
     private final TagInputHandler tagInputHandler;
 
     public UserInputHandler() {
-        containerInputHandler = new ContainerInputHandler(new ContainerRepository());
-        recipeInputHandler = new RecipeInputHandler();
         tagInputHandler = new TagInputHandler();
+        containerInputHandler = new ContainerInputHandler(new ContainerRepository(), tagInputHandler);
+        recipeInputHandler = new RecipeInputHandler();
+
 
         while (SYSTEM_ACTIVE) print();
     }

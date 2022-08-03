@@ -1,11 +1,13 @@
 package org.lunic.ui;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class ConsoleUtils {
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in).useDelimiter("\r?\n");
     private static final int MaxChars = 20;
     private static final int MinChars = 3;
 
@@ -14,9 +16,7 @@ public class ConsoleUtils {
         while (text.length() < MinChars || text.length() > MaxChars) {
             text = scanner.next();
             if(text.equals("!")) return text;
-
-
-            if(text.length() > 20) {
+            if(text.length() > MaxChars) {
                 System.err.println("Text too long (Maximum Length: " + MaxChars + ")");
             } else if (text.length() < MinChars) {
                 System.err.println("Text too short (Minimum Length: " + MinChars + ")");
@@ -41,7 +41,7 @@ public class ConsoleUtils {
                 scanner.next();
             }
 
-            if(selection < 0 || selection > options.size()) {
+            if(selection < 0 || selection >= options.size()) {
                 System.err.println("Selection out of bounds!");
             }
         }
@@ -62,6 +62,38 @@ public class ConsoleUtils {
             confirmed = true;
         }
 
-        return  confirmed;
+        return confirmed;
+    }
+
+    public static int getAmount(int min, int max) {
+        int amount = Integer.MIN_VALUE;
+        if(max == 0) max = Integer.MAX_VALUE;
+        while (min > amount || amount > max) {
+            try {
+                amount = scanner.nextInt();
+            } catch (Exception e) {
+                System.err.println("No valid input detected. Try again.");
+                scanner.next();
+            }
+            if(min > amount && amount > max) {
+                System.err.println("Input out of bounds! (Min: " + min + " Max: " + max + " )");
+            }
+        }
+        return amount;
+    }
+
+    public static LocalDate getDate() {
+        LocalDate date = LocalDate.of(1,1,1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyy");
+
+        while (date.isBefore(LocalDate.now())) {
+            try {
+                date = LocalDate.parse(readString(), formatter);
+            } catch (Exception e) {
+                System.err.println("Date could not be parsed. (yyyy-MM-dd)");
+            }
+        }
+
+        return date;
     }
 }

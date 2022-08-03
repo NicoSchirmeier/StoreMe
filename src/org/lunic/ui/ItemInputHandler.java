@@ -2,14 +2,23 @@ package org.lunic.ui;
 
 import org.lunic.data.Container;
 import org.lunic.data.Item;
+import org.lunic.data.ItemType;
+import org.lunic.data.Tag;
 import org.lunic.repositories.ContainerRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ItemInputHandler implements InputHandler {
-    ContainerRepository repository; 
-    public ItemInputHandler(ContainerRepository repository) {
-        this.repository = repository; 
+    ContainerRepository repository;
+    ContainerInputHandler containerInputHandler;
+    TagInputHandler tagInputHandler;
+
+    public ItemInputHandler(ContainerRepository repository, ContainerInputHandler containerInputHandler, TagInputHandler tagInputHandler) {
+        this.repository = repository;
+        this.containerInputHandler = containerInputHandler;
+        this.tagInputHandler = tagInputHandler;
     }
 
     @Override
@@ -35,7 +44,36 @@ public class ItemInputHandler implements InputHandler {
     }
 
     public void printItemCreationDialog(Container container) {
-        System.err.println("NOT IMPLEMENTED");
+        ArrayList<Option> options = new ArrayList<>();
+
+        System.out.println("Enter Name:");
+        String name = ConsoleUtils.readString();
+
+        System.out.println("Select Type:");
+        for (ItemType itemType : ItemType.values()) {
+            options.add(new Option(itemType.name(), itemType));
+        }
+        ItemType itemType = (ItemType) ConsoleUtils.displayOptions(options).getRootObject();
+
+        System.out.println("Enter Amount:");
+        int amount = ConsoleUtils.getAmount(1, 0);
+
+        System.out.println("Enter Expiration Date: (yyyy-MM-dd)");
+        LocalDate expirationDate = ConsoleUtils.getDate();
+        System.out.println("Enter Consumption Date: (yyyy-MM-dd)");
+        LocalDate consumptionDate = ConsoleUtils.getDate();
+
+        System.out.println("Select Tags:");
+        HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
+
+        Item item = new Item(name, itemType, amount, expirationDate, consumptionDate, tags);
+        System.out.println(item);
+        boolean confirmed = ConsoleUtils.printConfirmationDialog("Create Item");
+
+        if(confirmed) {
+            container.items().add(item);
+            repository.Update(container, container);
+        }
     }
 
     private void printItemChangeDialog(Item item, Container container) {
@@ -43,6 +81,9 @@ public class ItemInputHandler implements InputHandler {
     }
 
     private void printItemDeletionDialog(Item item, Container container) {
+        boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete Item");
+        if(confirmed) container.items().remove(item);
+        repository.Update(container, container);
     }
 
     private enum Action {

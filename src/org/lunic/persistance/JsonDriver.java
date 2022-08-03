@@ -1,7 +1,10 @@
 package org.lunic.persistance;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.lunic.data.Container;
 import org.lunic.data.Recipe;
 
@@ -19,12 +22,14 @@ public abstract class JsonDriver {
     }
 
     private void saveToJson(Object item, String path) {
-        ObjectMapper objectMapper = new ObjectMapper().setDefaultPrettyPrinter(new DefaultPrettyPrinter());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
 
         File jsonFile = new File(path);
         try {
             FileWriter jsonWriter = new FileWriter(jsonFile);
-            jsonWriter.write(objectMapper.writeValueAsString(item));
+            String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(item);
+            jsonWriter.write(json);
             jsonWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,7 +40,7 @@ public abstract class JsonDriver {
         try {
             File file = new File(path);
             boolean parentDirectoriesCreated = file.getParentFile().mkdirs();
-            if(parentDirectoriesCreated) {
+            if(parentDirectoriesCreated || file.getParentFile().exists()) {
                 if (file.createNewFile()) {
                     System.out.println("File created: " + file.getName());
                 } else {
@@ -54,6 +59,7 @@ public abstract class JsonDriver {
     protected ArrayList<Record> read(String path, Record type) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
             String json = Files.readString(Path.of(path));
 
             ArrayList<Record> records = new ArrayList<>();

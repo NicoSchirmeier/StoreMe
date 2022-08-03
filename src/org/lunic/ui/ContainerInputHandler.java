@@ -12,9 +12,9 @@ public class ContainerInputHandler implements InputHandler {
     private final ContainerRepository repository;
     private final ItemInputHandler itemInputHandler;
 
-    public ContainerInputHandler(ContainerRepository containerRepository) {
+    public ContainerInputHandler(ContainerRepository containerRepository, TagInputHandler tagInputHandler) {
         this.repository = containerRepository;
-        this.itemInputHandler = new ItemInputHandler(repository);
+        this.itemInputHandler = new ItemInputHandler(repository, this, tagInputHandler);
     }
     @Override
     public void print() {
@@ -67,6 +67,7 @@ public class ContainerInputHandler implements InputHandler {
                 printContainerChangeDialog(container);
             }
         }
+        printContainerOptions();
     }
 
     private void printContainerCreationDialog() {
@@ -119,6 +120,5 @@ public class ContainerInputHandler implements InputHandler {
     private void printContainerDeletionDialog(Container container) {
         boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete Container");
         if(confirmed) repository.Delete(container);
-        printContainerOptions();
     }
 }
