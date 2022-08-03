@@ -1,20 +1,13 @@
 package org.lunic.persistance;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.lunic.data.Tag;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class TagJsonDriver extends JsonDriver {
 
     private static final String PATH = "data/tags.json";
-    private static final Type listType = new TypeToken<ArrayList<Tag>>(){}.getType();
+    private static final Tag type = new Tag(null, null, null);
 
     public TagJsonDriver() {
         super(PATH);
@@ -27,6 +20,6 @@ public class TagJsonDriver extends JsonDriver {
 
     @Override
     public ArrayList<Record> read() {
-        return read(PATH, listType);
+        return read(PATH, type);
     }
 }

@@ -7,7 +7,6 @@ import org.lunic.repositories.ContainerRepository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Scanner;
 
 public class ContainerInputHandler implements InputHandler {
     private final ContainerRepository repository;
@@ -63,28 +62,19 @@ public class ContainerInputHandler implements InputHandler {
             } else if (action.equals(Actions.REMOVE)) {
                 printContainerDeletionDialog();
             } else if (action.equals(Actions.CHANGE)) {
-                printContainerChangeDialog();
+                printContainerChangeDialog(container);
             }
         }
     }
 
     private void printContainerCreationDialog() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter name: ");
         String name = ConsoleUtils.readString();
         System.out.println("Enter location: ");
         String location = ConsoleUtils.readString();
         System.out.println("Select container type:");
 
-        ContainerType type = ContainerType.DEFAULT;
-        ArrayList<Option> options = new ArrayList<>();
-        for (ContainerType containerType : ContainerType.values()) {
-            options.add(new Option(containerType.name(), containerType));
-        }
-        Option option = ConsoleUtils.displayOptions(options);
-        if(option.getRootObject() instanceof ContainerType containerType) {
-            type = containerType;
-        }
+        ContainerType type = printTypeSelector();
 
         Container container = new Container(name, location, new HashSet<>(), type);
 
@@ -96,8 +86,32 @@ public class ContainerInputHandler implements InputHandler {
         }
     }
 
-    private void printContainerChangeDialog() {
-        System.err.println("NOT IMPLEMENTED");
+    private void printContainerChangeDialog(Container containerToBeUpdated) {
+        Container updatedContainer;
+
+        System.out.println("Changing container: [" + containerToBeUpdated + "]");
+        System.out.println("Enter name: (Enter \"!\" to skip)");
+        String name = ConsoleUtils.readString();
+        System.out.println("Enter location: (Enter \"!\" to skip)");
+        String location = ConsoleUtils.readString();
+        System.out.println("Select container type:");
+
+        ContainerType type = printTypeSelector();
+
+        if(name.equals("!")) name = containerToBeUpdated.name();
+        if(location.equals("!")) location = containerToBeUpdated.location();
+
+        updatedContainer = new Container(name, location, containerToBeUpdated.items(), type);
+
+        System.out.println(containerToBeUpdated);
+        System.out.println("->");
+        System.out.println(updatedContainer);
+        if(ConsoleUtils.printConfirmationDialog("Change Container")) {
+            repository.Update(containerToBeUpdated, updatedContainer);
+        } else {
+            printContainerItems(containerToBeUpdated);
+        }
+
     }
 
     private void printContainerDeletionDialog() {
@@ -112,6 +126,21 @@ public class ContainerInputHandler implements InputHandler {
         System.err.println("NOT IMPLEMENTED");
     }
 
+    private ContainerType printTypeSelector() {
+        ContainerType type = ContainerType.DEFAULT;
+        ArrayList<Option> options = new ArrayList<>();
+        for (ContainerType containerType : ContainerType.values()) {
+            options.add(new Option(containerType.name(), containerType));
+        }
+
+        Option option = ConsoleUtils.displayOptions(options);
+
+        if(option.getRootObject() instanceof ContainerType containerType) {
+            type = containerType;
+        }
+
+        return type;
+    }
     private enum Actions {
         CREATE,
         CREATE_ITEM,

@@ -1,20 +1,10 @@
 package org.lunic.persistance;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.lunic.data.Item;
-import org.lunic.data.Tag;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class ItemTemplateJsonDriver extends JsonDriver {
     private static final String PATH = "data/item_templates.json";
-    private static final Type listType = new TypeToken<ArrayList<Item>>(){}.getType();
+    private static final Item type = new Item(null, null, 0, null, null, null);
 
     public ItemTemplateJsonDriver() {
         super(PATH);
@@ -27,6 +17,6 @@ public class ItemTemplateJsonDriver extends JsonDriver {
 
     @Override
     public ArrayList<Record> read() {
-        return read(PATH, listType);
+        return read(PATH, type);
     }
 }

@@ -13,6 +13,8 @@ public class ConsoleUtils {
         String text = "";
         while (text.length() < MinChars || text.length() > MaxChars) {
             text = scanner.next();
+            if(text.equals("!")) return text;
+
 
             if(text.length() > 20) {
                 System.err.println("Text too long (Maximum Length: " + MaxChars + ")");
@@ -32,7 +34,12 @@ public class ConsoleUtils {
             for(Option option : options) {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
-            selection = scanner.nextInt();
+            try {
+                selection = scanner.nextInt();
+            } catch (Exception e) {
+                System.err.println("No valid input detected. Try again.");
+                scanner.next();
+            }
 
             if(selection < 0 || selection > options.size()) {
                 System.err.println("Selection out of bounds!");

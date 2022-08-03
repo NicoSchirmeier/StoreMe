@@ -1,13 +1,13 @@
 package org.lunic.persistance;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.lunic.data.Container;
+import org.lunic.data.Recipe;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -19,11 +19,12 @@ public abstract class JsonDriver {
     }
 
     private void saveToJson(Object item, String path) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        ObjectMapper objectMapper = new ObjectMapper().setDefaultPrettyPrinter(new DefaultPrettyPrinter());
+
         File jsonFile = new File(path);
         try {
             FileWriter jsonWriter = new FileWriter(jsonFile);
-            jsonWriter.write(gson.toJson(item));
+            jsonWriter.write(objectMapper.writeValueAsString(item));
             jsonWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,8 +35,12 @@ public abstract class JsonDriver {
         try {
             File file = new File(path);
             boolean parentDirectoriesCreated = file.getParentFile().mkdirs();
-            if(!file.exists() && parentDirectoriesCreated) {
-                var _created = file.createNewFile();
+            if(parentDirectoriesCreated) {
+                if (file.createNewFile()) {
+                    System.out.println("File created: " + file.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,11 +51,18 @@ public abstract class JsonDriver {
         saveToJson(records, path);
     }
 
-    protected ArrayList<Record> read(String path, Type listType) {
+    protected ArrayList<Record> read(String path, Record type) {
         try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            ObjectMapper objectMapper = new ObjectMapper();
             String json = Files.readString(Path.of(path));
-            return gson.fromJson(json, listType);
+
+            ArrayList<Record> records = new ArrayList<>();
+            if(json.length() > 0) {
+                for (Object obj : objectMapper.readValue(json, ArrayList.class)) {
+                    records.add(objectMapper.convertValue(obj, type.getClass()));
+                }
+            }
+            return records;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,6 +70,7 @@ public abstract class JsonDriver {
     }
 
     abstract public void save(ArrayList<Record> records);
+
     abstract public ArrayList<Record> read();
 
 
