@@ -10,9 +10,11 @@ import java.util.HashSet;
 
 public class ContainerInputHandler implements InputHandler {
     private final ContainerRepository repository;
+    private final ItemInputHandler itemInputHandler;
 
     public ContainerInputHandler(ContainerRepository containerRepository) {
         this.repository = containerRepository;
+        this.itemInputHandler = new ItemInputHandler(repository);
     }
     @Override
     public void print() {
@@ -21,10 +23,10 @@ public class ContainerInputHandler implements InputHandler {
         printContainerOptions();
     }
 
-    private void printContainerOptions() {
+    public void printContainerOptions() {
         ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("Create NEW", Actions.CREATE));
-        options.add(new Option("Back", Actions.BACK));
+        options.add(new Option("Create NEW", ContainerAction.CREATE));
+        options.add(new Option("Back", ContainerAction.BACK));
         for (Container container : repository.Read()) {
             options.add(new Option(container.toString(), container));
         }
@@ -32,21 +34,21 @@ public class ContainerInputHandler implements InputHandler {
         Option option = ConsoleUtils.displayOptions(options);
 
         if(option.getRootObject() instanceof Container) {
-            printContainerItems((Container) option.getRootObject());
-        } else if (option.getRootObject() instanceof Actions action) {
-            if(action.equals(Actions.CREATE)) {
+            printContainerDetails((Container) option.getRootObject());
+        } else if (option.getRootObject() instanceof ContainerAction action) {
+            if(action.equals(ContainerAction.CREATE)) {
                 printContainerCreationDialog();
             }
         }
 
     }
 
-    private void printContainerItems(Container container) {
+    private void printContainerDetails(Container container) {
         ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("Add Item", Actions.CREATE_ITEM));
-        options.add(new Option("Delete container", Actions.REMOVE));
-        options.add(new Option("Change Container", Actions.CHANGE));
-        options.add(new Option("Back", Actions.BACK));
+        options.add(new Option("Add Item", ContainerAction.CREATE_ITEM));
+        options.add(new Option("Delete container", ContainerAction.REMOVE));
+        options.add(new Option("Change Container", ContainerAction.CHANGE));
+        options.add(new Option("Back", ContainerAction.BACK));
 
         for(Item item : container.items()) {
             options.add(new Option(item.toString(), item));
@@ -55,13 +57,13 @@ public class ContainerInputHandler implements InputHandler {
         Option option = ConsoleUtils.displayOptions(options);
 
         if(option.getRootObject() instanceof Item) {
-            printItemOptions(container, (Item) option.getRootObject());
-        } else if (option.getRootObject() instanceof Actions action) {
-            if (action.equals(Actions.CREATE_ITEM)) {
-                printItemCreationDialog(container);
-            } else if (action.equals(Actions.REMOVE)) {
-                printContainerDeletionDialog();
-            } else if (action.equals(Actions.CHANGE)) {
+            itemInputHandler.printItemOptions(container, (Item) option.getRootObject());
+        } else if (option.getRootObject() instanceof ContainerAction action) {
+            if (action.equals(ContainerAction.CREATE_ITEM)) {
+                itemInputHandler.printItemCreationDialog(container);
+            } else if (action.equals(ContainerAction.REMOVE)) {
+                printContainerDeletionDialog(container);
+            } else if (action.equals(ContainerAction.CHANGE)) {
                 printContainerChangeDialog(container);
             }
         }
@@ -74,7 +76,7 @@ public class ContainerInputHandler implements InputHandler {
         String location = ConsoleUtils.readString();
         System.out.println("Select container type:");
 
-        ContainerType type = printTypeSelector();
+        ContainerType type = ContainerAction.printTypeSelector();
 
         Container container = new Container(name, location, new HashSet<>(), type);
 
@@ -96,7 +98,7 @@ public class ContainerInputHandler implements InputHandler {
         String location = ConsoleUtils.readString();
         System.out.println("Select container type:");
 
-        ContainerType type = printTypeSelector();
+        ContainerType type = ContainerAction.printTypeSelector();
 
         if(name.equals("!")) name = containerToBeUpdated.name();
         if(location.equals("!")) location = containerToBeUpdated.location();
@@ -109,43 +111,14 @@ public class ContainerInputHandler implements InputHandler {
         if(ConsoleUtils.printConfirmationDialog("Change Container")) {
             repository.Update(containerToBeUpdated, updatedContainer);
         } else {
-            printContainerItems(containerToBeUpdated);
+            printContainerDetails(containerToBeUpdated);
         }
 
     }
 
-    private void printContainerDeletionDialog() {
-        System.err.println("NOT IMPLEMENTED");
-    }
-
-    private void printItemCreationDialog(Container container) {
-        System.err.println("NOT IMPLEMENTED");
-    }
-
-    private void printItemOptions(Container container, Item rootObject) {
-        System.err.println("NOT IMPLEMENTED");
-    }
-
-    private ContainerType printTypeSelector() {
-        ContainerType type = ContainerType.DEFAULT;
-        ArrayList<Option> options = new ArrayList<>();
-        for (ContainerType containerType : ContainerType.values()) {
-            options.add(new Option(containerType.name(), containerType));
-        }
-
-        Option option = ConsoleUtils.displayOptions(options);
-
-        if(option.getRootObject() instanceof ContainerType containerType) {
-            type = containerType;
-        }
-
-        return type;
-    }
-    private enum Actions {
-        CREATE,
-        CREATE_ITEM,
-        REMOVE,
-        CHANGE,
-        BACK
+    private void printContainerDeletionDialog(Container container) {
+        boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete Container");
+        if(confirmed) repository.Delete(container);
+        printContainerOptions();
     }
 }
