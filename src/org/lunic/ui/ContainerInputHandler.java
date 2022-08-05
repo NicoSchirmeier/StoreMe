@@ -8,11 +8,12 @@ import org.lunic.repositories.ContainerRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class ContainerInputHandler implements InputHandler {
+public class ContainerInputHandler extends InputHandler {
     private final ContainerRepository repository;
     private final ItemInputHandler itemInputHandler;
 
     public ContainerInputHandler(ContainerRepository containerRepository, TagInputHandler tagInputHandler) {
+        super(containerRepository);
         this.repository = containerRepository;
         this.itemInputHandler = new ItemInputHandler(repository, this, tagInputHandler);
     }
@@ -22,7 +23,6 @@ public class ContainerInputHandler implements InputHandler {
         System.out.println("- Container -");
         printContainerOptions();
     }
-
     public void printContainerOptions() {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option("Create NEW", ContainerAction.CREATE));
@@ -37,12 +37,11 @@ public class ContainerInputHandler implements InputHandler {
             printContainerDetails((Container) option.getRootObject());
         } else if (option.getRootObject() instanceof ContainerAction action) {
             if(action.equals(ContainerAction.CREATE)) {
-                printContainerCreationDialog();
+                printCreationDialog();
             }
         }
 
     }
-
     private void printContainerDetails(Container container) {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option("Add Item", ContainerAction.CREATE_ITEM));
@@ -62,22 +61,21 @@ public class ContainerInputHandler implements InputHandler {
             if (action.equals(ContainerAction.CREATE_ITEM)) {
                 itemInputHandler.printItemCreationDialog(container);
             } else if (action.equals(ContainerAction.REMOVE)) {
-                printContainerDeletionDialog(container);
+                printDeletionDialog(container);
             } else if (action.equals(ContainerAction.CHANGE)) {
-                printContainerChangeDialog(container);
+                printChangeDialog(container);
             }
         }
         printContainerOptions();
     }
-
-    private void printContainerCreationDialog() {
+    @Override
+    public void printCreationDialog() {
         System.out.println("Enter name: ");
         String name = ConsoleUtils.readString();
         System.out.println("Enter location: ");
         String location = ConsoleUtils.readString();
         System.out.println("Select container type:");
-
-        ContainerType type = ContainerAction.printTypeSelector();
+        ContainerType type = (ContainerType) ConsoleUtils.printTypeSelection(ContainerType.values());
 
         Container container = new Container(name, location, new HashSet<>(), type);
 
@@ -85,11 +83,12 @@ public class ContainerInputHandler implements InputHandler {
         if(ConsoleUtils.printConfirmationDialog("Create Container")) {
             repository.Create(container);
         } else {
-            printContainerCreationDialog();
+            printCreationDialog();
         }
     }
-
-    private void printContainerChangeDialog(Container containerToBeUpdated) {
+    @Override
+    public void printChangeDialog(Record toUpdate) {
+        Container containerToBeUpdated = (Container) toUpdate;
         Container updatedContainer;
 
         System.out.println("Changing container: [" + containerToBeUpdated + "]");
@@ -98,8 +97,7 @@ public class ContainerInputHandler implements InputHandler {
         System.out.println("Enter location: (Enter \"!\" to skip)");
         String location = ConsoleUtils.readString();
         System.out.println("Select container type:");
-
-        ContainerType type = ContainerAction.printTypeSelector();
+        ContainerType type = (ContainerType) ConsoleUtils.printTypeSelection(ContainerType.values());
 
         if(name.equals("!")) name = containerToBeUpdated.name();
         if(location.equals("!")) location = containerToBeUpdated.location();
@@ -115,10 +113,5 @@ public class ContainerInputHandler implements InputHandler {
             printContainerDetails(containerToBeUpdated);
         }
 
-    }
-
-    private void printContainerDeletionDialog(Container container) {
-        boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete Container");
-        if(confirmed) repository.Delete(container);
     }
 }

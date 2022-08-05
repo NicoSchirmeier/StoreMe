@@ -5,13 +5,15 @@ import org.lunic.data.Item;
 import org.lunic.data.ItemType;
 import org.lunic.data.Tag;
 import org.lunic.repositories.ContainerRepository;
+import org.lunic.repositories.ItemTemplateRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class ItemInputHandler implements InputHandler {
+public class ItemInputHandler {
     ContainerRepository repository;
+    ItemTemplateRepository templateRepository;
     ContainerInputHandler containerInputHandler;
     TagInputHandler tagInputHandler;
 
@@ -20,12 +22,9 @@ public class ItemInputHandler implements InputHandler {
         this.containerInputHandler = containerInputHandler;
         this.tagInputHandler = tagInputHandler;
     }
-
-    @Override
     public void print() {
         System.err.println("NOT IMPLEMENTED");
     }
-
     public void printItemOptions(Container container, Item item) {
         ArrayList<Option> options = new ArrayList<>();
         System.out.println("Current Item: " + item);
@@ -42,27 +41,19 @@ public class ItemInputHandler implements InputHandler {
             }
         }
     }
-
     public void printItemCreationDialog(Container container) {
         ArrayList<Option> options = new ArrayList<>();
 
         System.out.println("Enter Name:");
         String name = ConsoleUtils.readString();
-
         System.out.println("Select Type:");
-        for (ItemType itemType : ItemType.values()) {
-            options.add(new Option(itemType.name(), itemType));
-        }
-        ItemType itemType = (ItemType) ConsoleUtils.displayOptions(options).getRootObject();
-
+        ItemType itemType = (ItemType) ConsoleUtils.printTypeSelection(ItemType.values());
         System.out.println("Enter Amount:");
         int amount = ConsoleUtils.getAmount(1, 0);
-
         System.out.println("Enter Expiration Date: (yyyy-MM-dd)");
         LocalDate expirationDate = ConsoleUtils.getDate();
         System.out.println("Enter Consumption Date: (yyyy-MM-dd)");
         LocalDate consumptionDate = ConsoleUtils.getDate();
-
         System.out.println("Select Tags:");
         HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
 
@@ -75,17 +66,48 @@ public class ItemInputHandler implements InputHandler {
             repository.Update(container, container);
         }
     }
-
     private void printItemChangeDialog(Item item, Container container) {
+        ArrayList<Option> options = new ArrayList<>();
 
+        System.out.println("Enter Name: (Write \"!\" to skip)");
+        String name = ConsoleUtils.readString();
+        if(name.equals("!")) name = item.name();
+        System.out.println("Select Type:");
+        ItemType itemType = (ItemType) ConsoleUtils.printTypeSelection(ItemType.values());
+        System.out.println("Enter Amount:");
+        int amount = ConsoleUtils.getAmount(1, 0);
+
+        System.out.println("Enter Expiration Date: (yyyy-MM-dd)");
+        LocalDate expirationDate = ConsoleUtils.getDate();
+        System.out.println("Enter Consumption Date: (yyyy-MM-dd)");
+        LocalDate consumptionDate = ConsoleUtils.getDate();
+
+        System.out.println("Select Tags:");
+        HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
+
+        Item changedItem = new Item(name, itemType, amount, expirationDate, consumptionDate, tags);
+
+        System.out.println(item);
+        System.out.println("->");
+        System.out.println(changedItem);
+        boolean confirmed = ConsoleUtils.printConfirmationDialog("Change Item");
+
+        if(confirmed) {
+            container.items().remove(item);
+            container.items().add(changedItem);
+            repository.Update(container, container);
+        }
     }
-
     private void printItemDeletionDialog(Item item, Container container) {
         boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete Item");
         if(confirmed) container.items().remove(item);
         repository.Update(container, container);
     }
 
+    public HashSet<Item> printAddTemplateItemsDialog() {
+
+        return new HashSet<>();
+    }
     private enum Action {
         CHANGE,
         DELETE, 

@@ -1,5 +1,7 @@
 package org.lunic.ui;
 
+import org.lunic.data.ItemType;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -82,6 +84,16 @@ public class ConsoleUtils {
         return amount;
     }
 
+    public static Object printTypeSelection(Object[] types) {
+        ArrayList<Option> options = new ArrayList<>();
+        for (Object type : types) {
+            if(type instanceof Enum<?> typeEnum) {
+                options.add(new Option(typeEnum.name(), typeEnum));
+            }
+        }
+        return displayOptions(options).getRootObject();
+    }
+
     public static LocalDate getDate() {
         LocalDate date = LocalDate.of(1,1,1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyy");
@@ -95,5 +107,25 @@ public class ConsoleUtils {
         }
 
         return date;
+    }
+
+    public static String readText() {
+        String text = "";
+        String lineNew;
+
+        do {
+            lineNew = readString();
+            text += lineNew;
+            if(lineNew.equals("!")) return "!";
+        } while (!lineNew.equals(""));
+
+        return text;
+    }
+
+    public static void printLine(String text) {
+        for(char c : text.toCharArray()) {
+            System.out.print("_");
+        }
+        System.out.println();
     }
 }

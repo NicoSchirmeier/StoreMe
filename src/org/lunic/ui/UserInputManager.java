@@ -1,21 +1,23 @@
 package org.lunic.ui;
 
 import org.lunic.repositories.ContainerRepository;
+import org.lunic.repositories.ItemTemplateRepository;
+import org.lunic.repositories.RecipeRepository;
+import org.lunic.repositories.TagRepository;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class UserInputHandler implements InputHandler {
+public class UserInputManager {
 
     public static boolean SYSTEM_ACTIVE = true;
     private final ContainerInputHandler containerInputHandler;
     private final RecipeInputHandler recipeInputHandler;
     private final TagInputHandler tagInputHandler;
 
-    public UserInputHandler() {
-        tagInputHandler = new TagInputHandler();
+    public UserInputManager() {
+        tagInputHandler = new TagInputHandler(new TagRepository());
         containerInputHandler = new ContainerInputHandler(new ContainerRepository(), tagInputHandler);
-        recipeInputHandler = new RecipeInputHandler();
+        recipeInputHandler = new RecipeInputHandler(new RecipeRepository(), new ItemTemplateRepository(), tagInputHandler);
 
 
         while (SYSTEM_ACTIVE) print();
@@ -43,11 +45,9 @@ public class UserInputHandler implements InputHandler {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option("View Container", containerInputHandler));
         options.add(new Option("View Recipes", recipeInputHandler));
-        options.add(new Option("View Tags", tagInputHandler));
+        options.add(new Option("View Categories and Shopping Lists", tagInputHandler));
 
         Option option = ConsoleUtils.displayOptions(options);
         option.getInputHandler().print();
     }
-
-
 }
