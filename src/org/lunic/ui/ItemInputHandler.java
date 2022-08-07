@@ -3,8 +3,10 @@ package org.lunic.ui;
 import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.Item;
+import org.lunic.data.builder.ItemBuilder;
 import org.lunic.data.type.ItemType;
 import org.lunic.data.Tag;
+import org.lunic.repositories.ItemTemplateRepository;
 import org.lunic.ui.helperclasses.Action;
 import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
@@ -37,6 +39,11 @@ public class ItemInputHandler {
         if (confirmed) {
             container.items().add(item);
             DataManager.CONTAINER_REPOSITORY.Update(container, container);
+
+            confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
+            if(confirmed) {
+                DataManager.ITEM_TEMPLATE_REPOSITORY.Create(new Item(item.name(), item.type(), 0, null, null, item.tags()));
+            }
         }
     }
 
@@ -61,32 +68,47 @@ public class ItemInputHandler {
         DataManager.CONTAINER_REPOSITORY.Update(container, container);
     }
 
-    private Item createOrChange(Item toChange) {
-        if(toChange == null) {
+    private Item createOrChange(Item baseItem) {
+        boolean isItemChange;
+
+        ItemBuilder builder;
+        if(baseItem == null) {
+            isItemChange = false;
+            builder = new ItemBuilder();
+
             System.out.println("- Create Item -");
         } else {
+            isItemChange = true;
+            builder = new ItemBuilder(baseItem);
+
             System.out.println("- Change Item -");
-            System.out.println(toChange + " (Enter \"!\" to skip)");
+            System.out.println(baseItem + " (Enter \"!\" to skip)");
         }
 
         System.out.println("Enter Name:");
-        String name = ConsoleReadingUtils.readString();
-        System.out.println("Select Type:");
-        ItemType itemType = (ItemType) ConsoleSelectionUtils.printTypeSelection(ItemType.values());
-        System.out.println("Enter Amount:");
-        int amount = ConsoleReadingUtils.getAmount(1, 0);
-        System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
-        LocalDate expirationDate = ConsoleReadingUtils.getDate();
-        System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
-        LocalDate consumptionDate = ConsoleReadingUtils.getDate();
-        System.out.println("Select Tags:");
-        HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog();
+        builder.setName(ConsoleReadingUtils.readText(isItemChange));
 
-        if(toChange != null) {
-            if(name.equals("!")) name = toChange.name();
+        System.out.println("Select Type:");
+        Object itemType = ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange);
+        if(itemType == null) {
+            builder.setType(null);
+        } else {
+            builder.setType((ItemType) itemType);
         }
 
-        return new Item(name, itemType, amount, expirationDate, consumptionDate, tags);
+        System.out.println("Enter Amount:");
+        builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange));
+
+        System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
+        builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
+
+        System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
+        builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
+
+        System.out.println("Select Tags:");
+        builder.setTags(DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(isItemChange));
+
+        return builder.create();
     }
 
     public HashSet<Item> printAddTemplateItemsDialog() {

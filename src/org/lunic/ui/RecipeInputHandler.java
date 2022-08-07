@@ -86,7 +86,7 @@ public class RecipeInputHandler extends InputHandler implements Printable {
         int minutes = ConsoleReadingUtils.getAmount(1, 0);
         Time duration = new Time(0, 0, minutes/(60*24), minutes/60, minutes % 60);
         System.out.println("Select Tags:");
-        HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog();
+        HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(false);
         String instruction = ConsoleReadingUtils.readText();
         if(recipe != null) {
             if(name.equals("!")) name = recipe.name();

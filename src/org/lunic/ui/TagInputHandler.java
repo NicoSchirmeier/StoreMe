@@ -130,7 +130,7 @@ public class TagInputHandler extends InputHandler implements Printable {
         return new Tag(name, type, description);
     }
 
-    public HashSet<Tag> printSelectTagsDialog() {
+    public HashSet<Tag> printSelectTagsDialog(boolean canBeSkipped) {
         HashSet<Tag> tags = new HashSet<>();
         while (true) {
             System.out.println("Currently added Tags: " + tags);
@@ -152,6 +152,8 @@ public class TagInputHandler extends InputHandler implements Printable {
                 tags.add(tag);
             }
         }
+        if(tags.isEmpty() && canBeSkipped) return null;
+
         return tags;
     }
 

@@ -3,6 +3,7 @@ package org.lunic.ui.helperclasses;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Scanner;
 
 import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.DATE_FORMAT;
 
@@ -39,11 +40,18 @@ public class ConsoleReadingUtils {
     }
 
     public static int getAmount(int min, int max) {
+        return getAmount(min, max, false);
+    }
+
+    public static int getAmount(int min, int max, boolean canBeSkipped) {
         int amount = Integer.MIN_VALUE;
         if(max == 0) max = Integer.MAX_VALUE;
         while (min > amount || amount > max) {
             try {
-                amount = ConsoleUtilConfiguration.SCANNER.nextInt();
+                String input = readString();
+                if(input.equals("!") && canBeSkipped) return -1;
+                amount = Integer.parseInt(input);
+
             } catch (Exception e) {
                 System.err.println("No valid input detected. Try again.");
                 ConsoleUtilConfiguration.SCANNER.next();
@@ -56,12 +64,18 @@ public class ConsoleReadingUtils {
     }
 
     public static LocalDate getDate() {
+        return getDate(false);
+    }
+
+    public static LocalDate getDate(boolean canBeSkipped) {
         LocalDate date = LocalDate.of(1,1,1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
         while (date.isBefore(LocalDate.now())) {
             try {
-                date = LocalDate.parse(readString(), formatter);
+                String text = readString();
+                if(text.equals("!") && canBeSkipped) return null;
+                date = LocalDate.parse(text, formatter);
             } catch (Exception e) {
                 System.err.println("Date could not be parsed. (" + DATE_FORMAT +")");
             }
@@ -71,13 +85,17 @@ public class ConsoleReadingUtils {
     }
 
     public static String readText() {
+        return readText(false);
+    }
+
+    public static String readText(boolean canBeSkipped) {
         String text = "";
         String lineNew;
 
         do {
             lineNew = readString();
             text += lineNew;
-            if(lineNew.equals("!")) return "!";
+            if(lineNew.equals("!") && canBeSkipped) return null;
         } while (!lineNew.equals(""));
 
         return text;

@@ -1,9 +1,15 @@
 package org.lunic.ui.helperclasses;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ConsoleSelectionUtils {
+
     public static Option displayOptions(ArrayList<Option> options) {
+        return displayOptions(options, false);
+    }
+
+    public static Option displayOptions(ArrayList<Option> options, boolean canBeSkipped) {
         if(options == null || options.size() < 1) return null;
 
         int selection = -1;
@@ -13,7 +19,9 @@ public class ConsoleSelectionUtils {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
             try {
-                selection = ConsoleUtilConfiguration.SCANNER.nextInt();
+                String input = ConsoleReadingUtils.readString();
+                if(input.equals("!") && canBeSkipped) return new Option(null, null);
+                selection = Integer.parseInt(input);
             } catch (Exception e) {
                 System.err.println("No valid input detected. Try again.");
                 ConsoleUtilConfiguration.SCANNER.next();
@@ -44,13 +52,17 @@ public class ConsoleSelectionUtils {
     }
 
     public static Object printTypeSelection(Object[] types) {
+        return printTypeSelection(types, false);
+    }
+
+    public static Object printTypeSelection(Object[] types, boolean canBeSkipped) {
         ArrayList<Option> options = new ArrayList<>();
         for (Object type : types) {
             if(type instanceof Enum<?> typeEnum) {
                 options.add(new Option(typeEnum.name(), typeEnum));
             }
         }
-        return displayOptions(options).getRootObject();
+        return displayOptions(options, canBeSkipped).getRootObject();
     }
 
 }
