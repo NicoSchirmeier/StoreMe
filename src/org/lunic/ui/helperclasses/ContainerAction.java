@@ -1,8 +1,4 @@
-package org.lunic.ui;
-
-import org.lunic.data.ContainerType;
-
-import java.util.ArrayList;
+package org.lunic.ui.helperclasses;
 
 public enum ContainerAction {
     CREATE,

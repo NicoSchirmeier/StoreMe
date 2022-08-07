@@ -1,20 +1,46 @@
 package org.lunic.repositories;
 
 import org.lunic.data.Container;
+import org.lunic.data.Item;
+import org.lunic.persistance.*;
 
 import java.util.ArrayList;
 
- /**
- * Used for positive GRASP example low coupling
-  * TODO 1 Put example into documentation
- */
-public interface ContainerRepository {
-    void Create(Container container);
+public class ContainerRepository extends Repository implements GeneralItemInterface {
 
-    ArrayList<Container> Read();
+    public ContainerRepository() {
+        super(new ContainerJsonDriver());
+    }
 
-    void Update(Container containerToBeUpdated,
-                Container updatedContainer);
+    public void Create(Container container) {
+        super.Create(container);
+    }
 
-    void Delete(Container container);
+    public ArrayList<Container> Read() {
+        ArrayList<Container> containers = new ArrayList<>();
+        for (Record record : recordList) {
+            if (record instanceof Container) {
+                containers.add((Container) record);
+            }
+        }
+        return containers;
+    }
+
+    public void Update(Container containerToBeUpdated,
+                       Container updatedContainer) {
+        super.Update(containerToBeUpdated, updatedContainer);
+    }
+
+    public void Delete(Container container) {
+        super.Delete(container);
+    }
+
+    @Override
+    public ArrayList<Item> getAllItems() {
+        ArrayList<Item> items = new ArrayList<>();
+        for (Container container : Read()) {
+            items.addAll(container.items());
+        }
+        return items;
+    }
 }

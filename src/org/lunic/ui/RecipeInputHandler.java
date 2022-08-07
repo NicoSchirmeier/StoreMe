@@ -1,36 +1,33 @@
 package org.lunic.ui;
 
 import org.lunic.data.*;
-import org.lunic.repositories.ItemTemplateRepository;
+import org.lunic.data.type.RecipeType;
+import org.lunic.data.Time;
 import org.lunic.repositories.RecipeRepository;
-import org.lunic.repositories.Repository;
-import org.lunic.repositories.TagRepository;
+import org.lunic.ui.helperclasses.*;
 
-import javax.swing.text.html.HTML;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class RecipeInputHandler extends InputHandler {
-    private final RecipeRepository repository;
-    private final TagInputHandler tagInputHandler;
+public class RecipeInputHandler extends InputHandler implements Printable {
+    private final RecipeRepository repository = UserInputManager.RECIPE_REPOSITORY;
+    private final TagInputHandler tagInputHandler = UserInputManager.TAG_INPUT_HANDLER;
 
-    public RecipeInputHandler(RecipeRepository repository, ItemTemplateRepository templateRepository, TagInputHandler tagInputHandler) {
-        super(repository);
-        this.repository = repository;
-        this.tagInputHandler = tagInputHandler;
+    public RecipeInputHandler() {
+        super(UserInputManager.RECIPE_REPOSITORY);
     }
 
     @Override
     public void print() {
         System.out.println("- Recipes -");
         ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("Back", Action.BACK));
-        options.add(new Option("Create", Action.CREATE));
+        options.add(new Option(Action.BACK.name(), Action.BACK));
+        options.add(new Option(Action.CREATE.name(), Action.CREATE));
         for (Recipe recipe : repository.Read()) {
             options.add(new Option(recipe.name(), recipe));
         }
 
-        Option option = ConsoleUtils.displayOptions(options);
+        Option option = ConsoleSelectionUtils.displayOptions(options);
         if (option.getRootObject() instanceof Action action) {
             if(action.equals(Action.CREATE)) {
                 printCreationDialog();
@@ -42,18 +39,14 @@ public class RecipeInputHandler extends InputHandler {
 
     private void printRecipeDetails(Recipe recipe) {
         System.out.println("  - " + recipe.name() + " -   ");
-        ConsoleUtils.printLine("  - " + recipe.name() + " -  ");
+        ConsoleReadingUtils.printSpacer("  - " + recipe.name() + " -  ");
         System.out.println(" Duration: " + recipe.duration().hours() + ":" + recipe.duration().minutes() + "h");
         System.out.println(" Type: " + recipe.type());
         System.out.println(" Tags: " + recipe.tags());
         System.out.println(" Needed Items: " + recipe.items());
         System.out.println(" Instruction:\n" + recipe.instruction());
-        ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("Back", Action.BACK));
-        options.add(new Option("Change", Action.CHANGE));
-        options.add(new Option("Delete", Action.DELETE));
 
-        Option option = ConsoleUtils.displayOptions(options);
+        Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE, Action.DELETE);
         if(option.getRootObject() instanceof Action action) {
             if(action.equals(Action.CHANGE)) {
                 printChangeDialog(recipe);
@@ -67,17 +60,17 @@ public class RecipeInputHandler extends InputHandler {
 
     @Override
     public void printCreationDialog() {
-        repository.Create(createRecipe(null));
+        repository.Create(createOrChange(null));
         print();
     }
 
     @Override
     public void printChangeDialog(Record toChange) {
-        repository.Update((Recipe) toChange, createRecipe((Recipe) toChange));
+        repository.Update((Recipe) toChange, createOrChange((Recipe) toChange));
         print();
     }
 
-    private Recipe createRecipe(Recipe recipe) {
+    private Recipe createOrChange(Recipe recipe) {
         if(recipe == null) {
             System.out.println("- Create Recipe -");
         } else {
@@ -86,17 +79,17 @@ public class RecipeInputHandler extends InputHandler {
         }
 
         System.out.println("Enter Name:");
-        String name = ConsoleUtils.readString();
+        String name = ConsoleReadingUtils.readString();
         System.out.println("Select Type:");
-        RecipeType type = (RecipeType) ConsoleUtils.printTypeSelection(RecipeType.values());
+        RecipeType type = (RecipeType) ConsoleSelectionUtils.printTypeSelection(RecipeType.values());
         System.out.println("Add needed Items:");
         HashSet<Item> items = new HashSet<>(); //GetItemTemplates here
         System.out.println("Enter cooking duration (in Minutes):");
-        int minutes = ConsoleUtils.getAmount(1, 0);
+        int minutes = ConsoleReadingUtils.getAmount(1, 0);
         Time duration = new Time(0, 0, minutes/(60*24), minutes/60, minutes % 60);
         System.out.println("Select Tags:");
         HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
-        String instruction = ConsoleUtils.readText();
+        String instruction = ConsoleReadingUtils.readText();
         if(recipe != null) {
             if(name.equals("!")) name = recipe.name();
             if(type == null) type = recipe.type();
@@ -112,12 +105,5 @@ public class RecipeInputHandler extends InputHandler {
     private boolean checkItemsExist(HashSet<Item> items) {
         System.err.println("Implement Recipe Observer for handling needed Items exist requests.");
         return false;
-    }
-
-    private enum Action {
-        BACK,
-        CREATE,
-        CHANGE,
-        DELETE
     }
 }

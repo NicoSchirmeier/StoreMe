@@ -1,28 +1,24 @@
 package org.lunic.ui;
 
 import org.lunic.data.Tag;
-import org.lunic.data.TagType;
+import org.lunic.data.type.TagType;
 import org.lunic.repositories.TagRepository;
+import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class TagInputHandler extends InputHandler {
+public class TagInputHandler extends InputHandler implements Printable {
 
-    private final TagRepository repository;
+    private final TagRepository repository = UserInputManager.TAG_REPOSITORY;
 
-    public TagInputHandler(TagRepository repository) {
-        super(repository);
-        this.repository = repository;
+    public TagInputHandler() {
+        super(UserInputManager.TAG_REPOSITORY);
     }
+
     @Override
     public void print() {
-        ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("Back", Action.BACK));
-        options.add(new Option("View Shopping Lists", Action.SHOPPING_LISTS));
-        options.add(new Option("View Category Lists", Action.CATEGORIES));
-
-        Option option = ConsoleUtils.displayOptions(options);
+        Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.SHOPPING_LISTS, Action.CATEGORIES);
         if(option.getRootObject() instanceof Action action) {
             if(action.equals(Action.SHOPPING_LISTS)) {
                 printShoppingLists();
@@ -42,27 +38,13 @@ public class TagInputHandler extends InputHandler {
                 options.add(new Option(tag.name(), tag));
             }
         }
-        Option option = ConsoleUtils.displayOptions(options);
-
-        if(option.getRootObject() instanceof Tag tag) {
-            printTagOptions(tag);
-        } else if (option.getRootObject() instanceof Action action){
-            if(action.equals(Action.CREATE)) {
-                printCreationDialog();
-            } else {
-                print();
-            }
-        }
+        executeOption(options);
     }
 
     private void printTagOptions(Tag tag) {
         System.out.println("Selected Tag: " + tag);
-        ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("Back", Action.BACK));
-        options.add(new Option("Change", Action.CHANGE));
-        options.add(new Option("Delete", Action.DELETE));
+        Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE,  Action.DELETE);
 
-        Option option = ConsoleUtils.displayOptions(options);
         if(option.getRootObject() instanceof Action action) {
             if(action.equals(Action.CHANGE)) {
                 printChangeDialog(tag);
@@ -87,7 +69,11 @@ public class TagInputHandler extends InputHandler {
                 options.add(new Option(tag.name(), tag));
             }
         }
-        Option option = ConsoleUtils.displayOptions(options);
+        executeOption(options);
+    }
+
+    private void executeOption(ArrayList<Option> options) {
+        Option option = ConsoleSelectionUtils.displayOptions(options);
 
         if(option.getRootObject() instanceof Tag tag) {
             printTagOptions(tag);
@@ -102,60 +88,65 @@ public class TagInputHandler extends InputHandler {
 
     @Override
     public void printCreationDialog() {
-        System.out.println("- Creating Tag -");
-        System.out.println("Enter Name:");
-        String name = ConsoleUtils.readString();
-        System.out.println("Select Type:");
-        ArrayList<Option> options = new ArrayList<>();
-        for (TagType type : TagType.values()) {
-            options.add(new Option(type.name(), type));
-        }
-        TagType type = (TagType) ConsoleUtils.displayOptions(options).getRootObject();
-
-        System.out.println("Enter Description: (One Line)");
-        String description = ConsoleUtils.readString();
-
-        Tag tag = new Tag(name, type, description);
+        Tag tag = createTag(null);
         System.out.println(tag);
-        boolean confirmed = ConsoleUtils.printConfirmationDialog("Create Tag");
+        boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Tag");
         if(confirmed) {
             repository.Create(tag);
         }
     }
+
     @Override
     public void printChangeDialog(Record toChange) {
-        System.out.println("Enter Name: (Write \"!\" to skip)");
-        String name = ConsoleUtils.readString();
-        System.out.println("Select Type:");
-        TagType type = (TagType) ConsoleUtils.printTypeSelection(TagType.values());
-        System.out.println("Enter Description: (One Line)");
-        String description = ConsoleUtils.readString();
-
-        Tag tag = new Tag(name, type, description);
+        Tag tag = createTag((Tag) toChange);
 
         System.out.println(toChange);
         System.out.println("->");
         System.out.println(tag);
-        boolean confirmed = ConsoleUtils.printConfirmationDialog("Change Tag");
+        boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Change Tag");
         if(confirmed) {
             repository.Update((Tag)toChange, tag);
         }
     }
+
+    public Tag createTag(Tag tagToEdit) {
+        if(tagToEdit == null) {
+            System.out.println("- Create Tag -");
+        } else {
+            System.out.println("- Edit Tag -");
+            System.out.println("Skip by typing \"!\"");
+        }
+
+        System.out.println("Enter Name: (Write \"!\" to skip)");
+        String name = ConsoleReadingUtils.readString();
+        System.out.println("Select Type:");
+        TagType type = (TagType) ConsoleSelectionUtils.printTypeSelection(TagType.values());
+        System.out.println("Enter Description: (One Line)");
+        String description = ConsoleReadingUtils.readString();
+
+        if(tagToEdit != null) {
+            if(name.equals("!")) name = tagToEdit.name();
+            if(description.equals("!")) description = tagToEdit.description();
+        }
+
+        return new Tag(name, type, description);
+    }
+
     public HashSet<Tag> printSelectTagsDialog() {
         HashSet<Tag> tags = new HashSet<>();
         while (true) {
             System.out.println("Currently added Tags: " + tags);
             ArrayList<Option> options = new ArrayList<>();
-            options.add(new Option("Done", Action.DONE));
-            options.add(new Option("Create", Action.CREATE));
+            options.add(new Option(Action.DONE.name(), Action.DONE));
+            options.add(new Option(Action.CREATE.name(), Action.CREATE));
             for (Tag tag : repository.Read()) {
                 options.add(new Option(tag.name(), tag));
             }
-            Option option = ConsoleUtils.displayOptions(options);
+            Option option = ConsoleSelectionUtils.displayOptions(options);
 
             if(option.getRootObject() instanceof Action action) {
                 if(action.equals(Action.DONE)) {
-                    return tags;
+                    break;
                 } else if (action.equals(Action.CREATE)) {
                     printCreationDialog();
                 }
@@ -163,14 +154,7 @@ public class TagInputHandler extends InputHandler {
                 tags.add(tag);
             }
         }
+        return tags;
     }
-    private enum Action {
-        CATEGORIES,
-        SHOPPING_LISTS,
-        DONE,
-        CREATE,
-        DELETE,
-        CHANGE,
-        BACK
-    }
+
 }

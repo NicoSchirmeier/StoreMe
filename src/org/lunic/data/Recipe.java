@@ -1,5 +1,7 @@
 package org.lunic.data;
 
+import org.lunic.data.type.RecipeType;
+
 import java.util.HashSet;
 
 public record Recipe(String name, RecipeType type,

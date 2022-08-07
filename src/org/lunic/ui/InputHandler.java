@@ -1,6 +1,7 @@
 package org.lunic.ui;
 
-import org.lunic.repositories.Repository;
+import org.lunic.repositories.*;
+import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 
 public abstract class InputHandler {
     Repository repository;
@@ -8,13 +9,11 @@ public abstract class InputHandler {
         this.repository = repository;
     }
 
-    public abstract void print();
-
     public abstract void printCreationDialog();
     public abstract void printChangeDialog(Record toChange);
 
     public void printDeletionDialog(Record toDelete) {
-        boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete " + toDelete.getClass().getSimpleName());
+        boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete " + toDelete.getClass().getSimpleName());
         if(confirmed) repository.Delete(toDelete);
     }
 }

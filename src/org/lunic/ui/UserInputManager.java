@@ -1,29 +1,40 @@
 package org.lunic.ui;
 
+
 import org.lunic.data.Item;
-import org.lunic.observer.ItemExpirationObserver;
+import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
+import org.lunic.ui.helperclasses.Option;
+import org.lunic.ui.helperclasses.Printable;
+
 import org.lunic.repositories.*;
+
+import org.lunic.observer.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class UserInputManager {
+import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.DATE_FORMAT;
+
+public class UserInputManager implements Printable {
 
     public static boolean SYSTEM_ACTIVE = true;
-    private final ContainerInputHandler containerInputHandler;
-    private final RecipeInputHandler recipeInputHandler;
-    private final TagInputHandler tagInputHandler;
-    private final ItemExpirationObserver itemExpirationObserver;
+
+    //Repositories
+    public static final ContainerRepository CONTAINER_REPOSITORY = new ContainerRepository();
+    public static final ItemTemplateRepository ITEM_TEMPLATE_REPOSITORY = new ItemTemplateRepository();
+    public static final RecipeRepository RECIPE_REPOSITORY = new RecipeRepository();
+    public static final TagRepository TAG_REPOSITORY = new TagRepository();
+
+    //InputHandler
+    public static final ContainerInputHandler CONTAINER_INPUT_HANDLER = new ContainerInputHandler();
+    public static final RecipeInputHandler RECIPE_INPUT_HANDLER = new RecipeInputHandler();
+    public static final TagInputHandler TAG_INPUT_HANDLER = new TagInputHandler();
+    public static final ItemInputHandler ITEM_INPUT_HANDLER = new ItemInputHandler();
+
+    //Observer
+    private static final ItemExpirationObserver itemExpirationObserver = new ItemExpirationObserver();
 
     public UserInputManager() {
-        tagInputHandler = new TagInputHandler(new TagRepository());
-        ContainerRepositoryImpl containerRepository =
-                new ContainerRepositoryImpl();
-        containerInputHandler = new ContainerInputHandler(containerRepository, tagInputHandler);
-        itemExpirationObserver = new ItemExpirationObserver(containerRepository);
-        recipeInputHandler = new RecipeInputHandler(new RecipeRepository(), new ItemTemplateRepository(), tagInputHandler);
-
-
         while (SYSTEM_ACTIVE) print();
     }
 
@@ -46,20 +57,22 @@ public class UserInputManager {
         System.out.println("- StoreME -");
         System.out.println();
 
-        System.out.println("This Items will expire soon: ");
+        System.out.println("These Items will expire soon: ");
         for (Item expiredItem : itemExpirationObserver.getSoonExpiringItems()) {
-            System.out.println("- " + expiredItem.name() + " " +
-                    expiredItem.expirationDate().format(DateTimeFormatter.ofPattern(ConsoleUtils.dateFormat)));
+            System.err.println("- " + expiredItem.name() + " " +
+                    expiredItem.expirationDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         }
         System.out.println();
 
 
         ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("View Container", containerInputHandler));
-        options.add(new Option("View Recipes", recipeInputHandler));
-        options.add(new Option("View Categories and Shopping Lists", tagInputHandler));
+        options.add(new Option("View Container", CONTAINER_INPUT_HANDLER));
+        options.add(new Option("View Recipes", RECIPE_INPUT_HANDLER));
+        options.add(new Option("View Categories and Shopping Lists", TAG_INPUT_HANDLER));
 
-        Option option = ConsoleUtils.displayOptions(options);
-        option.getInputHandler().print();
+        Option option = ConsoleSelectionUtils.displayOptions(options);
+        if(option.hasPrintable()) {
+            option.getPrintable().print();
+        }
     }
 }

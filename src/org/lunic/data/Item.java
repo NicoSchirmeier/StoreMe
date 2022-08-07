@@ -1,5 +1,7 @@
 package org.lunic.data;
 
+import org.lunic.data.type.ItemType;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;

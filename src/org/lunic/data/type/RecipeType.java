@@ -1,4 +1,4 @@
-package org.lunic.data;
+package org.lunic.data.type;
 
 public enum RecipeType {
     COOKING,
