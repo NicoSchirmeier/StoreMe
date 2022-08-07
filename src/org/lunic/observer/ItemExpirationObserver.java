@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 
-public class ExpirationObserver {
+public class ItemExpirationObserver {
 
-    public ContainerRepository currentContainers;
-    LocalDate currentDate;
+    private final ContainerRepository currentContainers;
 
-    public ExpirationObserver(ContainerRepository currentContainers) {
+    public ItemExpirationObserver(ContainerRepository currentContainers) {
         this.currentContainers = currentContainers;
-        this.currentDate = LocalDate.now();
     }
 
     public static long getDaysBetween(LocalDate expirationDate,
@@ -26,7 +24,7 @@ public class ExpirationObserver {
     }
 
     public ArrayList<Item> getSoonExpiringItems() {
-
+        LocalDate currentDate = LocalDate.now();
         ArrayList<Item> expiredItems = new ArrayList<>();
         for (Container container : currentContainers.Read()) {
             for (Item item : container.items()) {

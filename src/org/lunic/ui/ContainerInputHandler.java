@@ -4,15 +4,17 @@ import org.lunic.data.Container;
 import org.lunic.data.ContainerType;
 import org.lunic.data.Item;
 import org.lunic.repositories.ContainerRepository;
+import org.lunic.repositories.ContainerRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ContainerInputHandler extends InputHandler {
-    public final ContainerRepository containerRepository;
+    private final ContainerRepositoryImpl containerRepository;
     private final ItemInputHandler itemInputHandler;
 
-    public ContainerInputHandler(ContainerRepository containerRepository, TagInputHandler tagInputHandler) {
+    public ContainerInputHandler(ContainerRepositoryImpl containerRepository,
+                                 TagInputHandler tagInputHandler) {
         super(containerRepository);
         this.containerRepository = containerRepository;
         this.itemInputHandler = new ItemInputHandler(this.containerRepository, this, tagInputHandler);
