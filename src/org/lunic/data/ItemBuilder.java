@@ -1,7 +1,5 @@
-package org.lunic.data.builder;
+package org.lunic.data;
 
-import org.lunic.data.Item;
-import org.lunic.data.Tag;
 import org.lunic.data.type.ItemType;
 
 import java.time.LocalDate;
@@ -26,7 +24,7 @@ public class ItemBuilder {
         this.itemTemplate = new Item(null, null,  0, null, null, null);
     }
 
-    public Item create() {
+    public Item build() {
         if(name == null) name = itemTemplate.name();
         if(type == null) type = itemTemplate.type();
         if(amount <= 0) amount = itemTemplate.amount();
@@ -34,7 +32,7 @@ public class ItemBuilder {
         if(consumptionDate == null) consumptionDate = itemTemplate.consumptionDate();
         if(tags == null) tags = itemTemplate.tags();
 
-        return new Item(name, type, amount, expirationDate, consumptionDate, tags);
+        return new Item(this);
     }
 
     public ItemBuilder setName(String name) {
@@ -66,4 +64,30 @@ public class ItemBuilder {
         this.tags = tags;
         return this;
     }
+
+    protected String getName() {
+        return name;
+    }
+
+    protected ItemType getType() {
+        return type;
+    }
+
+    protected int getAmount() {
+        return amount;
+    }
+
+    protected LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    protected LocalDate getConsumptionDate() {
+        return consumptionDate;
+    }
+
+    protected HashSet<Tag> getTags() {
+        return tags;
+    }
 }
+
+

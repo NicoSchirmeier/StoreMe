@@ -3,21 +3,24 @@ package org.lunic.ui.helperclasses;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.Scanner;
 
 import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.DATE_FORMAT;
+import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.SCANNER;
 
 public class ConsoleReadingUtils {
 
     public static String readString() {
+        return readString(ConsoleUtilConfiguration.MAX_CHARS, ConsoleUtilConfiguration.MAX_CHARS);
+    }
+
+    public static String readString(int min, int max) {
         String text = "";
-        while (text.length() < ConsoleUtilConfiguration.MIN_CHARS || text.length() > ConsoleUtilConfiguration.MAX_CHARS) {
-            text = ConsoleUtilConfiguration.SCANNER.next();
-            if(text.equals("!")) return text;
-            if(text.length() > ConsoleUtilConfiguration.MAX_CHARS) {
-                System.err.println("Text too long (Maximum Length: " + ConsoleUtilConfiguration.MAX_CHARS + ")");
-            } else if (text.length() < ConsoleUtilConfiguration.MIN_CHARS) {
-                System.err.println("Text too short (Minimum Length: " + ConsoleUtilConfiguration.MIN_CHARS + ")");
+        while (text.length() < min || text.length() > max) {
+            text = SCANNER.next();
+            if(text.length() > max) {
+                System.err.println("Text too long (Maximum Length: " + max + ")");
+            } else if (text.length() < min) {
+                System.err.println("Text too short (Minimum Length: " + min + ")");
             }
         }
         return text;

@@ -3,11 +3,14 @@ package org.lunic.ui;
 import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.Item;
-import org.lunic.data.builder.ItemBuilder;
+import org.lunic.data.ItemBuilder;
 import org.lunic.data.type.ItemType;
 import org.lunic.data.Tag;
 import org.lunic.repositories.ItemTemplateRepository;
-import org.lunic.ui.helperclasses.*;
+import org.lunic.ui.helperclasses.Action;
+import org.lunic.ui.helperclasses.ConsoleReadingUtils;
+import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
+import org.lunic.ui.helperclasses.Option;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -96,16 +99,16 @@ public class ItemInputHandler {
         System.out.println("Enter Amount:");
         builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange));
 
-        System.out.println("Enter Expiration Date: (" + ConsoleUtilConfiguration.DATE_FORMAT + ")" );
+        System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
         builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
 
-        System.out.println("Enter Consumption Date: (" + ConsoleUtilConfiguration.DATE_FORMAT + ")" );
+        System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
         builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
 
         System.out.println("Select Tags:");
         builder.setTags(DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(isItemChange));
 
-        return builder.create();
+        return builder.build();
     }
 
     public HashSet<Item> printAddTemplateItemsDialog() {

@@ -2,6 +2,7 @@ package org.lunic.ui;
 
 import org.lunic.DataManager;
 import org.lunic.data.Container;
+import org.lunic.data.ItemBuilder;
 import org.lunic.data.type.ContainerType;
 import org.lunic.data.Item;
 import org.lunic.ui.helperclasses.*;

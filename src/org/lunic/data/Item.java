@@ -3,12 +3,14 @@ package org.lunic.data;
 import org.lunic.data.type.ItemType;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 
 public record Item(String name, ItemType type, int amount,
                    LocalDate expirationDate, LocalDate consumptionDate,
                    HashSet<Tag> tags) {
+    Item(ItemBuilder builder) {
+        this(builder.getName(), builder.getType(), builder.getAmount(), builder.getExpirationDate(), builder.getConsumptionDate(), builder.getTags());
+    }
 
     @Override
     public String toString() {
