@@ -86,7 +86,7 @@ public class ItemInputHandler {
         }
 
         System.out.println("Enter Name:");
-        builder.setName(ConsoleReadingUtils.readText(isItemChange));
+        builder.setName(ConsoleReadingUtils.readString(isItemChange));
 
         System.out.println("Select Type:");
         Object itemType = ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange);

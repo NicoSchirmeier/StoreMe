@@ -140,7 +140,8 @@ public class TagInputHandler extends InputHandler implements Printable {
             for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
                 options.add(new Option(tag.name(), tag));
             }
-            Option option = ConsoleSelectionUtils.displayOptions(options);
+            Option option = ConsoleSelectionUtils.displayOptions(options, canBeSkipped);
+            if(option.getRootObject() == null) return null;
 
             if(option.getRootObject() instanceof Action action) {
                 if(action.equals(Action.DONE)) {

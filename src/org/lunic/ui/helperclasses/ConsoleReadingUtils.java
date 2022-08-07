@@ -10,19 +10,24 @@ import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.SCANNER;
 public class ConsoleReadingUtils {
 
     public static String readString() {
-        return readString(ConsoleUtilConfiguration.MAX_CHARS, ConsoleUtilConfiguration.MAX_CHARS);
+        return readString(ConsoleUtilConfiguration.MIN_CHARS, ConsoleUtilConfiguration.MAX_CHARS, false);
     }
 
-    public static String readString(int min, int max) {
-        String text = "";
-        while (text.length() < min || text.length() > max) {
+    public static String readString(boolean canBeSkipped) {
+        return readString(ConsoleUtilConfiguration.MIN_CHARS, ConsoleUtilConfiguration.MAX_CHARS, canBeSkipped);
+    }
+
+    public static String readString(int min, int max, boolean canBeSkipped) {
+        String text;
+        do {
             text = SCANNER.next();
+            if(text.equals("!") && canBeSkipped) return null;
             if(text.length() > max) {
                 System.err.println("Text too long (Maximum Length: " + max + ")");
             } else if (text.length() < min) {
                 System.err.println("Text too short (Minimum Length: " + min + ")");
             }
-        }
+        } while (text.length() < min || text.length() > max);
         return text;
     }
 
@@ -51,7 +56,7 @@ public class ConsoleReadingUtils {
         if(max == 0) max = Integer.MAX_VALUE;
         while (min > amount || amount > max) {
             try {
-                String input = readString();
+                String input = readString(1, Integer.MAX_VALUE, false);
                 if(input.equals("!") && canBeSkipped) return -1;
                 amount = Integer.parseInt(input);
 
@@ -76,8 +81,8 @@ public class ConsoleReadingUtils {
 
         while (date.isBefore(LocalDate.now())) {
             try {
-                String text = readString();
-                if(text.equals("!") && canBeSkipped) return null;
+                String text = readString(1, Integer.MAX_VALUE, false);
+                if(text != null && text.equals("!") && canBeSkipped) return null;
                 date = LocalDate.parse(text, formatter);
             } catch (Exception e) {
                 System.err.println("Date could not be parsed. (" + DATE_FORMAT +")");
@@ -96,9 +101,9 @@ public class ConsoleReadingUtils {
         String lineNew;
 
         do {
-            lineNew = readString();
+            lineNew = readString(0, Integer.MAX_VALUE, false);
             text += lineNew;
-            if(lineNew.equals("!") && canBeSkipped) return null;
+            if(lineNew != null && lineNew.equals("!")) return null;
         } while (!lineNew.equals(""));
 
         return text;

@@ -19,10 +19,13 @@ public class ConsoleSelectionUtils {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
             try {
-                String input = ConsoleReadingUtils.readString(0, 2);
+                String input = ConsoleReadingUtils.readString(1, Integer.MAX_VALUE, false);
                 System.out.println(input);
-                if(input.equals("!") && canBeSkipped) return new Option(null, null);
-                selection = Integer.parseInt(input);
+                if(input != null && input.equals("!") && canBeSkipped) {
+                    return new Option(null, null);
+                } else if (!input.equals("!")) {
+                    selection = Integer.parseInt(input);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("No valid input detected. Try again.");
