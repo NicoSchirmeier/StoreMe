@@ -18,7 +18,7 @@ public class ItemInputHandler {
     public ItemInputHandler() {}
 
     public void printItemOptions(Container container, Item item) {
-        System.out.println("Current Item: " + item);
+        System.out.println("Current Item: " + item.toPrettyString());
         Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE, Action.DELETE);
         if (option.getRootObject() instanceof Action action) {
             if (action.equals(Action.CHANGE)) {

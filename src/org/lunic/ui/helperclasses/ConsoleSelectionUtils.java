@@ -28,10 +28,18 @@ public class ConsoleSelectionUtils {
     }
 
     public static Option displayActions(Action... actions) {
+        return displayActions(null, actions);
+    }
+
+    public static Option displayActions(ArrayList<Option> additionalOptions, Action... actions) {
         ArrayList<Option> options = new ArrayList<>();
         for (Action action : actions) {
             options.add(new Option(action.name(), action));
         }
+        if(additionalOptions != null) {
+            options.addAll(additionalOptions);
+        }
+
         return  displayOptions(options);
     }
 

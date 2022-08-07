@@ -37,10 +37,12 @@ public class ContainerInputHandler extends InputHandler implements Printable {
     }
 
     private void printContainerDetails(Container container) {
-        Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CREATE, Action.REMOVE, Action.CHANGE);
+        ArrayList<Option> additionalOptions = new ArrayList<>();
+        for (Item item : container.items()) additionalOptions.add(new Option(item.toString(), item));
+        Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK, Action.CREATE, Action.REMOVE, Action.CHANGE);
 
-        if(option.getRootObject() instanceof Item) {
-            DataManager.ITEM_INPUT_HANDLER.printItemOptions(container, (Item) option.getRootObject());
+        if(option.getRootObject() instanceof Item item) {
+            DataManager.ITEM_INPUT_HANDLER.printItemOptions(container, item);
         } else if (option.getRootObject() instanceof Action action) {
             if (action.equals(Action.CREATE)) {
                 DataManager.ITEM_INPUT_HANDLER.printItemCreationDialog(container);

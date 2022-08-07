@@ -6,6 +6,6 @@ public record Tag(String name, TagType type, String description) {
 
     @Override
     public String toString() {
-        return name + " | type: " + type;
+        return name + " | description: " + description;
     }
 }
