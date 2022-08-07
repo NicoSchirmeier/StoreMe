@@ -7,4 +7,5 @@ public class ConsoleUtilConfiguration {
     public static final int MAX_CHARS = 20;
     public static final int MIN_CHARS = 3;
     public static final String DATE_FORMAT = "dd/MM/yyyy";
+    public static final int SPACER_LENGTH = 50;
 }

@@ -83,10 +83,16 @@ public class ConsoleReadingUtils {
         return text;
     }
 
-    public static void printSpacer(String text) {
-        for(char c : text.toCharArray()) {
+    public static void printSpacer() {
+        for(int i = 0; i < ConsoleUtilConfiguration.SPACER_LENGTH; i++) {
             System.out.print("_");
         }
         System.out.println();
+    }
+
+    public static void printSpace(int length) {
+        for(int i = 0; i < length; i++) {
+            System.out.print(" ");
+        }
     }
 }

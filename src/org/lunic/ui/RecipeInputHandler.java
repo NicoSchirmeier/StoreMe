@@ -37,7 +37,7 @@ public class RecipeInputHandler extends InputHandler implements Printable {
 
     private void printRecipeDetails(Recipe recipe) {
         System.out.println("  - " + recipe.name() + " -   ");
-        ConsoleReadingUtils.printSpacer("  - " + recipe.name() + " -  ");
+        ConsoleReadingUtils.printSpacer();
         System.out.println(" Duration: " + recipe.duration().hours() + ":" + recipe.duration().minutes() + "h");
         System.out.println(" Type: " + recipe.type());
         System.out.println(" Tags: " + recipe.tags());
