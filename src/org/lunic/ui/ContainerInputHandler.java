@@ -31,8 +31,8 @@ public class ContainerInputHandler extends InputHandler implements Printable {
 
         if(option.getRootObject() instanceof Container) {
             printContainerDetails((Container) option.getRootObject());
-        } else if (option.getRootObject() instanceof ContainerAction action) {
-            if(action.equals(ContainerAction.CREATE)) {
+        } else if (option.getRootObject() instanceof Action action) {
+            if(action.equals(Action.CREATE)) {
                 printCreationDialog();
             }
         }
@@ -43,12 +43,12 @@ public class ContainerInputHandler extends InputHandler implements Printable {
 
         if(option.getRootObject() instanceof Item) {
             itemInputHandler.printItemOptions(container, (Item) option.getRootObject());
-        } else if (option.getRootObject() instanceof ContainerAction action) {
-            if (action.equals(ContainerAction.CREATE_ITEM)) {
+        } else if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.CREATE)) {
                 itemInputHandler.printItemCreationDialog(container);
-            } else if (action.equals(ContainerAction.REMOVE)) {
+            } else if (action.equals(Action.REMOVE)) {
                 printDeletionDialog(container);
-            } else if (action.equals(ContainerAction.CHANGE)) {
+            } else if (action.equals(Action.CHANGE)) {
                 printChangeDialog(container);
             }
         }
