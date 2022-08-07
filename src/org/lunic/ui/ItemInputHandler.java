@@ -99,10 +99,10 @@ public class ItemInputHandler {
         System.out.println("Enter Amount:");
         builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange));
 
-        System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
+        System.out.println("Enter Expiration Date: (" + ConsoleUtilConfiguration.DATE_FORMAT + ")" );
         builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
 
-        System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
+        System.out.println("Enter Consumption Date: (" + ConsoleUtilConfiguration.DATE_FORMAT + ")" );
         builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
 
         System.out.println("Select Tags:");
