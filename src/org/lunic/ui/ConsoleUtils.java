@@ -13,6 +13,8 @@ public class ConsoleUtils {
     private static final int MaxChars = 20;
     private static final int MinChars = 3;
 
+    public static final String dateFormat = "dd/MM/yyyy";
+
     public static String readString() {
         String text = "";
         while (text.length() < MinChars || text.length() > MaxChars) {
@@ -96,13 +98,13 @@ public class ConsoleUtils {
 
     public static LocalDate getDate() {
         LocalDate date = LocalDate.of(1,1,1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
 
         while (date.isBefore(LocalDate.now())) {
             try {
                 date = LocalDate.parse(readString(), formatter);
             } catch (Exception e) {
-                System.err.println("Date could not be parsed. (yyyy-MM-dd)");
+                System.err.println("Date could not be parsed. (" + dateFormat +")");
             }
         }
 

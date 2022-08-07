@@ -22,25 +22,28 @@ public class ItemInputHandler {
         this.containerInputHandler = containerInputHandler;
         this.tagInputHandler = tagInputHandler;
     }
+
     public void print() {
         System.err.println("NOT IMPLEMENTED");
     }
+
     public void printItemOptions(Container container, Item item) {
         ArrayList<Option> options = new ArrayList<>();
         System.out.println("Current Item: " + item);
         options.add(new Option("Change", Action.CHANGE));
         options.add(new Option("Remove", Action.DELETE));
         options.add(new Option("Back", Action.BACK));
-        
+
         Option option = ConsoleUtils.displayOptions(options);
-        if(option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.CHANGE)) {
+        if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.CHANGE)) {
                 printItemChangeDialog(item, container);
             } else if (action.equals(Action.DELETE)) {
                 printItemDeletionDialog(item, container);
             }
         }
     }
+
     public void printItemCreationDialog(Container container) {
         ArrayList<Option> options = new ArrayList<>();
 
@@ -50,9 +53,9 @@ public class ItemInputHandler {
         ItemType itemType = (ItemType) ConsoleUtils.printTypeSelection(ItemType.values());
         System.out.println("Enter Amount:");
         int amount = ConsoleUtils.getAmount(1, 0);
-        System.out.println("Enter Expiration Date: (yyyy-MM-dd)");
+        System.out.println("Enter Expiration Date: (" + ConsoleUtils.dateFormat + ")");
         LocalDate expirationDate = ConsoleUtils.getDate();
-        System.out.println("Enter Consumption Date: (yyyy-MM-dd)");
+        System.out.println("Enter Consumption Date: (" + ConsoleUtils.dateFormat + ")");
         LocalDate consumptionDate = ConsoleUtils.getDate();
         System.out.println("Select Tags:");
         HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
@@ -61,26 +64,28 @@ public class ItemInputHandler {
         System.out.println(item);
         boolean confirmed = ConsoleUtils.printConfirmationDialog("Create Item");
 
-        if(confirmed) {
+        if (confirmed) {
             container.items().add(item);
             repository.Update(container, container);
         }
     }
+
     private void printItemChangeDialog(Item item, Container container) {
         ArrayList<Option> options = new ArrayList<>();
 
         System.out.println("Enter Name: (Write \"!\" to skip)");
         String name = ConsoleUtils.readString();
-        if(name.equals("!")) name = item.name();
+        if (name.equals("!")) name = item.name();
         System.out.println("Select Type:");
         ItemType itemType = (ItemType) ConsoleUtils.printTypeSelection(ItemType.values());
         System.out.println("Enter Amount:");
         int amount = ConsoleUtils.getAmount(1, 0);
 
-        System.out.println("Enter Expiration Date: (yyyy-MM-dd)");
+        System.out.println("Enter Expiration Date: (" + ConsoleUtils.dateFormat + ")");
         LocalDate expirationDate = ConsoleUtils.getDate();
-        System.out.println("Enter Consumption Date: (yyyy-MM-dd)");
+        System.out.println("Enter Consumption Date: (" + ConsoleUtils.dateFormat + ")");
         LocalDate consumptionDate = ConsoleUtils.getDate();
+
 
         System.out.println("Select Tags:");
         HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
@@ -92,15 +97,16 @@ public class ItemInputHandler {
         System.out.println(changedItem);
         boolean confirmed = ConsoleUtils.printConfirmationDialog("Change Item");
 
-        if(confirmed) {
+        if (confirmed) {
             container.items().remove(item);
             container.items().add(changedItem);
             repository.Update(container, container);
         }
     }
+
     private void printItemDeletionDialog(Item item, Container container) {
         boolean confirmed = ConsoleUtils.printConfirmationDialog("Delete Item");
-        if(confirmed) container.items().remove(item);
+        if (confirmed) container.items().remove(item);
         repository.Update(container, container);
     }
 
@@ -108,9 +114,10 @@ public class ItemInputHandler {
 
         return new HashSet<>();
     }
+
     private enum Action {
         CHANGE,
-        DELETE, 
+        DELETE,
         BACK
     }
 }

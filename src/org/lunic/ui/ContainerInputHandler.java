@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ContainerInputHandler extends InputHandler {
-    private final ContainerRepository repository;
+    public final ContainerRepository containerRepository;
     private final ItemInputHandler itemInputHandler;
 
     public ContainerInputHandler(ContainerRepository containerRepository, TagInputHandler tagInputHandler) {
         super(containerRepository);
-        this.repository = containerRepository;
-        this.itemInputHandler = new ItemInputHandler(repository, this, tagInputHandler);
+        this.containerRepository = containerRepository;
+        this.itemInputHandler = new ItemInputHandler(this.containerRepository, this, tagInputHandler);
     }
     @Override
     public void print() {
@@ -27,7 +27,7 @@ public class ContainerInputHandler extends InputHandler {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option("Create NEW", ContainerAction.CREATE));
         options.add(new Option("Back", ContainerAction.BACK));
-        for (Container container : repository.Read()) {
+        for (Container container : containerRepository.Read()) {
             options.add(new Option(container.toString(), container));
         }
 
@@ -81,7 +81,7 @@ public class ContainerInputHandler extends InputHandler {
 
         System.out.println(container);
         if(ConsoleUtils.printConfirmationDialog("Create Container")) {
-            repository.Create(container);
+            containerRepository.Create(container);
         } else {
             printCreationDialog();
         }
@@ -108,7 +108,7 @@ public class ContainerInputHandler extends InputHandler {
         System.out.println("->");
         System.out.println(updatedContainer);
         if(ConsoleUtils.printConfirmationDialog("Change Container")) {
-            repository.Update(containerToBeUpdated, updatedContainer);
+            containerRepository.Update(containerToBeUpdated, updatedContainer);
         } else {
             printContainerDetails(containerToBeUpdated);
         }
