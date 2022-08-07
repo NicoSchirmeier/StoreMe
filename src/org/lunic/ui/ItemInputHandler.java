@@ -51,6 +51,7 @@ public class ItemInputHandler {
         String name = ConsoleUtils.readString();
         System.out.println("Select Type:");
         ItemType itemType = (ItemType) ConsoleUtils.printTypeSelection(ItemType.values());
+        // TODO 2 as DRY Example
         System.out.println("Enter Amount:");
         int amount = ConsoleUtils.getAmount(1, 0);
         System.out.println("Enter Expiration Date: (" + ConsoleUtils.dateFormat + ")");
