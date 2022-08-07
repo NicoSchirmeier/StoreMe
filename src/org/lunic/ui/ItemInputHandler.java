@@ -1,12 +1,10 @@
 package org.lunic.ui;
 
+import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.Item;
 import org.lunic.data.type.ItemType;
 import org.lunic.data.Tag;
-import org.lunic.repositories.ContainerRepository;
-import org.lunic.repositories.GeneralItemInterface;
-import org.lunic.repositories.ItemTemplateRepository;
 import org.lunic.ui.helperclasses.Action;
 import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
@@ -16,10 +14,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public class ItemInputHandler {
-    ContainerRepository repository = UserInputManager.CONTAINER_REPOSITORY;
-    ItemTemplateRepository templateRepository = UserInputManager.ITEM_TEMPLATE_REPOSITORY;
-    ContainerInputHandler containerInputHandler = UserInputManager.CONTAINER_INPUT_HANDLER;
-    TagInputHandler tagInputHandler = UserInputManager.TAG_INPUT_HANDLER;
 
     public ItemInputHandler() {}
 
@@ -42,7 +36,7 @@ public class ItemInputHandler {
 
         if (confirmed) {
             container.items().add(item);
-            repository.Update(container, container);
+            DataManager.CONTAINER_REPOSITORY.Update(container, container);
         }
     }
 
@@ -57,14 +51,14 @@ public class ItemInputHandler {
         if (confirmed) {
             container.items().remove(toChange);
             container.items().add(item);
-            repository.Update(container, container);
+            DataManager.CONTAINER_REPOSITORY.Update(container, container);
         }
     }
 
     private void printItemDeletionDialog(Item item, Container container) {
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete Item");
         if (confirmed) container.items().remove(item);
-        repository.Update(container, container);
+        DataManager.CONTAINER_REPOSITORY.Update(container, container);
     }
 
     private Item createOrChange(Item toChange) {
@@ -86,7 +80,7 @@ public class ItemInputHandler {
         System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
         LocalDate consumptionDate = ConsoleReadingUtils.getDate();
         System.out.println("Select Tags:");
-        HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
+        HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog();
 
         if(toChange != null) {
             if(name.equals("!")) name = toChange.name();

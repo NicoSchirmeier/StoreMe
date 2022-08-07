@@ -4,7 +4,7 @@ import org.lunic.repositories.*;
 import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 
 public abstract class InputHandler {
-    Repository repository;
+    private final Repository repository;
     public InputHandler(Repository repository) {
         this.repository = repository;
     }

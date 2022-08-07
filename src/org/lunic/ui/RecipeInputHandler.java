@@ -1,20 +1,18 @@
 package org.lunic.ui;
 
+import org.lunic.DataManager;
 import org.lunic.data.*;
 import org.lunic.data.type.RecipeType;
 import org.lunic.data.Time;
-import org.lunic.repositories.RecipeRepository;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class RecipeInputHandler extends InputHandler implements Printable {
-    private final RecipeRepository repository = UserInputManager.RECIPE_REPOSITORY;
-    private final TagInputHandler tagInputHandler = UserInputManager.TAG_INPUT_HANDLER;
 
     public RecipeInputHandler() {
-        super(UserInputManager.RECIPE_REPOSITORY);
+        super(DataManager.RECIPE_REPOSITORY);
     }
 
     @Override
@@ -23,7 +21,7 @@ public class RecipeInputHandler extends InputHandler implements Printable {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Recipe recipe : repository.Read()) {
+        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.Read()) {
             options.add(new Option(recipe.name(), recipe));
         }
 
@@ -60,13 +58,13 @@ public class RecipeInputHandler extends InputHandler implements Printable {
 
     @Override
     public void printCreationDialog() {
-        repository.Create(createOrChange(null));
+        DataManager.RECIPE_REPOSITORY.Create(createOrChange(null));
         print();
     }
 
     @Override
     public void printChangeDialog(Record toChange) {
-        repository.Update((Recipe) toChange, createOrChange((Recipe) toChange));
+        DataManager.RECIPE_REPOSITORY.Update((Recipe) toChange, createOrChange((Recipe) toChange));
         print();
     }
 
@@ -88,7 +86,7 @@ public class RecipeInputHandler extends InputHandler implements Printable {
         int minutes = ConsoleReadingUtils.getAmount(1, 0);
         Time duration = new Time(0, 0, minutes/(60*24), minutes/60, minutes % 60);
         System.out.println("Select Tags:");
-        HashSet<Tag> tags = tagInputHandler.printSelectTagsDialog();
+        HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog();
         String instruction = ConsoleReadingUtils.readText();
         if(recipe != null) {
             if(name.equals("!")) name = recipe.name();

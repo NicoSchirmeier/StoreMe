@@ -1,6 +1,6 @@
 package org.lunic.observer;
 
-import org.lunic.ui.UserInputManager;
+import org.lunic.DataManager;
 
 import org.lunic.repositories.*;
 import org.lunic.data.*;
@@ -13,7 +13,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class ItemExpirationObserver {
 
-    private final GeneralItemInterface itemInterface = UserInputManager.CONTAINER_REPOSITORY;
+    private final GeneralItemInterface itemInterface = DataManager.CONTAINER_REPOSITORY;
 
     public ItemExpirationObserver() {
     }

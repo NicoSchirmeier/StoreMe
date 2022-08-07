@@ -1,8 +1,8 @@
 package org.lunic.ui;
 
+import org.lunic.DataManager;
 import org.lunic.data.Tag;
 import org.lunic.data.type.TagType;
-import org.lunic.repositories.TagRepository;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
@@ -10,10 +10,8 @@ import java.util.HashSet;
 
 public class TagInputHandler extends InputHandler implements Printable {
 
-    private final TagRepository repository = UserInputManager.TAG_REPOSITORY;
-
     public TagInputHandler() {
-        super(UserInputManager.TAG_REPOSITORY);
+        super(DataManager.TAG_REPOSITORY);
     }
 
     @Override
@@ -33,7 +31,7 @@ public class TagInputHandler extends InputHandler implements Printable {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Tag tag : repository.Read()) {
+        for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
             if(!tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
@@ -64,7 +62,7 @@ public class TagInputHandler extends InputHandler implements Printable {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Tag tag : repository.Read()) {
+        for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
             if(tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
@@ -92,7 +90,7 @@ public class TagInputHandler extends InputHandler implements Printable {
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Tag");
         if(confirmed) {
-            repository.Create(tag);
+            DataManager.TAG_REPOSITORY.Create(tag);
         }
     }
 
@@ -105,7 +103,7 @@ public class TagInputHandler extends InputHandler implements Printable {
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Change Tag");
         if(confirmed) {
-            repository.Update((Tag)toChange, tag);
+            DataManager.TAG_REPOSITORY.Update((Tag)toChange, tag);
         }
     }
 
@@ -139,7 +137,7 @@ public class TagInputHandler extends InputHandler implements Printable {
             ArrayList<Option> options = new ArrayList<>();
             options.add(new Option(Action.DONE.name(), Action.DONE));
             options.add(new Option(Action.CREATE.name(), Action.CREATE));
-            for (Tag tag : repository.Read()) {
+            for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
                 options.add(new Option(tag.name(), tag));
             }
             Option option = ConsoleSelectionUtils.displayOptions(options);

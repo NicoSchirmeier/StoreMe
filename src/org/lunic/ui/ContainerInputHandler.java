@@ -1,20 +1,18 @@
 package org.lunic.ui;
 
+import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.type.ContainerType;
 import org.lunic.data.Item;
 import org.lunic.ui.helperclasses.*;
-import org.lunic.repositories.ContainerRepository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ContainerInputHandler extends InputHandler implements Printable {
-    private final ContainerRepository repository = UserInputManager.CONTAINER_REPOSITORY;
-    private final ItemInputHandler itemInputHandler = UserInputManager.ITEM_INPUT_HANDLER;
 
     public ContainerInputHandler() {
-        super(UserInputManager.CONTAINER_REPOSITORY);
+        super(DataManager.CONTAINER_REPOSITORY);
     }
 
     @Override
@@ -23,7 +21,7 @@ public class ContainerInputHandler extends InputHandler implements Printable {
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Container container : repository.Read()) {
+        for (Container container : DataManager.CONTAINER_REPOSITORY.Read()) {
             options.add(new Option(container.toString(), container));
         }
 
@@ -42,10 +40,10 @@ public class ContainerInputHandler extends InputHandler implements Printable {
         Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CREATE, Action.REMOVE, Action.CHANGE);
 
         if(option.getRootObject() instanceof Item) {
-            itemInputHandler.printItemOptions(container, (Item) option.getRootObject());
+            DataManager.ITEM_INPUT_HANDLER.printItemOptions(container, (Item) option.getRootObject());
         } else if (option.getRootObject() instanceof Action action) {
             if (action.equals(Action.CREATE)) {
-                itemInputHandler.printItemCreationDialog(container);
+                DataManager.ITEM_INPUT_HANDLER.printItemCreationDialog(container);
             } else if (action.equals(Action.REMOVE)) {
                 printDeletionDialog(container);
             } else if (action.equals(Action.CHANGE)) {
@@ -61,7 +59,7 @@ public class ContainerInputHandler extends InputHandler implements Printable {
 
         System.out.println(container);
         if(ConsoleReadingUtils.printConfirmationDialog("Create Container")) {
-            repository.Create(container);
+            DataManager.CONTAINER_REPOSITORY.Create(container);
         } else {
             printCreationDialog();
         }
@@ -76,7 +74,7 @@ public class ContainerInputHandler extends InputHandler implements Printable {
         System.out.println("->");
         System.out.println(updatedContainer);
         if(ConsoleReadingUtils.printConfirmationDialog("Change Container")) {
-            repository.Update(containerToBeUpdated, updatedContainer);
+            DataManager.CONTAINER_REPOSITORY.Update(containerToBeUpdated, updatedContainer);
         } else {
             printContainerDetails(containerToBeUpdated);
         }
@@ -90,9 +88,9 @@ public class ContainerInputHandler extends InputHandler implements Printable {
             System.out.println("- Change Container -");
             System.out.println(toChange + " (Skip with \"!\")");
         }
-        System.out.println("Enter name: (Enter \"!\" to skip)");
+        System.out.println("Enter name:");
         String name = ConsoleReadingUtils.readString();
-        System.out.println("Enter location: (Enter \"!\" to skip)");
+        System.out.println("Enter location:");
         String location = ConsoleReadingUtils.readString();
         System.out.println("Select container type:");
         ContainerType type = (ContainerType) ConsoleSelectionUtils.printTypeSelection(ContainerType.values());
