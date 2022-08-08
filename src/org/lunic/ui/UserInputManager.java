@@ -40,6 +40,7 @@ public class UserInputManager implements Printable {
         options.add(new Option("View Container", DataManager.CONTAINER_INPUT_HANDLER));
         options.add(new Option("View Recipes", DataManager.RECIPE_INPUT_HANDLER));
         options.add(new Option("View Categories and Shopping Lists", DataManager.TAG_INPUT_HANDLER));
+        options.add(new Option("View Item Templates", DataManager.ITEM_TEMPLATE_HANDLER));
         options.add(new Option("Exit", Action.EXIT));
 
         Option option = ConsoleSelectionUtils.displayOptions(options);

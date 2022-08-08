@@ -1,5 +1,6 @@
 package org.lunic.repositories;
 
+import org.lunic.data.Item;
 import org.lunic.persistance.JsonDriver;
 
 import java.util.ArrayList;
@@ -56,5 +57,4 @@ public abstract class Repository {
                 "ERROR: " + recordToFind.getClass() + " could not be found!");
         return null;
     }
-
 }

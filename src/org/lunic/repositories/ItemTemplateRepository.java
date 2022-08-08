@@ -35,4 +35,13 @@ public class ItemTemplateRepository extends Repository {
         super.Delete(itemTemplate);
     }
 
+    public boolean Contains(Item item) {
+        for (Item template : Read()) {
+            if(template.equals(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

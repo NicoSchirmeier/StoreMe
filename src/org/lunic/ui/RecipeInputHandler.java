@@ -81,7 +81,7 @@ public class RecipeInputHandler extends InputHandler implements Printable {
         System.out.println("Select Type:");
         RecipeType type = (RecipeType) ConsoleSelectionUtils.printTypeSelection(RecipeType.values());
         System.out.println("Add needed Items:");
-        HashSet<Item> items = new HashSet<>(); //GetItemTemplates here
+        HashSet<Item> items = DataManager.ITEM_TEMPLATE_HANDLER.printAddTemplateItemsDialog(true); //GetItemTemplates here
         System.out.println("Enter cooking duration (in Minutes):");
         int minutes = ConsoleReadingUtils.getAmount(1, 0);
         Time duration = new Time(0, 0, minutes/(60*24), minutes/60, minutes % 60);

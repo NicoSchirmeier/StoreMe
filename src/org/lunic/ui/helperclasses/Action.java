@@ -8,6 +8,7 @@ public enum Action {
     DELETE,
     CHANGE,
     REMOVE,
+    ADD,
     BACK,
     EXIT
 }

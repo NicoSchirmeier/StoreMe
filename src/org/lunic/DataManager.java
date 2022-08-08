@@ -5,10 +5,7 @@ import org.lunic.repositories.ContainerRepository;
 import org.lunic.repositories.ItemTemplateRepository;
 import org.lunic.repositories.RecipeRepository;
 import org.lunic.repositories.TagRepository;
-import org.lunic.ui.ContainerInputHandler;
-import org.lunic.ui.ItemInputHandler;
-import org.lunic.ui.RecipeInputHandler;
-import org.lunic.ui.TagInputHandler;
+import org.lunic.ui.*;
 
 public class DataManager {
     //Repositories
@@ -22,6 +19,7 @@ public class DataManager {
     public static final RecipeInputHandler RECIPE_INPUT_HANDLER = new RecipeInputHandler();
     public static final TagInputHandler TAG_INPUT_HANDLER = new TagInputHandler();
     public static final ItemInputHandler ITEM_INPUT_HANDLER = new ItemInputHandler();
+    public static final ItemTemplateHandler ITEM_TEMPLATE_HANDLER = new ItemTemplateHandler();
 
     //Observer
     public static final ItemExpirationObserver ITEM_EXPIRATION_OBSERVER = new ItemExpirationObserver();

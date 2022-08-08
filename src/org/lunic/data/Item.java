@@ -8,6 +8,7 @@ import java.util.HashSet;
 public record Item(String name, ItemType type, int amount,
                    LocalDate expirationDate, LocalDate consumptionDate,
                    HashSet<Tag> tags) {
+
     Item(ItemBuilder builder) {
         this(builder.getName(), builder.getType(), builder.getAmount(), builder.getExpirationDate(), builder.getConsumptionDate(), builder.getTags());
     }
@@ -29,5 +30,19 @@ public record Item(String name, ItemType type, int amount,
                 "\n | Expiration Date: " + expirationDate +
                 "\n | Consumption Date: " + consumptionDate +
                 "\n | Tags: " + tagString;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Item item) {
+            if(item.name().equals(name) && item.tags.equals(tags()) && item.type.equals(type())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String toTemplateString() {
+        return name + " | Type: " + type + " | Tags: " + tags;
     }
 }
