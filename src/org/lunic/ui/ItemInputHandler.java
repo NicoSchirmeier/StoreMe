@@ -59,14 +59,6 @@ public class ItemInputHandler {
             container.items().remove(toChange);
             container.items().add(item);
             DataManager.CONTAINER_REPOSITORY.Update(container, container);
-
-            confirmed = ConsoleReadingUtils.printConfirmationDialog("Save or add as new Template");
-            Item templateItem = new Item(item.name(), item.type(), 0, null, null, item.tags());
-            if(confirmed && DataManager.ITEM_TEMPLATE_REPOSITORY.Contains(toChange)) {
-                DataManager.ITEM_TEMPLATE_REPOSITORY.Update(toChange, templateItem);
-            } else if (confirmed && !DataManager.ITEM_TEMPLATE_REPOSITORY.Contains(toChange)) {
-                DataManager.ITEM_TEMPLATE_REPOSITORY.Create(templateItem);
-            }
         }
     }
 
@@ -85,10 +77,6 @@ public class ItemInputHandler {
             builder = new ItemBuilder();
 
             System.out.println("- Create Item -");
-            boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create from Item Template");
-            if(confirmed) {
-                return createOrChange(DataManager.ITEM_TEMPLATE_HANDLER.printSelectTemplate());
-            }
         } else {
             isItemChange = true;
             builder = new ItemBuilder(baseItem);
@@ -97,27 +85,34 @@ public class ItemInputHandler {
             System.out.println(baseItem + " (Enter \"!\" to skip)");
         }
 
-        boolean isTemplateItem = false;
-        if(isItemChange) if(baseItem.expirationDate() == null || baseItem.consumptionDate() == null) isTemplateItem = true;
-
         System.out.println("Enter Name:");
         builder.setName(ConsoleReadingUtils.readString(isItemChange));
 
         System.out.println("Select Type:");
-        builder.setType((ItemType) ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange));
+        Object itemType = ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange);
+        if(itemType == null) {
+            builder.setType(null);
+        } else {
+            builder.setType((ItemType) itemType);
+        }
 
         System.out.println("Enter Amount:");
-        builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange && !isTemplateItem));
+        builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange));
 
         System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
-        builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange && !isTemplateItem));
+        builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
 
         System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
-        builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange && !isTemplateItem));
+        builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
 
         System.out.println("Select Tags:");
         builder.setTags(DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(isItemChange));
 
         return builder.build();
+    }
+
+    public HashSet<Item> printAddTemplateItemsDialog() {
+
+        return new HashSet<>();
     }
 }
