@@ -13,7 +13,7 @@ public class ItemTemplateHandler implements Printable {
     @Override
     public void print() {
         System.out.println("- Item Templates -");
-        ArrayList<Option> additionalOptions = new ArrayList<Option>();
+        ArrayList<Option> additionalOptions = new ArrayList<>();
         for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.Read()) {
             additionalOptions.add(new Option( template.toTemplateString(), template));
         }
@@ -51,13 +51,20 @@ public class ItemTemplateHandler implements Printable {
         return null;
     }
 
-    public HashSet<Item> printAddTemplateItemsDialog(boolean selectAmount) {
+    public HashSet<Item> printAddTemplateItemsDialog(boolean selectAmount, boolean canBeSkipped) {
         HashSet<Item> itemTemplates = new HashSet<>();
+        if(canBeSkipped) {
+            boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Skip");
+            if(confirmed) return null;
+        }
+
         while (true) {
             Item template = printSelectTemplate();
             if(template != null) {
                 if(selectAmount) {
+                    System.out.println("Enter needed amount:");
                     int amount = ConsoleReadingUtils.getAmount(1, Integer.MAX_VALUE);
+                    if(amount < 0) return null;
                     itemTemplates.add(new ItemBuilder(template).setAmount(amount).build());
                 } else {
                     itemTemplates.add(template);

@@ -9,6 +9,7 @@ public enum Action {
     CHANGE,
     REMOVE,
     ADD,
+    VIEW,
     BACK,
     EXIT
 }

@@ -1,5 +1,6 @@
 package org.lunic;
 
+import org.lunic.observer.ItemConsumptionObserver;
 import org.lunic.observer.ItemExpirationObserver;
 import org.lunic.repositories.ContainerRepository;
 import org.lunic.repositories.ItemTemplateRepository;
@@ -23,4 +24,5 @@ public class DataManager {
 
     //Observer
     public static final ItemExpirationObserver ITEM_EXPIRATION_OBSERVER = new ItemExpirationObserver();
+    public static final ItemConsumptionObserver ITEM_CONSUMPTION_OBSERVER = new ItemConsumptionObserver();
 }

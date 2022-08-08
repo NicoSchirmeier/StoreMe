@@ -15,26 +15,41 @@ public class ItemExpirationObserver {
 
     private final GeneralItemInterface itemInterface = DataManager.CONTAINER_REPOSITORY;
 
-    public ItemExpirationObserver() {
-    }
-
-    public static long getDaysBetween(LocalDate expirationDate,
-                                       LocalDate currentDate) {
-        return DAYS.between(currentDate, expirationDate);
-    }
-
     public ArrayList<Item> getSoonExpiringItems() {
         LocalDate currentDate = LocalDate.now();
         ArrayList<Item> expiredItems = new ArrayList<>();
 
         for (Item item : itemInterface.getAllItems()) {
-            long daysBetween = getDaysBetween(item.expirationDate(), currentDate);
+            long daysBetween = ObserverUtils.getDaysBetween(item.expirationDate(), currentDate);
             if (daysBetween <= 0) {
                 expiredItems.add(item);
             }
         }
 
         return expiredItems;
+    }
+
+    public ArrayList<Recipe> getRecommendedRecipes() {
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.Read()) {
+            boolean canBeCooked = true;
+            for(Item item : recipe.items()) {
+                if(item.amount() > getTotalAmount(item)) {
+                    canBeCooked = false;
+                }
+            }
+            if(canBeCooked) recipes.add(recipe);
+        }
+
+        return recipes;
+    }
+
+    public int getTotalAmount(Item item) {
+        int amount = 0;
+        for (Item existingItem : DataManager.CONTAINER_REPOSITORY.getAllItems()) {
+            if(existingItem.equals(item)) amount += existingItem.amount();
+        }
+        return amount;
     }
 
 }

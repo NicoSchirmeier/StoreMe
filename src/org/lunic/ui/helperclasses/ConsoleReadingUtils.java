@@ -57,6 +57,7 @@ public class ConsoleReadingUtils {
         while (min > amount || amount > max) {
             try {
                 String input = readString(1, Integer.MAX_VALUE, false);
+                if(input == null) return -1;
                 if(input.equals("!") && canBeSkipped) return -1;
                 amount = Integer.parseInt(input);
 
@@ -82,7 +83,8 @@ public class ConsoleReadingUtils {
         while (date.isBefore(LocalDate.now())) {
             try {
                 String text = readString(1, Integer.MAX_VALUE, false);
-                if(text != null && text.equals("!") && canBeSkipped) return null;
+                if(text == null) return null;
+                if( text.equals("!") && canBeSkipped) return null;
                 date = LocalDate.parse(text, formatter);
             } catch (Exception e) {
                 System.err.println("Date could not be parsed. (" + DATE_FORMAT +")");
@@ -102,8 +104,9 @@ public class ConsoleReadingUtils {
 
         do {
             lineNew = readString(0, Integer.MAX_VALUE, false);
-            text += lineNew;
-            if(lineNew != null && lineNew.equals("!")) return null;
+            text = text.concat("   " + lineNew + "\n");
+            if(lineNew == null) return null;
+            if(lineNew.equals("!") && canBeSkipped) return null;
         } while (!lineNew.equals(""));
 
         return text;
