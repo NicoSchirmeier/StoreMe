@@ -14,14 +14,15 @@ public class ConsoleSelectionUtils {
 
         int selection = -1;
 
-        while (selection < 0 || selection > options.size()) {
+        while (selection < 0 || selection >= options.size()) {
             for(Option option : options) {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
             try {
                 String input = ConsoleReadingUtils.readString(1, Integer.MAX_VALUE, false);
                 System.out.println(input);
-                if(input != null && input.equals("!") && canBeSkipped) {
+                if(input == null) return null;
+                if(input.equals("!") && canBeSkipped) {
                     return new Option(null, null);
                 } else if (!input.equals("!")) {
                     selection = Integer.parseInt(input);

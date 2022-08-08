@@ -8,8 +8,4 @@ public class ConsoleUtilConfiguration {
     protected static final int MIN_CHARS = 2;
     public static final String DATE_FORMAT = "dd/MM/yyyy";
     protected static final int SPACER_LENGTH = 50;
-
-    public static void configure() {
-        SCANNER.nextLine();
-    }
 }
