@@ -8,6 +8,6 @@ import java.util.ArrayList;
  * Used for positive GRASP example low coupling
   * TODO 1 Put example into documentation
  */
-public interface GeneralItemInterface {
+public interface ContainerItemInterface {
     ArrayList<Item> getAllItems();
 }

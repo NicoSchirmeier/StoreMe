@@ -6,7 +6,7 @@ import org.lunic.persistance.*;
 
 import java.util.ArrayList;
 
-public class ContainerRepository extends Repository implements GeneralItemInterface {
+public class ContainerRepository extends Repository implements ContainerItemInterface {
 
     public ContainerRepository() {
         super(new ContainerJsonDriver());
