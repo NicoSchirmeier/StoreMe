@@ -70,5 +70,4 @@ public class TagRepository extends Repository {
             super.Delete(tag);
         }
     }
-
 }

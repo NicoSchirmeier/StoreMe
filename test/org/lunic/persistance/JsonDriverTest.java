@@ -1,27 +1,16 @@
 package org.lunic.persistance;
 
 import org.junit.jupiter.api.Test;
+import org.lunic.data.TestRecord;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JsonDriverTest {
+public class JsonDriverTest {
 
-    String path = "tests/" + getClass().getName() + ".json";
-    JsonDriver jsonDriverMock = new JsonDriver(path) {
-        @Override
-        public void save(ArrayList<Record> records) {
-            super.save(records, path);
-        }
-
-        @Override
-        public ArrayList<Record> read() {
-            return super.read(path, new TestRecord(""));
-        }
-    };
+    JsonDriverMock jsonDriverMock = new JsonDriverMock();
 
     @Test
     void saveAndRead() {
@@ -32,13 +21,11 @@ class JsonDriverTest {
         records.add(testRecord);
         jsonDriverMock.save(records);
 
-        File file = new File(path);
+        File file = new File(jsonDriverMock.getPath());
         if(file.exists()) {
             assertTrue(jsonDriverMock.read().contains(testRecord));
         } else {
             fail("File does not exist!");
         }
     }
-
-    record TestRecord(String Test){}
 }

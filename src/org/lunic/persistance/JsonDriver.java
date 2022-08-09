@@ -72,5 +72,4 @@ public abstract class JsonDriver {
 
     abstract public ArrayList<Record> read();
 
-
 }

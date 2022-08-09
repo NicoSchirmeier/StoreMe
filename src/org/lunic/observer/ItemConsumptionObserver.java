@@ -14,7 +14,7 @@ public class ItemConsumptionObserver {
         ArrayList<Item> soonConsumedItems = new ArrayList<>();
 
         for (Item item : itemInterface.getAllItems()) {
-            long daysBetween = ObserverUtils.getDaysBetween(item.consumptionDate(), LocalDate.now());
+            long daysBetween = ObserverUtils.getDaysBetween(LocalDate.now(), item.consumptionDate());
             if (daysBetween <= 10) {
                 soonConsumedItems.add(item);
             }

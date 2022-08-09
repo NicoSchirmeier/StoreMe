@@ -20,7 +20,7 @@ public class ItemExpirationObserver {
         ArrayList<Item> expiredItems = new ArrayList<>();
 
         for (Item item : itemInterface.getAllItems()) {
-            long daysBetween = ObserverUtils.getDaysBetween(item.expirationDate(), currentDate);
+            long daysBetween = ObserverUtils.getDaysBetween(currentDate, LocalDate.now());
             if (daysBetween <= 0) {
                 expiredItems.add(item);
             }
