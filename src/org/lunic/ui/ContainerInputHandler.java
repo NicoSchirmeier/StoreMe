@@ -25,7 +25,6 @@ public class ContainerInputHandler extends InputHandler implements Printable {
         for (Container container : DataManager.CONTAINER_REPOSITORY.Read()) {
             options.add(new Option(container.toString(), container));
         }
-
         Option option = ConsoleSelectionUtils.displayOptions(options);
 
         if(option.getRootObject() instanceof Container) {
