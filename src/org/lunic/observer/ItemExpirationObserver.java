@@ -8,12 +8,10 @@ import org.lunic.data.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 
 public class ItemExpirationObserver {
 
-    private final GeneralItemInterface itemInterface = DataManager.CONTAINER_REPOSITORY;
+    private final ContainerItemInterface itemInterface = DataManager.CONTAINER_REPOSITORY;
 
     public ArrayList<Item> getSoonExpiringItems() {
         LocalDate currentDate = LocalDate.now();
