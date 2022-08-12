@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonDriverTest {
 
-    JsonDriverMock jsonDriverMock = new JsonDriverMock();
+    TestJsonDriver jsonDriverMock = new TestJsonDriver();
 
     @Test
     void saveAndRead() {
@@ -21,7 +21,7 @@ public class JsonDriverTest {
         records.add(testRecord);
         jsonDriverMock.save(records);
 
-        File file = new File(jsonDriverMock.getPath());
+        File file = new File(TestJsonDriver.getPath());
         if(file.exists()) {
             assertTrue(jsonDriverMock.read().contains(testRecord));
         } else {

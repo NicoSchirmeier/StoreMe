@@ -1,14 +1,13 @@
 package org.lunic.repositories;
 
 import org.lunic.data.TestRecord;
-import org.lunic.persistance.JsonDriver;
-import org.lunic.persistance.JsonDriverMock;
+import org.lunic.persistance.TestJsonDriver;
 
 import java.util.ArrayList;
 
-public class TestingRepository extends Repository {
+public class TestRepository extends Repository {
 
-    protected TestingRepository(JsonDriverMock jsonDriver) {
+    protected TestRepository(TestJsonDriver jsonDriver) {
         super(jsonDriver);
     }
 

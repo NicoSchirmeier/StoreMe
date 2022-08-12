@@ -2,13 +2,13 @@ package org.lunic.repositories;
 
 import org.junit.jupiter.api.Test;
 import org.lunic.data.TestRecord;
-import org.lunic.persistance.JsonDriverMock;
+import org.lunic.persistance.TestJsonDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RepositoryTest {
 
-    private final TestingRepository repository = new TestingRepository(new JsonDriverMock());
+    private final TestRepository repository = new TestRepository(new TestJsonDriver());
 
     @Test
     void create() {
@@ -25,7 +25,7 @@ class RepositoryTest {
         TestRecord toUpdateTestRecord = new TestRecord(text);
         TestRecord updatedTestRecord = new TestRecord(updatedText);
         repository.Update(toUpdateTestRecord, updatedTestRecord);
-        assertTrue(!repository.Read().contains(toUpdateTestRecord) && repository.Read().contains(updatedTestRecord));
+        assertFalse(repository.Read().contains(toUpdateTestRecord) && repository.Read().contains(updatedTestRecord));
     }
 
     @Test
@@ -36,6 +36,6 @@ class RepositoryTest {
             repository.Create(testRecord);
         }
         repository.Delete(testRecord);
-        assertTrue(!repository.Read().contains(testRecord));
+        assertFalse(repository.Read().contains(testRecord));
     }
 }

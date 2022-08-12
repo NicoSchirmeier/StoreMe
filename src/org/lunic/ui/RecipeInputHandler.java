@@ -10,7 +10,7 @@ import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class RecipeInputHandler extends InputHandler implements Printable {
+public class RecipeInputHandler extends InputHandler implements Printable, Handler {
 
     public RecipeInputHandler() {
         super(DataManager.RECIPE_REPOSITORY);
@@ -57,7 +57,6 @@ public class RecipeInputHandler extends InputHandler implements Printable {
         }
     }
 
-    @Override
     public void printCreationDialog() {
         Recipe recipe = createOrChange(null);
 
@@ -69,7 +68,6 @@ public class RecipeInputHandler extends InputHandler implements Printable {
         }
     }
 
-    @Override
     public void printChangeDialog(Record toChange) {
         Recipe changedRecipe = createOrChange((Recipe) toChange);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Edit Recipe");

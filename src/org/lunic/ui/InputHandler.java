@@ -9,8 +9,7 @@ public abstract class InputHandler {
         this.repository = repository;
     }
 
-    public abstract void printCreationDialog();
-    public abstract void printChangeDialog(Record toChange);
+
 
     public void printDeletionDialog(Record toDelete) {
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete " + toDelete.getClass().getSimpleName());

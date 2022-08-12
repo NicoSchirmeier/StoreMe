@@ -8,7 +8,7 @@ import org.lunic.ui.helperclasses.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class TagInputHandler extends InputHandler implements Printable {
+public class TagInputHandler extends InputHandler implements Printable, Handler {
 
     public TagInputHandler() {
         super(DataManager.TAG_REPOSITORY);
@@ -84,7 +84,6 @@ public class TagInputHandler extends InputHandler implements Printable {
         }
     }
 
-    @Override
     public void printCreationDialog() {
         Tag tag = createTag(null);
         System.out.println(tag);
@@ -94,7 +93,6 @@ public class TagInputHandler extends InputHandler implements Printable {
         }
     }
 
-    @Override
     public void printChangeDialog(Record toChange) {
         Tag tag = createTag((Tag) toChange);
 

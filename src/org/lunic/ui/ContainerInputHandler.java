@@ -10,7 +10,7 @@ import org.lunic.ui.helperclasses.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class ContainerInputHandler extends InputHandler implements Printable {
+public class ContainerInputHandler extends InputHandler implements Printable, Handler {
 
     public ContainerInputHandler() {
         super(DataManager.CONTAINER_REPOSITORY);
@@ -55,7 +55,6 @@ public class ContainerInputHandler extends InputHandler implements Printable {
         print();
     }
 
-    @Override
     public void printCreationDialog() {
         Container container = createOrChange(null);
 
@@ -67,7 +66,6 @@ public class ContainerInputHandler extends InputHandler implements Printable {
         }
     }
 
-    @Override
     public void printChangeDialog(Record toUpdate) {
         Container containerToBeUpdated = (Container) toUpdate;
         Container updatedContainer = createOrChange(containerToBeUpdated);

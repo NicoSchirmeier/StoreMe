@@ -4,11 +4,11 @@ import org.lunic.data.TestRecord;
 
 import java.util.ArrayList;
 
-public class JsonDriverMock extends JsonDriver {
+public class TestJsonDriver extends JsonDriver {
 
-    public static final String PATH = "tests/" + JsonDriverMock.class.getName() + ".json";
+    public static final String PATH = "tests/" + TestJsonDriver.class.getName() + ".json";
 
-    public JsonDriverMock() {
+    public TestJsonDriver() {
         super(PATH);
     }
 
