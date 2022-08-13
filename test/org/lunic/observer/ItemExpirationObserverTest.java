@@ -15,7 +15,7 @@ class ItemExpirationObserverTest {
     void getDaysBetween_OverDueDate() {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(2);
-        long days = ObserverUtils.getDaysBetween(today, tomorrow);
+        long days = ObserverUtils.getDaysBetween(tomorrow, today);
         assertEquals(-2, days);
     }
 

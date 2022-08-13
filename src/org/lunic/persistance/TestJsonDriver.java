@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TestJsonDriver extends JsonDriver implements DataDriverInterface {
 
-    public static final String PATH = "tests/" + TestJsonDriver.class.getName() + ".json";
+    public static final String PATH = "test-data/" + TestJsonDriver.class.getName() + ".json";
 
     public TestJsonDriver() {
         super(PATH);

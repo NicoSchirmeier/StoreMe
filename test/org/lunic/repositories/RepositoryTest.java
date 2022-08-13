@@ -35,7 +35,9 @@ class RepositoryTest {
         if(!repository.read().contains(testRecord)) {
             repository.create(testRecord);
         }
-        repository.delete(testRecord);
+        while (repository.read().contains(testRecord)) {
+            repository.delete(testRecord);
+        }
         assertFalse(repository.read().contains(testRecord));
     }
 }

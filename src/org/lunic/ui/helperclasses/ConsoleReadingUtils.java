@@ -3,6 +3,7 @@ package org.lunic.ui.helperclasses;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Scanner;
 
 import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.DATE_FORMAT;
 import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.SCANNER;
