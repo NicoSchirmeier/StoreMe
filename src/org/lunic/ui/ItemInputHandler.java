@@ -12,7 +12,34 @@ import org.lunic.ui.helperclasses.Option;
 
 public class ItemInputHandler {
 
-    public ItemInputHandler() {
+    private static void getTags(boolean isItemChange, ItemBuilder builder) {
+        System.out.println("Select Tags:");
+        builder.setTags(TagInputHandlerUtils.printSelectTagsDialog(isItemChange));
+    }
+
+    private static void getConsumptionDate(boolean isItemChange, ItemBuilder builder) {
+        System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
+        builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
+    }
+
+    private static void getExpirationDate(boolean isItemChange, ItemBuilder builder) {
+        System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
+        builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
+    }
+
+    private static void getAmount(boolean isItemChange, ItemBuilder builder) {
+        System.out.println("Enter Amount:");
+        builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange));
+    }
+
+    private static void getType(boolean isItemChange, ItemBuilder builder) {
+        System.out.println("Select Type:");
+        builder.setType((ItemType) ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange));
+    }
+
+    private static void getName(boolean isItemChange, ItemBuilder builder) {
+        System.out.println("Enter Name:");
+        builder.setName(ConsoleReadingUtils.readString(isItemChange));
     }
 
     public void printItemOptions(Container container, Item item) {
@@ -65,46 +92,33 @@ public class ItemInputHandler {
     }
 
     private Item createOrChange(Item baseItem) {
-        boolean isItemChange;
+        boolean isItemChange = baseItem != null;
+        ItemBuilder builder = createItemBuilder(isItemChange, baseItem);
 
-        ItemBuilder builder;
-        if (baseItem == null) {
-            isItemChange = false;
-            builder = new ItemBuilder();
+        printCreateOrChangeWelcomeText(isItemChange, baseItem);
 
-            System.out.println("- Create Item -");
-        } else {
-            isItemChange = true;
-            builder = new ItemBuilder(baseItem);
-
-            System.out.println("- Change Item -");
-            System.out.println(baseItem + " (Enter \"!\" to skip)");
-        }
-
-        System.out.println("Enter Name:");
-        builder.setName(ConsoleReadingUtils.readString(isItemChange));
-
-        System.out.println("Select Type:");
-        Object itemType = ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange);
-        if (itemType == null) {
-            builder.setType(null);
-        } else {
-            builder.setType((ItemType) itemType);
-        }
-
-        System.out.println("Enter Amount:");
-        builder.setAmount(ConsoleReadingUtils.getAmount(1, 0, isItemChange));
-
-        System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
-        builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
-
-        System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
-        builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
-
-        System.out.println("Select Tags:");
-        builder.setTags(TagInputHandlerUtils.printSelectTagsDialog(isItemChange));
+        getName(isItemChange, builder);
+        getType(isItemChange, builder);
+        getAmount(isItemChange, builder);
+        getExpirationDate(isItemChange, builder);
+        getConsumptionDate(isItemChange, builder);
+        getTags(isItemChange, builder);
 
         return builder.build();
+    }
+
+    private void printCreateOrChangeWelcomeText(boolean isItemChange, Item item) {
+        if (isItemChange) {
+            System.out.println("- Change Item -");
+            System.out.println(item + " (Enter \"!\" to skip)");
+        } else {
+            System.out.println("- Create Item -");
+        }
+    }
+
+    private ItemBuilder createItemBuilder(boolean isItemChange, Item baseItem) {
+        if (isItemChange) return new ItemBuilder(baseItem);
+        return new ItemBuilder();
     }
 
 }
