@@ -101,7 +101,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         int minutes = ConsoleReadingUtils.getAmount(1, 0, isChange);
         Time duration = new Time(0, 0, minutes / (60 * 24), minutes / 60, minutes % 60);
         System.out.println("Select Tags:");
-        HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(isChange);
+        HashSet<Tag> tags = TagInputHandlerUtils.printSelectTagsDialog(isChange);
         System.out.println("Write Instruction (End with blank line)");
         String instruction = ConsoleReadingUtils.readText(isChange);
         if (recipe != null) {

@@ -102,7 +102,7 @@ public class ItemInputHandler {
         builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
 
         System.out.println("Select Tags:");
-        builder.setTags(DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(isItemChange));
+        builder.setTags(TagInputHandlerUtils.printSelectTagsDialog(isItemChange));
 
         return builder.build();
     }
