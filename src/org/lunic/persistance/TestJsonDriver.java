@@ -12,6 +12,17 @@ public class TestJsonDriver extends JsonDriver implements DataDriverInterface {
         super(PATH);
     }
 
+    public static String getPath() {
+        return PATH;
+    }
+
+    public static DataDriverInterface getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new TestJsonDriver();
+        }
+        return (DataDriverInterface) INSTANCE;
+    }
+
     @Override
     public void save(ArrayList<Record> records) {
         super.save(records, PATH);
@@ -20,16 +31,5 @@ public class TestJsonDriver extends JsonDriver implements DataDriverInterface {
     @Override
     public ArrayList<Record> read() {
         return super.read(PATH, new TestRecord(""));
-    }
-
-    public static String getPath() {
-        return PATH;
-    }
-
-    public static DataDriverInterface getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new TestJsonDriver();
-        }
-        return (DataDriverInterface) INSTANCE;
     }
 }

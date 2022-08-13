@@ -17,7 +17,7 @@ public abstract class Repository {
     private void load() {
         recordList.clear();
         ArrayList<Record> records = dataDriver.read();
-        if(records != null) {
+        if (records != null) {
             recordList.addAll(records);
         }
     }

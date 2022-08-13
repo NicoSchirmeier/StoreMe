@@ -10,11 +10,10 @@ import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
 import org.lunic.ui.helperclasses.Option;
 
-import java.util.HashSet;
-
 public class ItemInputHandler {
 
-    public ItemInputHandler() {}
+    public ItemInputHandler() {
+    }
 
     public void printItemOptions(Container container, Item item) {
         System.out.println("Current Item: " + item.toPrettyString());
@@ -38,7 +37,7 @@ public class ItemInputHandler {
             DataManager.CONTAINER_REPOSITORY.update(container, container);
 
             confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
-            if(confirmed) {
+            if (confirmed) {
                 DataManager.ITEM_TEMPLATE_REPOSITORY.create(new Item(item.name(), item.type(), 0, null, null, item.tags()));
             }
         }
@@ -69,7 +68,7 @@ public class ItemInputHandler {
         boolean isItemChange;
 
         ItemBuilder builder;
-        if(baseItem == null) {
+        if (baseItem == null) {
             isItemChange = false;
             builder = new ItemBuilder();
 
@@ -87,7 +86,7 @@ public class ItemInputHandler {
 
         System.out.println("Select Type:");
         Object itemType = ConsoleSelectionUtils.printTypeSelection(ItemType.values(), isItemChange);
-        if(itemType == null) {
+        if (itemType == null) {
             builder.setType(null);
         } else {
             builder.setType((ItemType) itemType);
@@ -108,8 +107,4 @@ public class ItemInputHandler {
         return builder.build();
     }
 
-    public HashSet<Item> printAddTemplateItemsDialog() {
-
-        return new HashSet<>();
-    }
 }

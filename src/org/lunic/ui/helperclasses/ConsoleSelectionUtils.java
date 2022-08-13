@@ -1,7 +1,6 @@
 package org.lunic.ui.helperclasses;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ConsoleSelectionUtils {
 
@@ -10,19 +9,19 @@ public class ConsoleSelectionUtils {
     }
 
     public static Option displayOptions(ArrayList<Option> options, boolean canBeSkipped) {
-        if(options == null || options.size() < 1) return null;
+        if (options == null || options.size() < 1) return null;
 
         int selection = -1;
 
         while (selection < 0 || selection >= options.size()) {
-            for(Option option : options) {
+            for (Option option : options) {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
             try {
                 String input = ConsoleReadingUtils.readString(1, Integer.MAX_VALUE, false);
                 System.out.println(input);
-                if(input == null) return null;
-                if(input.equals("!") && canBeSkipped) {
+                if (input == null) return null;
+                if (input.equals("!") && canBeSkipped) {
                     return new Option(null, null);
                 } else if (!input.equals("!")) {
                     selection = Integer.parseInt(input);
@@ -33,7 +32,7 @@ public class ConsoleSelectionUtils {
                 ConsoleUtilConfiguration.SCANNER.next();
             }
 
-            if(selection < 0 || selection >= options.size()) {
+            if (selection < 0 || selection >= options.size()) {
                 System.err.println("Selection out of bounds!");
             }
         }
@@ -50,11 +49,11 @@ public class ConsoleSelectionUtils {
         for (Action action : actions) {
             options.add(new Option(action.name(), action));
         }
-        if(additionalOptions != null) {
+        if (additionalOptions != null) {
             options.addAll(additionalOptions);
         }
 
-        return  displayOptions(options);
+        return displayOptions(options);
     }
 
     public static Object printTypeSelection(Object[] types) {
@@ -64,7 +63,7 @@ public class ConsoleSelectionUtils {
     public static Object printTypeSelection(Object[] types, boolean canBeSkipped) {
         ArrayList<Option> options = new ArrayList<>();
         for (Object type : types) {
-            if(type instanceof Enum<?> typeEnum) {
+            if (type instanceof Enum<?> typeEnum) {
                 options.add(new Option(typeEnum.name(), typeEnum));
             }
         }

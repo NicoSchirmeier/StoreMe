@@ -19,9 +19,9 @@ public record Item(String name, ItemType type, int amount,
     }
 
     public String toPrettyString() {
-        String tagString = "";
+        StringBuilder tagString = new StringBuilder();
         for (Tag tag : tags) {
-            tagString = tagString + "\n   | " + tag;
+            tagString.append("\n   | ").append(tag);
         }
 
         return name +
@@ -34,10 +34,8 @@ public record Item(String name, ItemType type, int amount,
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Item item) {
-            if(item.name().equals(name) && item.tags.equals(tags()) && item.type.equals(type())) {
-                return true;
-            }
+        if (obj instanceof Item item) {
+            return item.name().equals(name) && item.tags.equals(tags()) && item.type.equals(type());
         }
         return false;
     }

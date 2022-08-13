@@ -13,7 +13,6 @@ import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.DATE_FORMAT;
 public class UserInputManager implements Printable {
 
     public static boolean SYSTEM_ACTIVE = true;
-    private final String title = "- StoreME -";
 
     public UserInputManager() {
         while (SYSTEM_ACTIVE) print();
@@ -21,19 +20,20 @@ public class UserInputManager implements Printable {
 
     public void print() {
         System.out.println();
+        String title = "- StoreME -";
         ConsoleReadingUtils.printSpace(30 - title.length());
         System.out.print(title);
         System.out.println();
         ConsoleReadingUtils.printSpacer();
 
-        if(DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems().size() > 0) {
+        if (DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems().size() > 0) {
             System.out.println("These Items will expire soon: ");
             for (Item expiredItem : DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems()) {
                 System.err.println("- " + expiredItem.name() + " " +
                         expiredItem.expirationDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             }
         }
-        delayedPrint("");
+        delayedPrint();
 
         if (DataManager.ITEM_CONSUMPTION_OBSERVER.getSoonConsumedItems().size() > 0) {
             System.out.println("You might run out of these Items soon: ");
@@ -42,7 +42,7 @@ public class UserInputManager implements Printable {
                         soonConsumedItem.consumptionDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             }
         }
-        delayedPrint("");
+        delayedPrint();
 
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option("View Container", DataManager.CONTAINER_INPUT_HANDLER));
@@ -53,10 +53,10 @@ public class UserInputManager implements Printable {
         options.add(new Option("Exit", Action.EXIT));
 
         Option option = ConsoleSelectionUtils.displayOptions(options);
-        if(option.hasPrintable()) {
+        if (option.hasPrintable()) {
             option.getPrintable().print();
         } else if (option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.EXIT)) {
+            if (action.equals(Action.EXIT)) {
                 SYSTEM_ACTIVE = false;
             } else if (action.equals(Action.VIEW)) {
                 DataManager.RECIPE_INPUT_HANDLER.printRecommendedRecipes();
@@ -64,12 +64,12 @@ public class UserInputManager implements Printable {
         }
     }
 
-    private void delayedPrint(String string) {
+    private void delayedPrint() {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(string);
+        System.out.println();
     }
 }

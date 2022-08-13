@@ -1,4 +1,5 @@
 package org.lunic.persistance;
+
 import org.lunic.data.Item;
 
 import java.util.ArrayList;
@@ -11,6 +12,13 @@ public class ItemTemplateJsonDriver extends JsonDriver implements DataDriverInte
         super(PATH);
     }
 
+    public static DataDriverInterface getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ItemTemplateJsonDriver();
+        }
+        return (DataDriverInterface) INSTANCE;
+    }
+
     @Override
     public void save(ArrayList<Record> records) {
         save(records, PATH);
@@ -19,12 +27,5 @@ public class ItemTemplateJsonDriver extends JsonDriver implements DataDriverInte
     @Override
     public ArrayList<Record> read() {
         return read(PATH, type);
-    }
-
-    public static DataDriverInterface getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new ItemTemplateJsonDriver();
-        }
-        return (DataDriverInterface) INSTANCE;
     }
 }

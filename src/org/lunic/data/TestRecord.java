@@ -1,4 +1,4 @@
 package org.lunic.data;
 
-public record  TestRecord(String text) {
+public record TestRecord(String text) {
 }

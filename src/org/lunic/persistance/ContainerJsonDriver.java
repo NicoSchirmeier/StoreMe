@@ -1,6 +1,7 @@
 package org.lunic.persistance;
 
 import org.lunic.data.Container;
+
 import java.util.ArrayList;
 
 public class ContainerJsonDriver extends JsonDriver implements DataDriverInterface {
@@ -11,6 +12,13 @@ public class ContainerJsonDriver extends JsonDriver implements DataDriverInterfa
         super(PATH);
     }
 
+    public static DataDriverInterface getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ContainerJsonDriver();
+        }
+        return (DataDriverInterface) INSTANCE;
+    }
+
     @Override
     public void save(ArrayList<Record> records) {
         save(records, PATH);
@@ -19,12 +27,5 @@ public class ContainerJsonDriver extends JsonDriver implements DataDriverInterfa
     @Override
     public ArrayList<Record> read() {
         return read(PATH, type);
-    }
-
-    public static DataDriverInterface getInstance() {
-       if(INSTANCE == null) {
-         INSTANCE = new ContainerJsonDriver();
-       }
-       return (DataDriverInterface) INSTANCE;
     }
 }

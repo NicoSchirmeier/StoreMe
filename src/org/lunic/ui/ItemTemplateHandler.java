@@ -14,10 +14,10 @@ public class ItemTemplateHandler implements Printable {
         System.out.println("- Item Templates -");
         ArrayList<Option> additionalOptions = new ArrayList<>();
         for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.read()) {
-            additionalOptions.add(new Option( template.toTemplateString(), template));
+            additionalOptions.add(new Option(template.toTemplateString(), template));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
-        if(option.getRootObject() instanceof Item template) {
+        if (option.getRootObject() instanceof Item template) {
             printItemTemplateDetails(template);
         }
     }
@@ -26,10 +26,10 @@ public class ItemTemplateHandler implements Printable {
         System.out.println("- Template Item - ");
         System.out.println(template.toPrettyString());
         Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.DELETE);
-        if(option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.DELETE)) {
+        if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.DELETE)) {
                 boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete Item Template");
-                if(confirmed) {
+                if (confirmed) {
                     DataManager.ITEM_TEMPLATE_REPOSITORY.delete(template);
                 }
             }
@@ -44,7 +44,7 @@ public class ItemTemplateHandler implements Printable {
             additionalOptions.add(new Option(template.toTemplateString(), template));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
-        if(option.getRootObject() instanceof Item template) {
+        if (option.getRootObject() instanceof Item template) {
             return template;
         }
         return null;
@@ -52,26 +52,26 @@ public class ItemTemplateHandler implements Printable {
 
     public HashSet<Item> printAddTemplateItemsDialog(boolean selectAmount, boolean canBeSkipped) {
         HashSet<Item> itemTemplates = new HashSet<>();
-        if(canBeSkipped) {
+        if (canBeSkipped) {
             boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Skip");
-            if(confirmed) return null;
+            if (confirmed) return null;
         }
 
         while (true) {
             Item template = printSelectTemplate();
-            if(template != null) {
-                if(selectAmount) {
+            if (template != null) {
+                if (selectAmount) {
                     System.out.println("Enter needed amount:");
                     int amount = ConsoleReadingUtils.getAmount(1, Integer.MAX_VALUE);
-                    if(amount < 0) return null;
+                    if (amount < 0) return null;
                     itemTemplates.add(new ItemBuilder(template).setAmount(amount).build());
                 } else {
                     itemTemplates.add(template);
                 }
             }
             Option option = ConsoleSelectionUtils.displayActions(Action.ADD, Action.DONE);
-            if(option.getRootObject() instanceof Action action) {
-                if(action.equals(Action.DONE)) break;
+            if (option.getRootObject() instanceof Action action) {
+                if (action.equals(Action.DONE)) break;
             }
         }
         return itemTemplates;

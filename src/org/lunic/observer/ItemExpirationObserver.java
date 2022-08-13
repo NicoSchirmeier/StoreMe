@@ -1,9 +1,9 @@
 package org.lunic.observer;
 
 import org.lunic.DataManager;
-
-import org.lunic.repositories.*;
-import org.lunic.data.*;
+import org.lunic.data.Item;
+import org.lunic.data.Recipe;
+import org.lunic.repositories.ContainerItemInterface;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ public class ItemExpirationObserver {
 
     public ArrayList<Recipe> getRecommendedRecipes() {
         ArrayList<Recipe> recipes = new ArrayList<>();
-        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
             boolean canBeCooked = true;
-            for(Item item : recipe.items()) {
-                if(item.amount() > getTotalAmount(item)) {
+            for (Item item : recipe.items()) {
+                if (item.amount() > getTotalAmount(item)) {
                     canBeCooked = false;
                 }
             }
-            if(canBeCooked) recipes.add(recipe);
+            if (canBeCooked) recipes.add(recipe);
         }
 
         return recipes;
@@ -45,7 +45,7 @@ public class ItemExpirationObserver {
     public int getTotalAmount(Item item) {
         int amount = 0;
         for (Item existingItem : DataManager.CONTAINER_REPOSITORY.getAllItems()) {
-            if(existingItem.equals(item)) amount += existingItem.amount();
+            if (existingItem.equals(item)) amount += existingItem.amount();
         }
         return amount;
     }

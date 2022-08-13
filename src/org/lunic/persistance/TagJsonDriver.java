@@ -1,4 +1,5 @@
 package org.lunic.persistance;
+
 import org.lunic.data.Tag;
 
 import java.util.ArrayList;
@@ -12,6 +13,13 @@ public class TagJsonDriver extends JsonDriver implements DataDriverInterface {
         super(PATH);
     }
 
+    public static DataDriverInterface getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new TagJsonDriver();
+        }
+        return (DataDriverInterface) INSTANCE;
+    }
+
     @Override
     public void save(ArrayList<Record> tags) {
         save(tags, PATH);
@@ -20,12 +28,5 @@ public class TagJsonDriver extends JsonDriver implements DataDriverInterface {
     @Override
     public ArrayList<Record> read() {
         return read(PATH, type);
-    }
-
-    public static DataDriverInterface getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new TagJsonDriver();
-        }
-        return (DataDriverInterface) INSTANCE;
     }
 }

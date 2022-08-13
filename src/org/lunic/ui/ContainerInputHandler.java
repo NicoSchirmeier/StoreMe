@@ -2,8 +2,8 @@ package org.lunic.ui;
 
 import org.lunic.DataManager;
 import org.lunic.data.Container;
-import org.lunic.data.type.ContainerType;
 import org.lunic.data.Item;
+import org.lunic.data.type.ContainerType;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
@@ -26,10 +26,10 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         }
         Option option = ConsoleSelectionUtils.displayOptions(options);
 
-        if(option.getRootObject() instanceof Container) {
+        if (option.getRootObject() instanceof Container) {
             printContainerDetails((Container) option.getRootObject());
         } else if (option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.CREATE)) {
+            if (action.equals(Action.CREATE)) {
                 printCreationDialog();
             }
         }
@@ -40,7 +40,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         for (Item item : container.items()) additionalOptions.add(new Option(item.toString(), item));
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK, Action.CREATE, Action.REMOVE, Action.CHANGE);
 
-        if(option.getRootObject() instanceof Item item) {
+        if (option.getRootObject() instanceof Item item) {
             DataManager.ITEM_INPUT_HANDLER.printItemOptions(container, item);
         } else if (option.getRootObject() instanceof Action action) {
             if (action.equals(Action.CREATE)) {
@@ -58,7 +58,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         Container container = createOrChange(null);
 
         System.out.println(container);
-        if(ConsoleReadingUtils.printConfirmationDialog("Create Container")) {
+        if (ConsoleReadingUtils.printConfirmationDialog("Create Container")) {
             DataManager.CONTAINER_REPOSITORY.create(container);
         } else {
             printCreationDialog();
@@ -72,7 +72,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         System.out.println(containerToBeUpdated);
         System.out.println("->");
         System.out.println(updatedContainer);
-        if(ConsoleReadingUtils.printConfirmationDialog("Change Container")) {
+        if (ConsoleReadingUtils.printConfirmationDialog("Change Container")) {
             DataManager.CONTAINER_REPOSITORY.update(containerToBeUpdated, updatedContainer);
         } else {
             printContainerDetails(containerToBeUpdated);
@@ -81,7 +81,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
     }
 
     private Container createOrChange(Container toChange) {
-        if(toChange == null) {
+        if (toChange == null) {
             System.out.println("- Create Container -");
         } else {
             System.out.println("- Change Container -");
@@ -94,9 +94,9 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         System.out.println("Select container type:");
         ContainerType type = (ContainerType) ConsoleSelectionUtils.printTypeSelection(ContainerType.values());
 
-        if(toChange != null) {
-            if(name.equals("!")) name = toChange.name();
-            if(location.equals("!")) location = toChange.location();
+        if (toChange != null) {
+            if (name.equals("!")) name = toChange.name();
+            if (location.equals("!")) location = toChange.location();
             return new Container(name, location, toChange.items(), type);
         }
 

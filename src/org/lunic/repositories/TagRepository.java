@@ -5,7 +5,7 @@ import org.lunic.data.Container;
 import org.lunic.data.Item;
 import org.lunic.data.Recipe;
 import org.lunic.data.Tag;
-import org.lunic.persistance.*;
+import org.lunic.persistance.TagJsonDriver;
 
 import java.util.ArrayList;
 
@@ -33,15 +33,15 @@ public class TagRepository extends Repository {
     public void update(Tag tagToBeUpdated, Tag updatedTag) {
         for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
             for (Item item : container.items()) {
-                if(item.tags().contains(tagToBeUpdated)) {
+                if (item.tags().contains(tagToBeUpdated)) {
                     item.tags().remove(tagToBeUpdated);
                     item.tags().add(updatedTag);
                     DataManager.CONTAINER_REPOSITORY.update(container, container);
                 }
             }
         }
-        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
-            if(recipe.tags().contains(tagToBeUpdated)) {
+        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+            if (recipe.tags().contains(tagToBeUpdated)) {
                 recipe.tags().remove(tagToBeUpdated);
                 recipe.tags().add(updatedTag);
                 DataManager.RECIPE_REPOSITORY.update(recipe, recipe);
@@ -52,17 +52,17 @@ public class TagRepository extends Repository {
 
     @Override
     public void delete(Record record) {
-        if(record instanceof Tag tag) {
+        if (record instanceof Tag tag) {
             for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
                 for (Item item : container.items()) {
-                    if(item.tags().contains(tag)) {
+                    if (item.tags().contains(tag)) {
                         item.tags().remove(tag);
                         DataManager.CONTAINER_REPOSITORY.update(container, container);
                     }
                 }
             }
-            for(Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
-                if(recipe.tags().contains(tag)) {
+            for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+                if (recipe.tags().contains(tag)) {
                     recipe.tags().remove(tag);
                     DataManager.RECIPE_REPOSITORY.update(recipe, recipe);
                 }

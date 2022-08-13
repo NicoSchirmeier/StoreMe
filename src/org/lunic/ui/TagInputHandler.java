@@ -17,8 +17,8 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
     @Override
     public void print() {
         Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.SHOPPING_LISTS, Action.CATEGORIES);
-        if(option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.SHOPPING_LISTS)) {
+        if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.SHOPPING_LISTS)) {
                 printShoppingLists();
             } else if (action.equals(Action.CATEGORIES)) {
                 printCategories();
@@ -32,7 +32,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
         for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
-            if(!tag.type().equals(TagType.SHOPPING_LIST)) {
+            if (!tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
         }
@@ -41,15 +41,15 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
 
     private void printTagOptions(Tag tag) {
         System.out.println("Selected Tag: " + tag);
-        Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE,  Action.DELETE);
+        Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE, Action.DELETE);
 
-        if(option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.CHANGE)) {
+        if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.CHANGE)) {
                 printChangeDialog(tag);
             } else if (action.equals(Action.DELETE)) {
                 printDeletionDialog(tag);
             } else {
-                if(tag.type().equals(TagType.SHOPPING_LIST)) {
+                if (tag.type().equals(TagType.SHOPPING_LIST)) {
                     printShoppingLists();
                 } else {
                     printCategories();
@@ -63,7 +63,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
         for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
-            if(tag.type().equals(TagType.SHOPPING_LIST)) {
+            if (tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
         }
@@ -73,10 +73,10 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
     private void executeOption(ArrayList<Option> options) {
         Option option = ConsoleSelectionUtils.displayOptions(options);
 
-        if(option.getRootObject() instanceof Tag tag) {
+        if (option.getRootObject() instanceof Tag tag) {
             printTagOptions(tag);
-        } else if (option.getRootObject() instanceof Action action){
-            if(action.equals(Action.CREATE)) {
+        } else if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.CREATE)) {
                 printCreationDialog();
             } else {
                 print();
@@ -88,7 +88,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         Tag tag = createTag(null);
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Tag");
-        if(confirmed) {
+        if (confirmed) {
             DataManager.TAG_REPOSITORY.create(tag);
         }
     }
@@ -100,13 +100,13 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         System.out.println("->");
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Change Tag");
-        if(confirmed) {
-            DataManager.TAG_REPOSITORY.update((Tag)toChange, tag);
+        if (confirmed) {
+            DataManager.TAG_REPOSITORY.update((Tag) toChange, tag);
         }
     }
 
     public Tag createTag(Tag tagToEdit) {
-        if(tagToEdit == null) {
+        if (tagToEdit == null) {
             System.out.println("- Create Tag -");
         } else {
             System.out.println("- Edit Tag -");
@@ -120,9 +120,9 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         System.out.println("Enter Description: (One Line)");
         String description = ConsoleReadingUtils.readString();
 
-        if(tagToEdit != null) {
-            if(name.equals("!")) name = tagToEdit.name();
-            if(description.equals("!")) description = tagToEdit.description();
+        if (tagToEdit != null) {
+            if (name.equals("!")) name = tagToEdit.name();
+            if (description.equals("!")) description = tagToEdit.description();
         }
 
         return new Tag(name, type, description);
@@ -139,10 +139,10 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
                 options.add(new Option(tag.name(), tag));
             }
             Option option = ConsoleSelectionUtils.displayOptions(options, canBeSkipped);
-            if(option.getRootObject() == null) return null;
+            if (option.getRootObject() == null) return null;
 
-            if(option.getRootObject() instanceof Action action) {
-                if(action.equals(Action.DONE)) {
+            if (option.getRootObject() instanceof Action action) {
+                if (action.equals(Action.DONE)) {
                     break;
                 } else if (action.equals(Action.CREATE)) {
                     printCreationDialog();
@@ -151,7 +151,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
                 tags.add(tag);
             }
         }
-        if(tags.isEmpty() && canBeSkipped) return null;
+        if (tags.isEmpty() && canBeSkipped) return null;
 
         return tags;
     }

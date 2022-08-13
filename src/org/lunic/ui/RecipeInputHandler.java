@@ -1,9 +1,11 @@
 package org.lunic.ui;
 
 import org.lunic.DataManager;
-import org.lunic.data.*;
-import org.lunic.data.type.RecipeType;
+import org.lunic.data.Item;
+import org.lunic.data.Recipe;
+import org.lunic.data.Tag;
 import org.lunic.data.Time;
+import org.lunic.data.type.RecipeType;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
 
         Option option = ConsoleSelectionUtils.displayOptions(options);
         if (option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.CREATE)) {
+            if (action.equals(Action.CREATE)) {
                 printCreationDialog();
             }
         } else if (option.getRootObject() instanceof Recipe recipe) {
@@ -45,8 +47,8 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println(" Instruction:\n" + recipe.instruction());
 
         Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE, Action.DELETE);
-        if(option.getRootObject() instanceof Action action) {
-            if(action.equals(Action.CHANGE)) {
+        if (option.getRootObject() instanceof Action action) {
+            if (action.equals(Action.CHANGE)) {
                 printChangeDialog(recipe);
             } else if (action.equals(Action.DELETE)) {
                 printDeletionDialog(recipe);
@@ -61,7 +63,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
 
         System.out.println(recipe);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Recipe");
-        if(confirmed) {
+        if (confirmed) {
             DataManager.RECIPE_REPOSITORY.create(recipe);
             print();
         }
@@ -73,7 +75,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println(toChange);
         System.out.println("->");
         System.out.println(changedRecipe);
-        if(confirmed) {
+        if (confirmed) {
             DataManager.RECIPE_REPOSITORY.update((Recipe) toChange, changedRecipe);
             print();
         }
@@ -81,7 +83,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
 
     private Recipe createOrChange(Recipe recipe) {
         boolean isChange = false;
-        if(recipe == null) {
+        if (recipe == null) {
             System.out.println("- Create Recipe -");
         } else {
             isChange = true;
@@ -97,18 +99,18 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         HashSet<Item> items = DataManager.ITEM_TEMPLATE_HANDLER.printAddTemplateItemsDialog(true, isChange);
         System.out.println("Enter cooking duration (in Minutes):");
         int minutes = ConsoleReadingUtils.getAmount(1, 0, isChange);
-        Time duration = new Time(0, 0, minutes/(60*24), minutes/60, minutes % 60);
+        Time duration = new Time(0, 0, minutes / (60 * 24), minutes / 60, minutes % 60);
         System.out.println("Select Tags:");
         HashSet<Tag> tags = DataManager.TAG_INPUT_HANDLER.printSelectTagsDialog(isChange);
         System.out.println("Write Instruction (End with blank line)");
         String instruction = ConsoleReadingUtils.readText(isChange);
-        if(recipe != null) {
-            if(name == null) name = recipe.name();
-            if(type == null) type = recipe.type();
-            if(items == null) items = recipe.items();
-            if(minutes < 1) duration = recipe.duration();
-            if(tags == null) tags = recipe.tags();
-            if(instruction == null) instruction = recipe.instruction();
+        if (recipe != null) {
+            if (name == null) name = recipe.name();
+            if (type == null) type = recipe.type();
+            if (items == null) items = recipe.items();
+            if (minutes < 1) duration = recipe.duration();
+            if (tags == null) tags = recipe.tags();
+            if (instruction == null) instruction = recipe.instruction();
         }
 
         return new Recipe(name, type, items, checkItemsExist(items), duration, tags, instruction);
@@ -116,8 +118,8 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
 
     private boolean checkItemsExist(HashSet<Item> items) {
         boolean canBeCooked = true;
-        for(Item item : items) {
-            if(item.amount() > DataManager.ITEM_EXPIRATION_OBSERVER.getTotalAmount(item)) {
+        for (Item item : items) {
+            if (item.amount() > DataManager.ITEM_EXPIRATION_OBSERVER.getTotalAmount(item)) {
                 canBeCooked = false;
             }
         }
@@ -128,11 +130,11 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println("- Recommended Recipes -");
         System.out.println("(based on stored items)");
         ArrayList<Option> additionalOptions = new ArrayList<>();
-        for(Recipe recipe : DataManager.ITEM_EXPIRATION_OBSERVER.getRecommendedRecipes()) {
+        for (Recipe recipe : DataManager.ITEM_EXPIRATION_OBSERVER.getRecommendedRecipes()) {
             additionalOptions.add(new Option(recipe.toString(), recipe));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
-        if(option.getRootObject() instanceof Recipe recipe) {
+        if (option.getRootObject() instanceof Recipe recipe) {
             printRecipeDetails(recipe);
         }
     }

@@ -14,7 +14,7 @@ public class TestRepository extends Repository {
     public ArrayList<TestRecord> read() {
         ArrayList<TestRecord> testRecords = new ArrayList<>();
         for (Record record : recordList) {
-            if(record instanceof TestRecord testRecord) {
+            if (record instanceof TestRecord testRecord) {
                 testRecords.add(testRecord);
             }
         }

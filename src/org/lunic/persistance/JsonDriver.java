@@ -37,7 +37,7 @@ public abstract class JsonDriver {
         try {
             File file = new File(path);
             boolean parentDirectoriesCreated = file.getParentFile().mkdirs();
-            if(parentDirectoriesCreated || file.getParentFile().exists()) {
+            if (parentDirectoriesCreated || file.getParentFile().exists()) {
                 if (file.createNewFile()) {
                     System.out.println("File created: " + file.getName());
                 }
@@ -58,7 +58,7 @@ public abstract class JsonDriver {
             String json = Files.readString(Path.of(path));
 
             ArrayList<Record> records = new ArrayList<>();
-            if(json.length() > 0) {
+            if (json.length() > 0) {
                 for (Object obj : objectMapper.readValue(json, ArrayList.class)) {
                     records.add(objectMapper.convertValue(obj, type.getClass()));
                 }

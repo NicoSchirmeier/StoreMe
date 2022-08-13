@@ -2,7 +2,7 @@ package org.lunic.repositories;
 
 import org.lunic.data.Container;
 import org.lunic.data.Item;
-import org.lunic.persistance.*;
+import org.lunic.persistance.ContainerJsonDriver;
 
 import java.util.ArrayList;
 
@@ -10,15 +10,15 @@ public class ContainerRepository extends Repository implements ContainerItemInte
 
     private static ContainerRepository INSTANCE;
 
+    private ContainerRepository() {
+        super(ContainerJsonDriver.getInstance());
+    }
+
     public static ContainerRepository getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new ContainerRepository();
         }
         return INSTANCE;
-    }
-
-    private ContainerRepository() {
-        super(ContainerJsonDriver.getInstance());
     }
 
     public void create(Container container) {
