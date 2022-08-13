@@ -32,4 +32,8 @@ public class TestRepository extends Repository {
     public void update(TestRecord toUpdate, TestRecord updated) {
         super.update(toUpdate, updated);
     }
+
+    public void clear() {
+        recordList.clear();
+    }
 }

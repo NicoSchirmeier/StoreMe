@@ -53,7 +53,7 @@ public abstract class Repository {
             }
         }
         System.err.println(
-                "ERROR: " + recordToFind.getClass() + " could not be found!");
+                "ERROR: " + recordToFind.getClass().getName() + " could not be found!");
         return null;
     }
 }
