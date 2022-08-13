@@ -19,12 +19,12 @@ public class ItemInputHandler {
 
     private static void getConsumptionDate(boolean isItemChange, ItemBuilder builder) {
         System.out.println("Enter Consumption Date: (dd/MM/YYYY)");
-        builder.setConsumptionDate(ConsoleReadingUtils.getDate(isItemChange));
+        builder.setConsumptionDate(ConsoleReadingUtils.readDate(isItemChange));
     }
 
     private static void getExpirationDate(boolean isItemChange, ItemBuilder builder) {
         System.out.println("Enter Expiration Date: (dd/MM/YYYY)");
-        builder.setExpirationDate(ConsoleReadingUtils.getDate(isItemChange));
+        builder.setExpirationDate(ConsoleReadingUtils.readDate(isItemChange));
     }
 
     private static void getAmount(boolean isItemChange, ItemBuilder builder) {

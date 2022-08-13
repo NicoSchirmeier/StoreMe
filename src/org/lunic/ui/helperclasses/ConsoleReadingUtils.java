@@ -72,7 +72,7 @@ public class ConsoleReadingUtils {
         return amount;
     }
 
-    public static LocalDate getDate(boolean canBeSkipped) {
+    public static LocalDate readDate(boolean canBeSkipped) {
         LocalDate date = LocalDate.of(1, 1, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
