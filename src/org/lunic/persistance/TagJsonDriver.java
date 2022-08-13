@@ -4,7 +4,7 @@ import org.lunic.data.Tag;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class TagJsonDriver extends JsonDriver {
+public class TagJsonDriver extends JsonDriver implements DataDriverInterface {
 
     private static final String PATH = "data/tags.json";
     private static final Tag type = new Tag(null, null, null);

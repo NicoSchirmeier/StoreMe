@@ -1,8 +1,10 @@
 package org.lunic.persistance;
 import org.lunic.data.Item;
+
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
-public class ItemTemplateJsonDriver extends JsonDriver {
+public class ItemTemplateJsonDriver extends JsonDriver implements DataDriverInterface {
     private static final String PATH = "data/item_templates.json";
     private static final Item type = new Item(null, null, 0, null, null, null);
 

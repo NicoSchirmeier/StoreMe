@@ -3,7 +3,7 @@ package org.lunic.persistance;
 import org.lunic.data.Container;
 import java.util.ArrayList;
 
-public class ContainerJsonDriver extends JsonDriver {
+public class ContainerJsonDriver extends JsonDriver implements DataDriverInterface {
     private static final String PATH = "data/container.json";
     private static final Container type = new Container(null, null, null, null);
 

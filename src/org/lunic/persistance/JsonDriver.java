@@ -67,9 +67,4 @@ public abstract class JsonDriver {
         }
         return null;
     }
-
-    abstract public void save(ArrayList<Record> records);
-
-    abstract public ArrayList<Record> read();
-
 }
