@@ -11,13 +11,7 @@ import java.util.HashSet;
 public class ItemTemplateHandler implements Printable {
     @Override
     public void print() {
-        System.out.println("- Item Templates -");
-        ArrayList<Option> additionalOptions = new ArrayList<>();
-        for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.read()) {
-            additionalOptions.add(new Option(template.toTemplateString(), template));
-        }
-        Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
-        if (option.getRootObject() instanceof Item template) {
+        if (printItemTemplateOptions().getRootObject() instanceof Item template) {
             printItemTemplateDetails(template);
         }
     }
@@ -38,16 +32,19 @@ public class ItemTemplateHandler implements Printable {
     }
 
     public Item printSelectTemplate() {
+        if (printItemTemplateOptions().getRootObject() instanceof Item template) {
+            return template;
+        }
+        return null;
+    }
+
+    private Option printItemTemplateOptions() {
         System.out.println("- Item Templates -");
         ArrayList<Option> additionalOptions = new ArrayList<>();
         for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.read()) {
             additionalOptions.add(new Option(template.toTemplateString(), template));
         }
-        Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
-        if (option.getRootObject() instanceof Item template) {
-            return template;
-        }
-        return null;
+        return ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
     }
 
     public HashSet<Item> printAddTemplateItemsDialog(boolean selectAmount, boolean canBeSkipped) {
