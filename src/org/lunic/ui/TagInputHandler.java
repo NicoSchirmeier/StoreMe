@@ -85,7 +85,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
     }
 
     public void printCreationDialog() {
-        Tag tag = createTag(null);
+        Tag tag = createOrChange(null);
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Tag");
         if (confirmed) {
@@ -94,7 +94,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
     }
 
     public void printChangeDialog(Record toChange) {
-        Tag tag = createTag((Tag) toChange);
+        Tag tag = createOrChange((Tag) toChange);
 
         System.out.println(toChange);
         System.out.println("->");
@@ -105,7 +105,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         }
     }
 
-    public Tag createTag(Tag tagToEdit) {
+    public Tag createOrChange(Tag tagToEdit) {
         if (tagToEdit == null) {
             System.out.println("- Create Tag -");
         } else {
