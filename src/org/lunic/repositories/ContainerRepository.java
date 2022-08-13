@@ -8,7 +8,16 @@ import java.util.ArrayList;
 
 public class ContainerRepository extends Repository implements ContainerItemInterface {
 
-    public ContainerRepository() {
+    private static ContainerRepository INSTANCE;
+
+    public static ContainerRepository getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ContainerRepository();
+        }
+        return INSTANCE;
+    }
+
+    private ContainerRepository() {
         super(new ContainerJsonDriver());
     }
 

@@ -10,7 +10,7 @@ import org.lunic.ui.*;
 
 public class DataManager {
     //Repositories
-    public static final ContainerRepository CONTAINER_REPOSITORY = new ContainerRepository();
+    public static final ContainerRepository CONTAINER_REPOSITORY = ContainerRepository.getInstance(); //Singleton
     public static final ItemTemplateRepository ITEM_TEMPLATE_REPOSITORY = new ItemTemplateRepository();
     public static final RecipeRepository RECIPE_REPOSITORY = new RecipeRepository();
     public static final TagRepository TAG_REPOSITORY = new TagRepository();
