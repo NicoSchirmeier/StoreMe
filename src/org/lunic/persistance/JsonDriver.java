@@ -11,9 +11,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public abstract class JsonDriver {
-
-    protected static JsonDriver INSTANCE;
-
     JsonDriver(String path) {
         create(path);
     }

@@ -60,13 +60,23 @@ public class ItemInputHandler {
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Item");
 
         if (confirmed) {
-            container.items().add(item);
-            DataManager.CONTAINER_REPOSITORY.update(container, container);
+            addItem(container, item);
+        }
+    }
 
-            confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
-            if (confirmed) {
-                DataManager.ITEM_TEMPLATE_REPOSITORY.create(new Item(item.name(), item.type(), 0, null, null, item.tags()));
-            }
+    private void addItem(Container container, Item item) {
+        container.items().add(item);
+        DataManager.CONTAINER_REPOSITORY.update(container, container);
+
+        printSaveAsTemplateDialog(item);
+    }
+
+    private static void printSaveAsTemplateDialog(Item item) {
+        boolean confirmed;
+        confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
+        if (confirmed) {
+            DataManager.ITEM_TEMPLATE_REPOSITORY.create(new ItemBuilder().setName(item.name()
+            ).setType(item.type()).setAmount(0).setTags(item.tags()).build());
         }
     }
 
@@ -80,8 +90,7 @@ public class ItemInputHandler {
 
         if (confirmed) {
             container.items().remove(toChange);
-            container.items().add(item);
-            DataManager.CONTAINER_REPOSITORY.update(container, container);
+            addItem(container, item);
         }
     }
 

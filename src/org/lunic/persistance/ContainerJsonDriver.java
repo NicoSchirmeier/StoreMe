@@ -5,6 +5,7 @@ import org.lunic.data.Container;
 import java.util.ArrayList;
 
 public class ContainerJsonDriver extends JsonDriver implements DataDriverInterface {
+    protected static JsonDriver INSTANCE;
     private static final String PATH = "data/container.json";
     private static final Container type = new Container(null, null, null, null);
 

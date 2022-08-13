@@ -14,11 +14,10 @@ public class ItemExpirationObserver {
     private final ContainerItemInterface itemInterface = DataManager.CONTAINER_REPOSITORY;
 
     public ArrayList<Item> getSoonExpiringItems() {
-        LocalDate currentDate = LocalDate.now();
         ArrayList<Item> expiredItems = new ArrayList<>();
 
         for (Item item : itemInterface.getAllItems()) {
-            long daysBetween = ObserverUtils.getDaysBetween(currentDate, LocalDate.now());
+            long daysBetween = ObserverUtils.getDaysBetween(LocalDate.now(), item.expirationDate());
             if (daysBetween <= 0) {
                 expiredItems.add(item);
             }
@@ -45,7 +44,9 @@ public class ItemExpirationObserver {
     public int getTotalAmount(Item item) {
         int amount = 0;
         for (Item existingItem : DataManager.CONTAINER_REPOSITORY.getAllItems()) {
-            if (existingItem.equals(item)) amount += existingItem.amount();
+            if (existingItem.equals(item) && ObserverUtils.getDaysBetween(LocalDate.now(), existingItem.expirationDate()) >= 0) {
+                amount += existingItem.amount();
+            }
         }
         return amount;
     }
