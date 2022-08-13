@@ -2,13 +2,12 @@ package org.lunic.repositories;
 
 import org.junit.jupiter.api.Test;
 import org.lunic.data.TestRecord;
-import org.lunic.persistance.TestJsonDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RepositoryTest {
 
-    private final TestRepository repository = new TestRepository(new TestJsonDriver());
+    private final TestRepository repository = new TestRepository();
 
     @Test
     void create() {

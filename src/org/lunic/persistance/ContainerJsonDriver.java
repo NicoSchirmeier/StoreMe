@@ -7,7 +7,7 @@ public class ContainerJsonDriver extends JsonDriver implements DataDriverInterfa
     private static final String PATH = "data/container.json";
     private static final Container type = new Container(null, null, null, null);
 
-    public ContainerJsonDriver() {
+    private ContainerJsonDriver() {
         super(PATH);
     }
 
@@ -19,5 +19,12 @@ public class ContainerJsonDriver extends JsonDriver implements DataDriverInterfa
     @Override
     public ArrayList<Record> read() {
         return read(PATH, type);
+    }
+
+    public static DataDriverInterface getInstance() {
+       if(INSTANCE == null) {
+         INSTANCE = new ContainerJsonDriver();
+       }
+       return (DataDriverInterface) INSTANCE;
     }
 }

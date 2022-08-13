@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class TestRepository extends Repository {
 
-    protected TestRepository(TestJsonDriver jsonDriver) {
-        super(jsonDriver);
+    protected TestRepository() {
+        super(TestJsonDriver.getInstance());
     }
 
     public ArrayList<TestRecord> read() {

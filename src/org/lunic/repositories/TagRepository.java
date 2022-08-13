@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class TagRepository extends Repository {
 
     public TagRepository() {
-        super(new TagJsonDriver());
+        super(TagJsonDriver.getInstance());
     }
 
     public void create(Tag tag) {

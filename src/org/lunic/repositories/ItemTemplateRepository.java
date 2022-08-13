@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class ItemTemplateRepository extends Repository {
 
     public ItemTemplateRepository() {
-        super(new ItemTemplateJsonDriver());
+        super(ItemTemplateJsonDriver.getInstance());
     }
 
     public void create(Item itemTemplate) {
@@ -32,15 +32,6 @@ public class ItemTemplateRepository extends Repository {
 
     public void delete(Item itemTemplate) {
         super.delete(itemTemplate);
-    }
-
-    public boolean contains(Item item) {
-        for (Item template : read()) {
-            if(template.equals(item)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

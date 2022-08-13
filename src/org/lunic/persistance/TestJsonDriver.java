@@ -8,7 +8,7 @@ public class TestJsonDriver extends JsonDriver implements DataDriverInterface {
 
     public static final String PATH = "test-data/" + TestJsonDriver.class.getName() + ".json";
 
-    public TestJsonDriver() {
+    private TestJsonDriver() {
         super(PATH);
     }
 
@@ -24,5 +24,12 @@ public class TestJsonDriver extends JsonDriver implements DataDriverInterface {
 
     public static String getPath() {
         return PATH;
+    }
+
+    public static DataDriverInterface getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new TestJsonDriver();
+        }
+        return (DataDriverInterface) INSTANCE;
     }
 }

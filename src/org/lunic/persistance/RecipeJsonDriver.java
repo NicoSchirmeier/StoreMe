@@ -7,7 +7,7 @@ public class RecipeJsonDriver extends JsonDriver implements DataDriverInterface 
     private static final String PATH = "data/recipes.json";
     private static final Recipe type = new Recipe(null, null, null, false, null, null, null);
 
-    public RecipeJsonDriver() {
+    private RecipeJsonDriver() {
         super(PATH);
     }
 
@@ -19,5 +19,12 @@ public class RecipeJsonDriver extends JsonDriver implements DataDriverInterface 
     @Override
     public ArrayList<Record> read() {
         return read(PATH, type);
+    }
+
+    public static DataDriverInterface getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new RecipeJsonDriver();
+        }
+        return (DataDriverInterface) INSTANCE;
     }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class RecipeRepository extends Repository {
 
     public RecipeRepository() {
-        super(new RecipeJsonDriver());
+        super(RecipeJsonDriver.getInstance());
     }
 
     public void create(Recipe recipe) {

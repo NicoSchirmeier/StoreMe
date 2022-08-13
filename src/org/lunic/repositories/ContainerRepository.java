@@ -18,7 +18,7 @@ public class ContainerRepository extends Repository implements ContainerItemInte
     }
 
     private ContainerRepository() {
-        super(new ContainerJsonDriver());
+        super(ContainerJsonDriver.getInstance());
     }
 
     public void create(Container container) {
