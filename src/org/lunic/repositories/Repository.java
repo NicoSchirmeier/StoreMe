@@ -36,7 +36,7 @@ public abstract class Repository {
         jsonDriver.save(recordList);
     }
 
-    public void delete(Record record) {
+    protected void delete(Record record) {
         if (find(record) == null) return;
 
         recordList.remove(find(record));

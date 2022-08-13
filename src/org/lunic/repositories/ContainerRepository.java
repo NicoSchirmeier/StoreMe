@@ -31,7 +31,7 @@ public class ContainerRepository extends Repository implements ContainerItemInte
         super.update(containerToBeUpdated, updatedContainer);
     }
 
-    public void Delete(Container container) {
+    public void delete(Container container) {
         super.delete(container);
     }
 

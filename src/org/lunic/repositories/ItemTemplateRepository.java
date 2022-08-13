@@ -34,7 +34,7 @@ public class ItemTemplateRepository extends Repository {
         super.delete(itemTemplate);
     }
 
-    public boolean Contains(Item item) {
+    public boolean contains(Item item) {
         for (Item template : read()) {
             if(template.equals(item)) {
                 return true;
