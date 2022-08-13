@@ -6,7 +6,6 @@ import org.lunic.data.type.RecipeType;
 import org.lunic.data.Time;
 import org.lunic.ui.helperclasses.*;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -22,7 +21,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.Read()) {
+        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
             options.add(new Option(recipe.name(), recipe));
         }
 
@@ -63,7 +62,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println(recipe);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Recipe");
         if(confirmed) {
-            DataManager.RECIPE_REPOSITORY.Create(recipe);
+            DataManager.RECIPE_REPOSITORY.create(recipe);
             print();
         }
     }
@@ -75,7 +74,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println("->");
         System.out.println(changedRecipe);
         if(confirmed) {
-            DataManager.RECIPE_REPOSITORY.Update((Recipe) toChange, changedRecipe);
+            DataManager.RECIPE_REPOSITORY.update((Recipe) toChange, changedRecipe);
             print();
         }
     }

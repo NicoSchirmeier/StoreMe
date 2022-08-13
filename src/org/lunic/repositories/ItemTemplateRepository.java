@@ -4,7 +4,6 @@ import org.lunic.data.Item;
 import org.lunic.persistance.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class ItemTemplateRepository extends Repository {
 
@@ -12,11 +11,11 @@ public class ItemTemplateRepository extends Repository {
         super(new ItemTemplateJsonDriver());
     }
 
-    public void Create(Item itemTemplate) {
-        super.Create(itemTemplate);
+    public void create(Item itemTemplate) {
+        super.create(itemTemplate);
     }
 
-    public ArrayList<Item> Read() {
+    public ArrayList<Item> read() {
         ArrayList<Item> itemTemplates = new ArrayList<>();
         for (Record record : recordList) {
             if (record instanceof Item) {
@@ -27,16 +26,16 @@ public class ItemTemplateRepository extends Repository {
         return itemTemplates;
     }
 
-    public void Update(Item itemTemplateToBeUpdated, Item updatedItemTemplate) {
-        super.Update(itemTemplateToBeUpdated, updatedItemTemplate);
+    public void update(Item itemTemplateToBeUpdated, Item updatedItemTemplate) {
+        super.update(itemTemplateToBeUpdated, updatedItemTemplate);
     }
 
-    public void Delete(Item itemTemplate) {
-        super.Delete(itemTemplate);
+    public void delete(Item itemTemplate) {
+        super.delete(itemTemplate);
     }
 
     public boolean Contains(Item item) {
-        for (Item template : Read()) {
+        for (Item template : read()) {
             if(template.equals(item)) {
                 return true;
             }

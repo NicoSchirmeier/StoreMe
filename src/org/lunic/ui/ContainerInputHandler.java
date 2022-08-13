@@ -2,7 +2,6 @@ package org.lunic.ui;
 
 import org.lunic.DataManager;
 import org.lunic.data.Container;
-import org.lunic.data.ItemBuilder;
 import org.lunic.data.type.ContainerType;
 import org.lunic.data.Item;
 import org.lunic.ui.helperclasses.*;
@@ -22,7 +21,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Container container : DataManager.CONTAINER_REPOSITORY.Read()) {
+        for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
             options.add(new Option(container.toString(), container));
         }
         Option option = ConsoleSelectionUtils.displayOptions(options);
@@ -60,7 +59,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
 
         System.out.println(container);
         if(ConsoleReadingUtils.printConfirmationDialog("Create Container")) {
-            DataManager.CONTAINER_REPOSITORY.Create(container);
+            DataManager.CONTAINER_REPOSITORY.create(container);
         } else {
             printCreationDialog();
         }
@@ -74,7 +73,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         System.out.println("->");
         System.out.println(updatedContainer);
         if(ConsoleReadingUtils.printConfirmationDialog("Change Container")) {
-            DataManager.CONTAINER_REPOSITORY.Update(containerToBeUpdated, updatedContainer);
+            DataManager.CONTAINER_REPOSITORY.update(containerToBeUpdated, updatedContainer);
         } else {
             printContainerDetails(containerToBeUpdated);
         }

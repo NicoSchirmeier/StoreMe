@@ -12,11 +12,11 @@ public class ContainerRepository extends Repository implements ContainerItemInte
         super(new ContainerJsonDriver());
     }
 
-    public void Create(Container container) {
-        super.Create(container);
+    public void create(Container container) {
+        super.create(container);
     }
 
-    public ArrayList<Container> Read() {
+    public ArrayList<Container> read() {
         ArrayList<Container> containers = new ArrayList<>();
         for (Record record : recordList) {
             if (record instanceof Container) {
@@ -26,19 +26,19 @@ public class ContainerRepository extends Repository implements ContainerItemInte
         return containers;
     }
 
-    public void Update(Container containerToBeUpdated,
+    public void update(Container containerToBeUpdated,
                        Container updatedContainer) {
-        super.Update(containerToBeUpdated, updatedContainer);
+        super.update(containerToBeUpdated, updatedContainer);
     }
 
     public void Delete(Container container) {
-        super.Delete(container);
+        super.delete(container);
     }
 
     @Override
     public ArrayList<Item> getAllItems() {
         ArrayList<Item> items = new ArrayList<>();
-        for (Container container : Read()) {
+        for (Container container : read()) {
             items.addAll(container.items());
         }
         return items;

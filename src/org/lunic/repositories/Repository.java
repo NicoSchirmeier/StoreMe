@@ -1,6 +1,5 @@
 package org.lunic.repositories;
 
-import org.lunic.data.Item;
 import org.lunic.persistance.JsonDriver;
 
 import java.util.ArrayList;
@@ -12,10 +11,10 @@ public abstract class Repository {
 
     protected Repository(JsonDriver jsonDriver) {
         this.jsonDriver = jsonDriver;
-        Load();
+        load();
     }
 
-    private void Load() {
+    private void load() {
         recordList.clear();
         ArrayList<Record> records = jsonDriver.read();
         if(records != null) {
@@ -23,28 +22,28 @@ public abstract class Repository {
         }
     }
 
-    protected void Create(Record record) {
+    protected void create(Record record) {
         recordList.add(record);
         jsonDriver.save(recordList);
     }
 
-    protected void Update(Record recordToBeUpdated, Record updatedRecord) {
+    protected void update(Record recordToBeUpdated, Record updatedRecord) {
         if (recordToBeUpdated == null || updatedRecord == null) return;
 
-        recordList.remove(Find(recordToBeUpdated));
+        recordList.remove(find(recordToBeUpdated));
         recordList.add(updatedRecord);
 
         jsonDriver.save(recordList);
     }
 
-    public void Delete(Record record) {
-        if (Find(record) == null) return;
+    public void delete(Record record) {
+        if (find(record) == null) return;
 
-        recordList.remove(Find(record));
+        recordList.remove(find(record));
         jsonDriver.save(recordList);
     }
 
-    private Record Find(Record recordToFind) {
+    private Record find(Record recordToFind) {
         if (recordToFind == null) {
             System.err.println(new NullPointerException().getMessage());
             return null;

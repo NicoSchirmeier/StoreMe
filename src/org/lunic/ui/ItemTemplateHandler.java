@@ -5,7 +5,6 @@ import org.lunic.data.Item;
 import org.lunic.data.ItemBuilder;
 import org.lunic.ui.helperclasses.*;
 
-import javax.swing.plaf.OptionPaneUI;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -14,7 +13,7 @@ public class ItemTemplateHandler implements Printable {
     public void print() {
         System.out.println("- Item Templates -");
         ArrayList<Option> additionalOptions = new ArrayList<>();
-        for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.Read()) {
+        for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.read()) {
             additionalOptions.add(new Option( template.toTemplateString(), template));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);
@@ -31,7 +30,7 @@ public class ItemTemplateHandler implements Printable {
             if(action.equals(Action.DELETE)) {
                 boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete Item Template");
                 if(confirmed) {
-                    DataManager.ITEM_TEMPLATE_REPOSITORY.Delete(template);
+                    DataManager.ITEM_TEMPLATE_REPOSITORY.delete(template);
                 }
             }
         }
@@ -41,7 +40,7 @@ public class ItemTemplateHandler implements Printable {
     public Item printSelectTemplate() {
         System.out.println("- Item Templates -");
         ArrayList<Option> additionalOptions = new ArrayList<>();
-        for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.Read()) {
+        for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.read()) {
             additionalOptions.add(new Option(template.toTemplateString(), template));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);

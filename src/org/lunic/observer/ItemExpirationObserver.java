@@ -29,7 +29,7 @@ public class ItemExpirationObserver {
 
     public ArrayList<Recipe> getRecommendedRecipes() {
         ArrayList<Recipe> recipes = new ArrayList<>();
-        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.Read()) {
+        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
             boolean canBeCooked = true;
             for(Item item : recipe.items()) {
                 if(item.amount() > getTotalAmount(item)) {

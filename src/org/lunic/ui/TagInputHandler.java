@@ -31,7 +31,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
+        for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
             if(!tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
@@ -62,7 +62,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
+        for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
             if(tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
@@ -89,7 +89,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Tag");
         if(confirmed) {
-            DataManager.TAG_REPOSITORY.Create(tag);
+            DataManager.TAG_REPOSITORY.create(tag);
         }
     }
 
@@ -101,7 +101,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Change Tag");
         if(confirmed) {
-            DataManager.TAG_REPOSITORY.Update((Tag)toChange, tag);
+            DataManager.TAG_REPOSITORY.update((Tag)toChange, tag);
         }
     }
 
@@ -135,7 +135,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
             ArrayList<Option> options = new ArrayList<>();
             options.add(new Option(Action.DONE.name(), Action.DONE));
             options.add(new Option(Action.CREATE.name(), Action.CREATE));
-            for (Tag tag : DataManager.TAG_REPOSITORY.Read()) {
+            for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
                 options.add(new Option(tag.name(), tag));
             }
             Option option = ConsoleSelectionUtils.displayOptions(options, canBeSkipped);

@@ -15,11 +15,11 @@ public class TagRepository extends Repository {
         super(new TagJsonDriver());
     }
 
-    public void Create(Tag tag) {
-        super.Create(tag);
+    public void create(Tag tag) {
+        super.create(tag);
     }
 
-    public ArrayList<Tag> Read() {
+    public ArrayList<Tag> read() {
         ArrayList<Tag> tags = new ArrayList<>();
         for (Record record : recordList) {
             if (record instanceof Tag) {
@@ -30,44 +30,44 @@ public class TagRepository extends Repository {
         return tags;
     }
 
-    public void Update(Tag tagToBeUpdated, Tag updatedTag) {
-        for (Container container : DataManager.CONTAINER_REPOSITORY.Read()) {
+    public void update(Tag tagToBeUpdated, Tag updatedTag) {
+        for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
             for (Item item : container.items()) {
                 if(item.tags().contains(tagToBeUpdated)) {
                     item.tags().remove(tagToBeUpdated);
                     item.tags().add(updatedTag);
-                    DataManager.CONTAINER_REPOSITORY.Update(container, container);
+                    DataManager.CONTAINER_REPOSITORY.update(container, container);
                 }
             }
         }
-        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.Read()) {
+        for(Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
             if(recipe.tags().contains(tagToBeUpdated)) {
                 recipe.tags().remove(tagToBeUpdated);
                 recipe.tags().add(updatedTag);
-                DataManager.RECIPE_REPOSITORY.Update(recipe, recipe);
+                DataManager.RECIPE_REPOSITORY.update(recipe, recipe);
             }
         }
-        super.Update(tagToBeUpdated, updatedTag);
+        super.update(tagToBeUpdated, updatedTag);
     }
 
     @Override
-    public void Delete(Record record) {
+    public void delete(Record record) {
         if(record instanceof Tag tag) {
-            for (Container container : DataManager.CONTAINER_REPOSITORY.Read()) {
+            for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
                 for (Item item : container.items()) {
                     if(item.tags().contains(tag)) {
                         item.tags().remove(tag);
-                        DataManager.CONTAINER_REPOSITORY.Update(container, container);
+                        DataManager.CONTAINER_REPOSITORY.update(container, container);
                     }
                 }
             }
-            for(Recipe recipe : DataManager.RECIPE_REPOSITORY.Read()) {
+            for(Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
                 if(recipe.tags().contains(tag)) {
                     recipe.tags().remove(tag);
-                    DataManager.RECIPE_REPOSITORY.Update(recipe, recipe);
+                    DataManager.RECIPE_REPOSITORY.update(recipe, recipe);
                 }
             }
-            super.Delete(tag);
+            super.delete(tag);
         }
     }
 }

@@ -11,11 +11,11 @@ public class RecipeRepository extends Repository {
         super(new RecipeJsonDriver());
     }
 
-    public void Create(Recipe recipe) {
-        super.Create(recipe);
+    public void create(Recipe recipe) {
+        super.create(recipe);
     }
 
-    public ArrayList<Recipe> Read() {
+    public ArrayList<Recipe> read() {
         ArrayList<Recipe> recipes = new ArrayList<>();
         for (Record record : recordList) {
             if (record instanceof Recipe) {
@@ -26,11 +26,11 @@ public class RecipeRepository extends Repository {
         return recipes;
     }
 
-    public void Update(Recipe recipeToBeUpdated, Recipe updatedRecipe) {
-        super.Update(recipeToBeUpdated, updatedRecipe);
+    public void update(Recipe recipeToBeUpdated, Recipe updatedRecipe) {
+        super.update(recipeToBeUpdated, updatedRecipe);
     }
 
-    public void Delete(Recipe recipe) {
-        super.Delete(recipe);
+    public void delete(Recipe recipe) {
+        super.delete(recipe);
     }
 }

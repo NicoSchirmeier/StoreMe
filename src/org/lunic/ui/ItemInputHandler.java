@@ -5,14 +5,11 @@ import org.lunic.data.Container;
 import org.lunic.data.Item;
 import org.lunic.data.ItemBuilder;
 import org.lunic.data.type.ItemType;
-import org.lunic.data.Tag;
-import org.lunic.repositories.ItemTemplateRepository;
 import org.lunic.ui.helperclasses.Action;
 import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
 import org.lunic.ui.helperclasses.Option;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 
 public class ItemInputHandler {
@@ -38,11 +35,11 @@ public class ItemInputHandler {
 
         if (confirmed) {
             container.items().add(item);
-            DataManager.CONTAINER_REPOSITORY.Update(container, container);
+            DataManager.CONTAINER_REPOSITORY.update(container, container);
 
             confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
             if(confirmed) {
-                DataManager.ITEM_TEMPLATE_REPOSITORY.Create(new Item(item.name(), item.type(), 0, null, null, item.tags()));
+                DataManager.ITEM_TEMPLATE_REPOSITORY.create(new Item(item.name(), item.type(), 0, null, null, item.tags()));
             }
         }
     }
@@ -58,14 +55,14 @@ public class ItemInputHandler {
         if (confirmed) {
             container.items().remove(toChange);
             container.items().add(item);
-            DataManager.CONTAINER_REPOSITORY.Update(container, container);
+            DataManager.CONTAINER_REPOSITORY.update(container, container);
         }
     }
 
     private void printItemDeletionDialog(Item item, Container container) {
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete Item");
         if (confirmed) container.items().remove(item);
-        DataManager.CONTAINER_REPOSITORY.Update(container, container);
+        DataManager.CONTAINER_REPOSITORY.update(container, container);
     }
 
     private Item createOrChange(Item baseItem) {

@@ -11,7 +11,7 @@ public class TestRepository extends Repository {
         super(jsonDriver);
     }
 
-    public ArrayList<TestRecord> Read() {
+    public ArrayList<TestRecord> read() {
         ArrayList<TestRecord> testRecords = new ArrayList<>();
         for (Record record : recordList) {
             if(record instanceof TestRecord testRecord) {
@@ -21,15 +21,15 @@ public class TestRepository extends Repository {
         return testRecords;
     }
 
-    public void Create(TestRecord record) {
-        super.Create(record);
+    public void create(TestRecord record) {
+        super.create(record);
     }
 
-    public void Delete(TestRecord record) {
-        super.Delete(record);
+    public void delete(TestRecord record) {
+        super.delete(record);
     }
 
-    public void Update(TestRecord toUpdate, TestRecord updated) {
-        super.Update(toUpdate, updated);
+    public void update(TestRecord toUpdate, TestRecord updated) {
+        super.update(toUpdate, updated);
     }
 }
