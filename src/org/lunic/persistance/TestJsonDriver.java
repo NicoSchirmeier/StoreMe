@@ -5,8 +5,8 @@ import org.lunic.data.TestRecord;
 import java.util.ArrayList;
 
 public class TestJsonDriver extends JsonDriver implements DataDriverInterface {
-    protected static JsonDriver INSTANCE;
     public static final String PATH = "test-data/" + TestJsonDriver.class.getName() + ".json";
+    protected static JsonDriver INSTANCE;
 
     private TestJsonDriver() {
         super(PATH);

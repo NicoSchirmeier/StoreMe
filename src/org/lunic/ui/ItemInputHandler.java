@@ -42,6 +42,15 @@ public class ItemInputHandler {
         builder.setName(ConsoleReadingUtils.readString(isItemChange));
     }
 
+    private static void printSaveAsTemplateDialog(Item item) {
+        boolean confirmed;
+        confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
+        if (confirmed) {
+            DataManager.ITEM_TEMPLATE_REPOSITORY.create(new ItemBuilder().setName(item.name()
+            ).setType(item.type()).setAmount(0).setTags(item.tags()).build());
+        }
+    }
+
     public void printItemOptions(Container container, Item item) {
         System.out.println("Current Item: " + item.toPrettyString());
         Option option = ConsoleSelectionUtils.displayActions(Action.BACK, Action.CHANGE, Action.DELETE);
@@ -69,15 +78,6 @@ public class ItemInputHandler {
         DataManager.CONTAINER_REPOSITORY.update(container, container);
 
         printSaveAsTemplateDialog(item);
-    }
-
-    private static void printSaveAsTemplateDialog(Item item) {
-        boolean confirmed;
-        confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
-        if (confirmed) {
-            DataManager.ITEM_TEMPLATE_REPOSITORY.create(new ItemBuilder().setName(item.name()
-            ).setType(item.type()).setAmount(0).setTags(item.tags()).build());
-        }
     }
 
     private void printItemChangeDialog(Item toChange, Container container) {

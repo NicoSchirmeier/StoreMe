@@ -5,9 +5,9 @@ import org.lunic.data.Recipe;
 import java.util.ArrayList;
 
 public class RecipeJsonDriver extends JsonDriver implements DataDriverInterface {
-    protected static JsonDriver INSTANCE;
     private static final String PATH = "data/recipes.json";
     private static final Recipe type = new Recipe(null, null, null, false, null, null, null);
+    protected static JsonDriver INSTANCE;
 
     private RecipeJsonDriver() {
         super(PATH);
