@@ -106,7 +106,10 @@ public class ItemInputHandler {
         printCreateOrChangeWelcomeText(isItemChange, baseItem);
         if(!isItemChange) {
             Item template = DataManager.ITEM_TEMPLATE_HANDLER.printSelectTemplate();
-            if(template != null) baseItem = template;
+            if(template != null) {
+                baseItem = template;
+                isItemChange = true;
+            }
         }
 
         ItemBuilder builder = createItemBuilder(isItemChange, baseItem);

@@ -18,7 +18,7 @@ public class ItemExpirationObserver {
 
         for (Item item : itemInterface.getAllItems()) {
             long daysBetween = ObserverUtils.getDaysBetween(LocalDate.now(), item.expirationDate());
-            if (daysBetween <= 0) {
+            if (daysBetween <= 7) {
                 expiredItems.add(item);
             }
         }

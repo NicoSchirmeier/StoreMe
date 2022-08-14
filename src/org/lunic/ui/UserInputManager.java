@@ -27,7 +27,7 @@ public class UserInputManager implements Printable {
         ConsoleReadingUtils.printSpacer();
 
         if (DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems().size() > 0) {
-            System.out.println("These Items will expire soon: ");
+            System.out.println("These Items are expired or will expire soon: ");
             for (Item expiredItem : DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems()) {
                 System.err.println("- " + expiredItem.name() + " " +
                         expiredItem.expirationDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));

@@ -96,7 +96,6 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         } else if (option.getRootObject() instanceof Recipe recipe) {
             System.out.println(recipe);
         }
-        print();
     }
 
     @Override
