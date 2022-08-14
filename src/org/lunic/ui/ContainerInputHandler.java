@@ -37,7 +37,8 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
 
     private void printContainerDetails(Container container) {
         ArrayList<Option> additionalOptions = new ArrayList<>();
-        for (Item item : container.items()) additionalOptions.add(new Option(item.toString(), item));
+        for (Item item : container.items())
+            additionalOptions.add(new Option(item.toString(), item));
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK, Action.CREATE, Action.REMOVE, Action.CHANGE);
 
         if (option.getRootObject() instanceof Item item) {

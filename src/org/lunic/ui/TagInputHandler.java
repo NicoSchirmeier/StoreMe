@@ -5,7 +5,10 @@ import org.lunic.data.Item;
 import org.lunic.data.Recipe;
 import org.lunic.data.Tag;
 import org.lunic.data.type.TagType;
-import org.lunic.ui.helperclasses.*;
+import org.lunic.ui.helperclasses.Action;
+import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
+import org.lunic.ui.helperclasses.Option;
+import org.lunic.ui.helperclasses.Printable;
 
 import java.util.ArrayList;
 
@@ -71,11 +74,13 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         ArrayList<Option> additionalOptions = new ArrayList<>();
         additionalOptions.add(new Option(" ----- Items -----", Action.SPACER));
         for (Item item : DataManager.CONTAINER_REPOSITORY.getAllItems()) {
-            if(item.tags().contains(tag)) additionalOptions.add(new Option(item.toString(), item));
+            if (item.tags().contains(tag))
+                additionalOptions.add(new Option(item.toString(), item));
         }
         additionalOptions.add(new Option(" ----- Recipes -----", Action.SPACER));
         for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
-            if(recipe.tags().contains(tag)) additionalOptions.add(new Option(recipe.name() + " - " + recipe.type(), recipe));
+            if (recipe.tags().contains(tag))
+                additionalOptions.add(new Option(recipe.name() + " - " + recipe.type(), recipe));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK, Action.CHANGE, Action.DELETE);
 
