@@ -1,14 +1,26 @@
 package org.lunic.ui;
 
-import org.lunic.DataManager;
 import org.lunic.data.Item;
 import org.lunic.data.ItemBuilder;
+import org.lunic.repositories.ItemTemplateRepository;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ItemTemplateHandler implements Printable {
+
+    private static ItemTemplateHandler INSTANCE;
+
+    public static ItemTemplateHandler getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ItemTemplateHandler();
+        }
+        return INSTANCE;
+    }
+
+    private ItemTemplateHandler() {}
+
     @Override
     public void print() {
         if (printItemTemplateOptions().getRootObject() instanceof Item template) {
@@ -24,7 +36,7 @@ public class ItemTemplateHandler implements Printable {
             if (action.equals(Action.DELETE)) {
                 boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete Item Template");
                 if (confirmed) {
-                    DataManager.ITEM_TEMPLATE_REPOSITORY.delete(template);
+                    ItemTemplateRepository.getInstance().delete(template);
                 }
             }
         }
@@ -41,7 +53,7 @@ public class ItemTemplateHandler implements Printable {
     private Option printItemTemplateOptions() {
         System.out.println("- Item Templates -");
         ArrayList<Option> additionalOptions = new ArrayList<>();
-        for (Item template : DataManager.ITEM_TEMPLATE_REPOSITORY.read()) {
+        for (Item template : ItemTemplateRepository.getInstance().read()) {
             additionalOptions.add(new Option(template.toTemplateString(), template));
         }
         return ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);

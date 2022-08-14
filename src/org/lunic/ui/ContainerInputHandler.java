@@ -1,9 +1,9 @@
 package org.lunic.ui;
 
-import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.Item;
 import org.lunic.data.type.ContainerType;
+import org.lunic.repositories.ContainerRepository;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
@@ -11,8 +11,17 @@ import java.util.HashSet;
 
 public class ContainerInputHandler extends InputHandler implements Printable, Handler {
 
-    public ContainerInputHandler() {
-        super(DataManager.CONTAINER_REPOSITORY);
+    private static ContainerInputHandler INSTANCE;
+
+    public static ContainerInputHandler getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ContainerInputHandler();
+        }
+        return INSTANCE;
+    }
+
+    private ContainerInputHandler() {
+        super(ContainerRepository.getInstance());
     }
 
     @Override
@@ -21,7 +30,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
+        for (Container container : ContainerRepository.getInstance().read()) {
             options.add(new Option(container.toString(), container));
         }
         Option option = ConsoleSelectionUtils.displayOptions(options);
@@ -41,10 +50,10 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK, Action.CREATE, Action.REMOVE, Action.CHANGE);
 
         if (option.getRootObject() instanceof Item item) {
-            DataManager.ITEM_INPUT_HANDLER.printItemOptions(container, item);
+            ItemInputHandler.getInstance().printItemOptions(container, item);
         } else if (option.getRootObject() instanceof Action action) {
             if (action.equals(Action.CREATE)) {
-                DataManager.ITEM_INPUT_HANDLER.printItemCreationDialog(container);
+                ItemInputHandler.getInstance().printItemCreationDialog(container);
             } else if (action.equals(Action.REMOVE)) {
                 printDeletionDialog(container);
             } else if (action.equals(Action.CHANGE)) {
@@ -59,7 +68,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
 
         System.out.println(container);
         if (ConsoleReadingUtils.printConfirmationDialog("Create Container")) {
-            DataManager.CONTAINER_REPOSITORY.create(container);
+            ContainerRepository.getInstance().create(container);
         } else {
             printCreationDialog();
         }
@@ -73,7 +82,7 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
         System.out.println("->");
         System.out.println(updatedContainer);
         if (ConsoleReadingUtils.printConfirmationDialog("Change Container")) {
-            DataManager.CONTAINER_REPOSITORY.update(containerToBeUpdated, updatedContainer);
+            ContainerRepository.getInstance().update(containerToBeUpdated, updatedContainer);
         } else {
             printContainerDetails(containerToBeUpdated);
         }

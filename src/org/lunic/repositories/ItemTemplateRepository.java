@@ -7,8 +7,16 @@ import java.util.ArrayList;
 
 public class ItemTemplateRepository extends Repository {
 
-    public ItemTemplateRepository() {
+    private static ItemTemplateRepository INSTANCE;
+    private ItemTemplateRepository() {
         super(ItemTemplateJsonDriver.getInstance());
+    }
+
+    public static ItemTemplateRepository getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ItemTemplateRepository();
+        }
+        return INSTANCE;
     }
 
     public void create(Item itemTemplate) {

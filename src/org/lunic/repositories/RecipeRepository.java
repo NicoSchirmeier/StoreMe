@@ -7,8 +7,16 @@ import java.util.ArrayList;
 
 public class RecipeRepository extends Repository {
 
-    public RecipeRepository() {
+    private static RecipeRepository INSTANCE;
+    private RecipeRepository() {
         super(RecipeJsonDriver.getInstance());
+    }
+
+    public static RecipeRepository getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new RecipeRepository();
+        }
+        return INSTANCE;
     }
 
     public void create(Recipe recipe) {

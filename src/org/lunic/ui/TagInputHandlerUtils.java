@@ -1,8 +1,8 @@
 package org.lunic.ui;
 
-import org.lunic.DataManager;
 import org.lunic.data.Tag;
 import org.lunic.data.type.TagType;
+import org.lunic.repositories.TagRepository;
 import org.lunic.ui.helperclasses.Action;
 import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
@@ -17,7 +17,7 @@ public class TagInputHandlerUtils {
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Tag");
         if (confirmed) {
-            DataManager.TAG_REPOSITORY.create(tag);
+            TagRepository.getInstance().create(tag);
         }
     }
 
@@ -29,7 +29,7 @@ public class TagInputHandlerUtils {
         System.out.println(tag);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Change Tag");
         if (confirmed) {
-            DataManager.TAG_REPOSITORY.update((Tag) toChange, tag);
+            TagRepository.getInstance().update((Tag) toChange, tag);
         }
     }
 
@@ -63,7 +63,7 @@ public class TagInputHandlerUtils {
             ArrayList<Option> options = new ArrayList<>();
             options.add(new Option(Action.DONE.name(), Action.DONE));
             options.add(new Option(Action.CREATE.name(), Action.CREATE));
-            for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
+            for (Tag tag : TagRepository.getInstance().read()) {
                 options.add(new Option(tag.name(), tag));
             }
             Option option = ConsoleSelectionUtils.displayOptions(options, canBeSkipped);

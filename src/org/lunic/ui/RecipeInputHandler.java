@@ -1,11 +1,12 @@
 package org.lunic.ui;
 
-import org.lunic.DataManager;
 import org.lunic.data.Item;
 import org.lunic.data.Recipe;
 import org.lunic.data.Tag;
 import org.lunic.data.Time;
 import org.lunic.data.type.RecipeType;
+import org.lunic.observer.ItemExpirationObserver;
+import org.lunic.repositories.RecipeRepository;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
@@ -13,8 +14,17 @@ import java.util.HashSet;
 
 public class RecipeInputHandler extends InputHandler implements Printable, Handler {
 
-    public RecipeInputHandler() {
-        super(DataManager.RECIPE_REPOSITORY);
+    private static RecipeInputHandler INSTANCE;
+
+    public static RecipeInputHandler getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new RecipeInputHandler();
+        }
+        return INSTANCE;
+    }
+
+    private RecipeInputHandler() {
+        super(RecipeRepository.getInstance());
     }
 
     @Override
@@ -23,7 +33,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+        for (Recipe recipe : RecipeRepository.getInstance().read()) {
             options.add(new Option(recipe.name(), recipe));
         }
 
@@ -64,7 +74,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println(recipe);
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Create Recipe");
         if (confirmed) {
-            DataManager.RECIPE_REPOSITORY.create(recipe);
+            RecipeRepository.getInstance().create(recipe);
             print();
         }
     }
@@ -76,7 +86,8 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println("->");
         System.out.println(changedRecipe);
         if (confirmed) {
-            DataManager.RECIPE_REPOSITORY.update((Recipe) toChange, changedRecipe);
+            RecipeRepository.getInstance().update((Recipe) toChange, changedRecipe);
+            RecipeRepository.getInstance().update((Recipe) toChange, changedRecipe);
             print();
         }
     }
@@ -96,7 +107,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println("Select Type:");
         RecipeType type = (RecipeType) ConsoleSelectionUtils.printTypeSelection(RecipeType.values(), isChange);
         System.out.println("Add needed Items:");
-        HashSet<Item> items = DataManager.ITEM_TEMPLATE_HANDLER.printAddTemplateItemsDialog(true, isChange);
+        HashSet<Item> items = ItemTemplateHandler.getInstance().printAddTemplateItemsDialog(true, isChange);
         System.out.println("Enter cooking duration (in Minutes):");
         int minutes = ConsoleReadingUtils.getAmount(1, 0, isChange);
         Time duration = new Time(0, 0, minutes / (60 * 24), minutes / 60, minutes % 60);
@@ -119,7 +130,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
     private boolean checkItemsExist(HashSet<Item> items) {
         boolean canBeCooked = true;
         for (Item item : items) {
-            if (item.amount() > DataManager.ITEM_EXPIRATION_OBSERVER.getTotalAmount(item)) {
+            if (item.amount() > ItemExpirationObserver.getInstance().getTotalAmount(item)) {
                 canBeCooked = false;
             }
         }
@@ -130,7 +141,7 @@ public class RecipeInputHandler extends InputHandler implements Printable, Handl
         System.out.println("- Recommended Recipes -");
         System.out.println("(based on stored items)");
         ArrayList<Option> additionalOptions = new ArrayList<>();
-        for (Recipe recipe : DataManager.ITEM_EXPIRATION_OBSERVER.getRecommendedRecipes()) {
+        for (Recipe recipe : ItemExpirationObserver.getInstance().getRecommendedRecipes()) {
             additionalOptions.add(new Option(recipe.toString(), recipe));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK);

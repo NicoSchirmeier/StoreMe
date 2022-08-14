@@ -7,8 +7,16 @@ import java.util.ArrayList;
 
 public class TestRepository extends Repository {
 
-    protected TestRepository() {
+    private static TestRepository INSTANCE;
+    private TestRepository() {
         super(TestJsonDriver.getInstance());
+    }
+
+    public static TestRepository getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new TestRepository();
+        }
+        return INSTANCE;
     }
 
     public ArrayList<TestRecord> read() {

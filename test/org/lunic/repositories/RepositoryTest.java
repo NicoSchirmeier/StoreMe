@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RepositoryTest {
 
-    private final TestRepository repository = new TestRepository();
+    private final TestRepository repository = TestRepository.getInstance();
 
     @Test
     void create() {

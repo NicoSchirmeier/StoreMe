@@ -1,14 +1,24 @@
 package org.lunic.observer;
 
-import org.lunic.DataManager;
 import org.lunic.data.Item;
 import org.lunic.repositories.ContainerItemInterface;
+import org.lunic.repositories.ContainerRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ItemConsumptionObserver {
-    private final ContainerItemInterface itemInterface = DataManager.CONTAINER_REPOSITORY;
+
+    private static ItemConsumptionObserver INSTANCE;
+    public static ItemConsumptionObserver getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ItemConsumptionObserver();
+        }
+        return INSTANCE;
+    }
+    private ItemConsumptionObserver() {}
+
+    private final ContainerItemInterface itemInterface = ContainerRepository.getInstance();
 
     public ArrayList<Item> getSoonConsumedItems() {
         ArrayList<Item> soonConsumedItems = new ArrayList<>();

@@ -1,18 +1,28 @@
 package org.lunic.ui;
 
-import org.lunic.DataManager;
 import org.lunic.data.Item;
 import org.lunic.data.Recipe;
 import org.lunic.data.Tag;
 import org.lunic.data.type.TagType;
+import org.lunic.repositories.ContainerRepository;
+import org.lunic.repositories.RecipeRepository;
+import org.lunic.repositories.TagRepository;
 import org.lunic.ui.helperclasses.*;
 
 import java.util.ArrayList;
 
 public class TagInputHandler extends InputHandler implements Printable, Handler {
 
-    public TagInputHandler() {
-        super(DataManager.TAG_REPOSITORY);
+    private static TagInputHandler INSTANCE;
+    public static TagInputHandler getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new TagInputHandler();
+        }
+        return INSTANCE;
+    }
+
+    private TagInputHandler() {
+        super(TagRepository.getInstance());
     }
 
     @Override
@@ -32,7 +42,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
+        for (Tag tag : TagRepository.getInstance().read()) {
             if (!tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
@@ -44,7 +54,7 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         ArrayList<Option> options = new ArrayList<>();
         options.add(new Option(Action.BACK.name(), Action.BACK));
         options.add(new Option(Action.CREATE.name(), Action.CREATE));
-        for (Tag tag : DataManager.TAG_REPOSITORY.read()) {
+        for (Tag tag : TagRepository.getInstance().read()) {
             if (tag.type().equals(TagType.SHOPPING_LIST)) {
                 options.add(new Option(tag.name(), tag));
             }
@@ -70,11 +80,11 @@ public class TagInputHandler extends InputHandler implements Printable, Handler 
         System.out.println("Selected Tag: " + tag);
         ArrayList<Option> additionalOptions = new ArrayList<>();
         additionalOptions.add(new Option(" ----- Items -----", Action.SPACER));
-        for (Item item : DataManager.CONTAINER_REPOSITORY.getAllItems()) {
+        for (Item item : ContainerRepository.getInstance().getAllItems()) {
             if(item.tags().contains(tag)) additionalOptions.add(new Option(item.toString(), item));
         }
         additionalOptions.add(new Option(" ----- Recipes -----", Action.SPACER));
-        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+        for (Recipe recipe : RecipeRepository.getInstance().read()) {
             if(recipe.tags().contains(tag)) additionalOptions.add(new Option(recipe.name() + " - " + recipe.type(), recipe));
         }
         Option option = ConsoleSelectionUtils.displayActions(additionalOptions, Action.BACK, Action.CHANGE, Action.DELETE);

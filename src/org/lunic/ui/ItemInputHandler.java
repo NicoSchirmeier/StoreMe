@@ -1,16 +1,28 @@
 package org.lunic.ui;
 
-import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.Item;
 import org.lunic.data.ItemBuilder;
 import org.lunic.data.type.ItemType;
+import org.lunic.repositories.ContainerRepository;
+import org.lunic.repositories.ItemTemplateRepository;
 import org.lunic.ui.helperclasses.Action;
 import org.lunic.ui.helperclasses.ConsoleReadingUtils;
 import org.lunic.ui.helperclasses.ConsoleSelectionUtils;
 import org.lunic.ui.helperclasses.Option;
 
 public class ItemInputHandler {
+
+    private static ItemInputHandler INSTANCE;
+
+    public static ItemInputHandler getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ItemInputHandler();
+        }
+        return INSTANCE;
+    }
+
+    private ItemInputHandler() {}
 
     private static void getTags(boolean isItemChange, ItemBuilder builder) {
         System.out.println("Select Tags:");
@@ -66,7 +78,7 @@ public class ItemInputHandler {
 
     private void addItem(Container container, Item item) {
         container.items().add(item);
-        DataManager.CONTAINER_REPOSITORY.update(container, container);
+        ContainerRepository.getInstance().update(container, container);
 
         printSaveAsTemplateDialog(item);
     }
@@ -75,7 +87,7 @@ public class ItemInputHandler {
         boolean confirmed;
         confirmed = ConsoleReadingUtils.printConfirmationDialog("Save as Template");
         if (confirmed) {
-            DataManager.ITEM_TEMPLATE_REPOSITORY.create(new ItemBuilder().setName(item.name()
+            ItemTemplateRepository.getInstance().create(new ItemBuilder().setName(item.name()
             ).setType(item.type()).setAmount(0).setTags(item.tags()).build());
         }
     }
@@ -97,14 +109,14 @@ public class ItemInputHandler {
     private void printItemDeletionDialog(Item item, Container container) {
         boolean confirmed = ConsoleReadingUtils.printConfirmationDialog("Delete Item");
         if (confirmed) container.items().remove(item);
-        DataManager.CONTAINER_REPOSITORY.update(container, container);
+        ContainerRepository.getInstance().update(container, container);
     }
 
     private Item createOrChange(Item baseItem) {
         boolean isItemChange = baseItem != null;
         printCreateOrChangeWelcomeText(isItemChange, baseItem);
 
-        if(!isItemChange) baseItem = DataManager.ITEM_TEMPLATE_HANDLER.printSelectTemplate();
+        if(!isItemChange) baseItem = ItemTemplateHandler.getInstance().printSelectTemplate();
         isItemChange = baseItem != null;
 
         ItemBuilder builder = createItemBuilder(isItemChange, baseItem);

@@ -1,6 +1,5 @@
 package org.lunic.repositories;
 
-import org.lunic.DataManager;
 import org.lunic.data.Container;
 import org.lunic.data.Item;
 import org.lunic.data.Recipe;
@@ -11,8 +10,16 @@ import java.util.ArrayList;
 
 public class TagRepository extends Repository {
 
-    public TagRepository() {
+    private static TagRepository INSTANCE;
+    private TagRepository() {
         super(TagJsonDriver.getInstance());
+    }
+
+    public static TagRepository getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new TagRepository();
+        }
+        return INSTANCE;
     }
 
     public void create(Tag tag) {
@@ -31,20 +38,20 @@ public class TagRepository extends Repository {
     }
 
     public void update(Tag tagToBeUpdated, Tag updatedTag) {
-        for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
+        for (Container container : ContainerRepository.getInstance().read()) {
             for (Item item : container.items()) {
                 if (item.tags().contains(tagToBeUpdated)) {
                     item.tags().remove(tagToBeUpdated);
                     item.tags().add(updatedTag);
-                    DataManager.CONTAINER_REPOSITORY.update(container, container);
+                    ContainerRepository.getInstance().update(container, container);
                 }
             }
         }
-        for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+        for (Recipe recipe : RecipeRepository.getInstance().read()) {
             if (recipe.tags().contains(tagToBeUpdated)) {
                 recipe.tags().remove(tagToBeUpdated);
                 recipe.tags().add(updatedTag);
-                DataManager.RECIPE_REPOSITORY.update(recipe, recipe);
+                RecipeRepository.getInstance().update(recipe, recipe);
             }
         }
         super.update(tagToBeUpdated, updatedTag);
@@ -53,18 +60,18 @@ public class TagRepository extends Repository {
     @Override
     public void delete(Record record) {
         if (record instanceof Tag tag) {
-            for (Container container : DataManager.CONTAINER_REPOSITORY.read()) {
+            for (Container container : ContainerRepository.getInstance().read()) {
                 for (Item item : container.items()) {
                     if (item.tags().contains(tag)) {
                         item.tags().remove(tag);
-                        DataManager.CONTAINER_REPOSITORY.update(container, container);
+                        ContainerRepository.getInstance().update(container, container);
                     }
                 }
             }
-            for (Recipe recipe : DataManager.RECIPE_REPOSITORY.read()) {
+            for (Recipe recipe : RecipeRepository.getInstance().read()) {
                 if (recipe.tags().contains(tag)) {
                     recipe.tags().remove(tag);
-                    DataManager.RECIPE_REPOSITORY.update(recipe, recipe);
+                    RecipeRepository.getInstance().update(recipe, recipe);
                 }
             }
             super.delete(tag);

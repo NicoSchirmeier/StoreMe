@@ -1,8 +1,9 @@
 package org.lunic.ui;
 
 
-import org.lunic.DataManager;
 import org.lunic.data.Item;
+import org.lunic.observer.ItemConsumptionObserver;
+import org.lunic.observer.ItemExpirationObserver;
 import org.lunic.ui.helperclasses.*;
 
 import java.time.format.DateTimeFormatter;
@@ -12,9 +13,17 @@ import static org.lunic.ui.helperclasses.ConsoleUtilConfiguration.DATE_FORMAT;
 
 public class UserInputManager implements Printable {
 
+    private static UserInputManager INSTANCE;
+
+    public static UserInputManager getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new UserInputManager();
+        }
+        return INSTANCE;
+    }
     public static boolean SYSTEM_ACTIVE = true;
 
-    public UserInputManager() {
+    private UserInputManager() {
         while (SYSTEM_ACTIVE) print();
     }
 
@@ -26,18 +35,18 @@ public class UserInputManager implements Printable {
         System.out.println();
         ConsoleReadingUtils.printSpacer();
 
-        if (DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems().size() > 0) {
+        if (ItemExpirationObserver.getInstance().getSoonExpiringItems().size() > 0) {
             System.out.println("These Items are expired or will expire soon: ");
-            for (Item expiredItem : DataManager.ITEM_EXPIRATION_OBSERVER.getSoonExpiringItems()) {
+            for (Item expiredItem : ItemExpirationObserver.getInstance().getSoonExpiringItems()) {
                 System.err.println("- " + expiredItem.name() + " " +
                         expiredItem.expirationDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             }
         }
         delayedPrint();
 
-        if (DataManager.ITEM_CONSUMPTION_OBSERVER.getSoonConsumedItems().size() > 0) {
+        if (ItemConsumptionObserver.getInstance().getSoonConsumedItems().size() > 0) {
             System.out.println("You might run out of these Items soon: ");
-            for (Item soonConsumedItem : DataManager.ITEM_CONSUMPTION_OBSERVER.getSoonConsumedItems()) {
+            for (Item soonConsumedItem : ItemConsumptionObserver.getInstance().getSoonConsumedItems()) {
                 System.err.println("- " + soonConsumedItem.name() + " " +
                         soonConsumedItem.consumptionDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             }
@@ -45,10 +54,10 @@ public class UserInputManager implements Printable {
         delayedPrint();
 
         ArrayList<Option> options = new ArrayList<>();
-        options.add(new Option("View Container", DataManager.CONTAINER_INPUT_HANDLER));
-        options.add(new Option("View Recipes", DataManager.RECIPE_INPUT_HANDLER));
-        options.add(new Option("View Categories and Shopping Lists", DataManager.TAG_INPUT_HANDLER));
-        options.add(new Option("View Item Templates", DataManager.ITEM_TEMPLATE_HANDLER));
+        options.add(new Option("View Container", ContainerInputHandler.getInstance()));
+        options.add(new Option("View Recipes", RecipeInputHandler.getInstance()));
+        options.add(new Option("View Categories and Shopping Lists", TagInputHandler.getInstance()));
+        options.add(new Option("View Item Templates", ItemTemplateHandler.getInstance()));
         options.add(new Option("View Recommended Recipes", Action.VIEW));
         options.add(new Option("Exit", Action.EXIT));
 
@@ -59,7 +68,7 @@ public class UserInputManager implements Printable {
             if (action.equals(Action.EXIT)) {
                 SYSTEM_ACTIVE = false;
             } else if (action.equals(Action.VIEW)) {
-                DataManager.RECIPE_INPUT_HANDLER.printRecommendedRecipes();
+                RecipeInputHandler.getInstance().printRecommendedRecipes();
             }
         }
     }
