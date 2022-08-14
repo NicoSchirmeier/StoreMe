@@ -59,8 +59,11 @@ public class ConsoleReadingUtils {
                 String input = readString(1, Integer.MAX_VALUE, false);
                 if (input == null) return -1;
                 if (input.equals("!") && canBeSkipped) return -1;
-                amount = Integer.parseInt(input);
-
+                if(input.matches("[0-9]+")) {
+                    amount = Integer.parseInt(input);
+                } else {
+                    System.out.println("Only numbers between " + min + " and " + max + " are allowed!");
+                }
             } catch (Exception e) {
                 System.err.println("No valid input detected. Try again.");
                 ConsoleUtilConfiguration.SCANNER.next();

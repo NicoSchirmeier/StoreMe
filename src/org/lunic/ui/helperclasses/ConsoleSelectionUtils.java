@@ -18,13 +18,10 @@ public class ConsoleSelectionUtils {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
             try {
-                String input = ConsoleReadingUtils.readString(1, Integer.MAX_VALUE, false);
-                System.out.println(input);
-                if (input == null) return null;
-                if (input.equals("!") && canBeSkipped) {
+                selection = ConsoleReadingUtils.getAmount(0, options.size()-1, canBeSkipped);
+                System.out.println(selection);
+                if (selection < 0) {
                     return new Option(null, null);
-                } else if (!input.equals("!")) {
-                    selection = Integer.parseInt(input);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

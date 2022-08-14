@@ -11,5 +11,5 @@ public enum Action {
     ADD,
     VIEW,
     BACK,
-    EXIT
+    SPACER, EXIT
 }
