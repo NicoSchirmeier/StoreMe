@@ -18,7 +18,7 @@ public class ConsoleSelectionUtils {
                 System.out.println("[" + options.indexOf(option) + "] " + option.getText());
             }
             try {
-                selection = ConsoleReadingUtils.getAmount(0, options.size()-1, canBeSkipped);
+                selection = ConsoleReadingUtils.getAmount(0, options.size() - 1, canBeSkipped);
                 System.out.println(selection);
                 if (selection < 0) {
                     return new Option(null, null);

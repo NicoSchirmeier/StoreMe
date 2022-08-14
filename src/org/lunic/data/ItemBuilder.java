@@ -28,8 +28,10 @@ public class ItemBuilder {
         if (name == null) name = itemTemplate.name();
         if (type == null) type = itemTemplate.type();
         if (amount <= 0) amount = itemTemplate.amount();
-        if (expirationDate == null) expirationDate = itemTemplate.expirationDate();
-        if (consumptionDate == null) consumptionDate = itemTemplate.consumptionDate();
+        if (expirationDate == null)
+            expirationDate = itemTemplate.expirationDate();
+        if (consumptionDate == null)
+            consumptionDate = itemTemplate.consumptionDate();
         if (tags == null) tags = itemTemplate.tags();
 
         return new Item(this);
