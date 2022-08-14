@@ -1,3 +1,4 @@
+![StoreMe Logo](https://github.com/NicoSchirmeier/StoreMe/blob/master/docs/StoreMeLogoFinal.png)
 # StoreMe
 StoreMe is a Java based CLI Storage Planning App that aims to help you organize everything around your private life.
 
