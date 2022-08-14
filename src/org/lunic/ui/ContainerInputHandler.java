@@ -81,25 +81,37 @@ public class ContainerInputHandler extends InputHandler implements Printable, Ha
     }
 
     private Container createOrChange(Container toChange) {
-        if (toChange == null) {
+        boolean isContainerChange = toChange != null;
+
+        if (!isContainerChange) {
             System.out.println("- Create Container -");
         } else {
             System.out.println("- Change Container -");
             System.out.println(toChange + " (Skip with \"!\")");
         }
+
         System.out.println("Enter name:");
-        String name = ConsoleReadingUtils.readString();
+        String name = ConsoleReadingUtils.readString(isContainerChange);
         System.out.println("Enter location:");
-        String location = ConsoleReadingUtils.readString();
+        String location = ConsoleReadingUtils.readString(isContainerChange);
         System.out.println("Select container type:");
-        ContainerType type = (ContainerType) ConsoleSelectionUtils.printTypeSelection(ContainerType.values());
+        ContainerType type = (ContainerType) ConsoleSelectionUtils.printTypeSelection(ContainerType.values(), isContainerChange);
 
-        if (toChange != null) {
-            if (name.equals("!")) name = toChange.name();
-            if (location.equals("!")) location = toChange.location();
-            return new Container(name, location, toChange.items(), type);
+        HashSet<Item> items = new HashSet<>();
+        Container container = new Container(name, location, items, type);
+        if (isContainerChange) {
+            return applyChanges(container, toChange);
         }
+        return container;
+    }
 
-        return new Container(name, location, new HashSet<>(), type);
+    private Container applyChanges(Container container, Container toChange) {
+        String name = "", location = "";
+        ContainerType type = container.type();
+        if (container.name() == null) name = toChange.name();
+        if (container.location() == null) location = toChange.location();
+        if (container.type() == null) type = toChange.type();
+        HashSet<Item> items = toChange.items();
+        return new Container(name, location, items, type);
     }
 }
